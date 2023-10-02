@@ -10,6 +10,9 @@ assignees: ''
 **User Story**
 A clear and concise description of what the problem is. Ex. As a ____ I would like to ____, so that ____
 
+**Acceptance Criteria**
+List of things that must be satisfied.
+
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
