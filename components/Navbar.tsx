@@ -1,11 +1,12 @@
 import { Session } from '@supabase/gotrue-js';
-import React from 'react';
-import LogoutButton from './LogoutButton';
 import Link from 'next/link';
+import LogoutButton from './LogoutButton';
 
 type Props = {
   session: Session | null;
 };
+
+const temp = 1;
 
 function Navbar({ session }: Props) {
   return (
