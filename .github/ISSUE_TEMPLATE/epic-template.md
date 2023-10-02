@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Epic Template
+about: Describe this issue template's purpose here.
 title: ''
-labels: enhancement
+labels: ''
 assignees: ''
 
 ---
