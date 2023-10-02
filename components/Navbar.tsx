@@ -6,8 +6,6 @@ type Props = {
   session: Session | null;
 };
 
-const temp = 1;
-
 function Navbar({ session }: Props) {
   return (
     <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
