@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "flask-dev": "pip3 install -r requirements.txt && python -m flask --app api/index run -p 5328 --reload",
+    "next-dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run flask-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,6 +14,7 @@
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.8.1",
     "@supabase/supabase-js": "^2.37.0",
+    "concurrently": "^8.2.1",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"

@@ -1,3 +1,4 @@
+import Clicker from '@/components/Clicker';
 import Navbar from '@/components/Navbar';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
@@ -11,6 +12,7 @@ export default async function Home() {
   return (
     <main className="w-full flex flex-col items-center">
       <Navbar session={session} />
+      <Clicker />
       <div>Hello World</div>
     </main>
   );
