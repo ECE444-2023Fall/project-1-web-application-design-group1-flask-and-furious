@@ -27,6 +27,12 @@ Install required python packages with:
 pip install -r requirements.txt
 ```
 
+Setup your env variables:
+```bash
+cp .env.template .env
+```
+Fill this with your credentials from [supabase](https://supabase.com/dashboard/project/yqrgbzoauzaaznsztnwb/settings/api)
+
 Then, run the frontend and backend together with:
 
 ```bash
