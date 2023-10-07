@@ -1,4 +1,7 @@
+'use client';
 import { Session } from '@supabase/gotrue-js';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import NavbarProfile from './NavbarProfile';
 
 type Props = {
@@ -7,11 +10,33 @@ type Props = {
 
 function Navbar({ session }: Props) {
   return (
-    <nav className="w-full flex flex-row border-b h-16 bg-white p-6">
-      <div className="flex flex-row items-center">ClubHub</div>
+    <nav className="flex h-16 w-full flex-row border-b bg-white p-6">
+      <Link href="/" className="flex flex-row items-center">
+        ClubHub
+      </Link>
 
-      <div className="flex grow flex-row-reverse items-center">
+      <div className="flex grow flex-row-reverse items-center gap-2">
         <NavbarProfile session={session} />
+        <Link
+          href="/events/manage"
+          className={
+            (usePathname() === '/events/manage'
+              ? 'font-bold underline-offset-auto  '
+              : 'hover:opacity-50 ') + ''
+          }
+        >
+          Manage Events
+        </Link>
+        <Link
+          href="/events"
+          className={
+            (usePathname() === '/events'
+              ? 'font-bold underline-offset-auto '
+              : 'hover:opacity-50 ') + ''
+          }
+        >
+          Find Events
+        </Link>
       </div>
     </nav>
   );

@@ -1,4 +1,3 @@
-'use client';
 import { Menu, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { Session } from '@supabase/gotrue-js';
@@ -14,7 +13,7 @@ export default function NavbarProfile({ session }: Props) {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button>
         <UserCircleIcon
-          className="-mr-1 h-12 w-12 text-gray-400 stroke-1"
+          className="-mr-1 h-12 w-12 stroke-1 text-gray-400"
           aria-hidden="true"
         />
       </Menu.Button>
@@ -28,7 +27,7 @@ export default function NavbarProfile({ session }: Props) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="py-1 divide-y absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {session && (
             <div className="flex flex-col items-center gap-4">
               <Menu.Item>
