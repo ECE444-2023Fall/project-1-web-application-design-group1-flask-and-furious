@@ -13,11 +13,11 @@ export default async function Home() {
     <main className="flex w-full flex-col items-center">
       <Navbar session={session} />
       <div className="grid grid-cols-3 gap-2">
-        <EventCard session={session} />
-        <EventCard session={session} />
-        <EventCard session={session} />
-        <EventCard session={session} />
-        <EventCard session={session} />
+        <EventCard />
+        <EventCard />
+        <EventCard />
+        <EventCard />
+        <EventCard />
       </div>
     </main>
   );
