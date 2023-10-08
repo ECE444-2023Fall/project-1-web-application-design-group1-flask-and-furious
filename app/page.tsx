@@ -10,7 +10,7 @@ export default async function Home() {
     data: { session }
   } = await supabase.auth.getSession();
   return (
-    <main className="w-full flex flex-col items-center">
+    <main className="flex w-full flex-col items-center">
       <Navbar session={session} />
       <Clicker />
       <div>Hello World</div>
