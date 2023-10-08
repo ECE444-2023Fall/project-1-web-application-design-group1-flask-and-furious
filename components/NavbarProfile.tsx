@@ -31,21 +31,35 @@ export default function NavbarProfile({ session }: Props) {
           {session && (
             <div className="flex flex-col items-center gap-4">
               <Menu.Item>
-                {({ active }) => (
-                  <a
-                    href="#"
-                    className={
-                      (active ? 'bg-gray-100 text-gray-900' : 'text-gray-700') +
-                      ' block px-4 py-2 text-sm'
-                    }
-                  >
-                    {session.user.email}
-                  </a>
-                )}
+                <a
+                  href="#"
+                  className="block cursor-default px-4 py-2 text-sm text-gray-700"
+                >
+                  {session.user.email}
+                </a>
               </Menu.Item>
             </div>
           )}
           <div className="py-1">
+            {session && (
+              <div className="flex flex-col items-center gap-4">
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      href="/profile"
+                      className={
+                        (active
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-700') +
+                        ' block w-full px-4 py-2 text-left text-sm'
+                      }
+                    >
+                      Profile
+                    </Link>
+                  )}
+                </Menu.Item>
+              </div>
+            )}
             {session ? (
               <form action="/auth/sign-out" method="post">
                 <Menu.Item>
