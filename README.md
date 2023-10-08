@@ -1,11 +1,16 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Prerequisites
+
+1. Ensure you are using a modern version of Node.js `node -v` should be at least 18.X
+2. Install `pnpm` via `npm install -g pnpm`
+
 ## Getting Started (make sure youre in the root of the project)
 
 Install required backages with:
 
 ```bash
-npm install
+pnpm install
 ```
 
 Create a python virtual environment with:
@@ -36,19 +41,19 @@ Fill this with your credentials from [supabase](https://supabase.com/dashboard/p
 Then, run the frontend and backend together with:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Or to run just the backend:
 
 ```bash
-npm run flask-dev
+pnpm run flask-dev
 ```
 
 Or to run just the frontend:
 
 ```bash
-npm run next-dev
+pnpm run next-dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
