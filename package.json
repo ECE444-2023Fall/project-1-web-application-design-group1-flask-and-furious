@@ -12,7 +12,10 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "@supabase/auth-helpers-nextjs": "^0.8.1",
+    "@supabase/gotrue-js": "^2.55.0",
     "@supabase/supabase-js": "^2.37.0",
     "concurrently": "^8.2.1",
     "next": "latest",
@@ -34,6 +37,7 @@
     "lint-staged": "^14.0.1",
     "postcss": "latest",
     "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.5",
     "tailwindcss": "latest",
     "typescript": "^5.2.2"
   }

@@ -1,6 +1,8 @@
+'use client';
 import { Session } from '@supabase/gotrue-js';
 import Link from 'next/link';
-import LogoutButton from './LogoutButton';
+import { usePathname } from 'next/navigation';
+import NavbarProfile from './NavbarProfile';
 
 type Props = {
   session: Session | null;
@@ -8,21 +10,33 @@ type Props = {
 
 function Navbar({ session }: Props) {
   return (
-    <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-      <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm text-foreground">
-        {session ? (
-          <div className="flex items-center gap-4">
-            Hey, {session.user.email}!
-            <LogoutButton />
-          </div>
-        ) : (
-          <Link
-            href="/login"
-            className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-          >
-            Login
-          </Link>
-        )}
+    <nav className="flex h-16 w-full flex-row justify-between border-b bg-white p-6 text-black">
+      <Link href="/" className="flex flex-row items-center">
+        ClubHub
+      </Link>
+
+      <div className="flex items-center gap-2">
+        <Link
+          href="/events"
+          className={
+            usePathname() === '/events'
+              ? 'font-bold underline-offset-auto'
+              : 'hover:opacity-50'
+          }
+        >
+          Find Events
+        </Link>
+        <Link
+          href="/events/manage"
+          className={
+            usePathname() === '/events/manage'
+              ? 'font-bold underline-offset-auto'
+              : 'hover:opacity-50'
+          }
+        >
+          Manage Events
+        </Link>
+        <NavbarProfile session={session} />
       </div>
     </nav>
   );

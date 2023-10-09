@@ -6,7 +6,10 @@ const eslintCommand = (filenames) =>
     .join(' --file ')}`;
 
 const formatCommand = 'prettier --write';
+const ruffCommand = 'ruff check .';
+
 module.exports = {
   '*.{js,jsx,ts,tsx}': [formatCommand, eslintCommand],
-  '*.{css,scss}': [formatCommand]
+  '*.{css,scss}': [formatCommand],
+  '*.{py}': [ruffCommand]
 };

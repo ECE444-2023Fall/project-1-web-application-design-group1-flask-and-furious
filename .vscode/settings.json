@@ -3,6 +3,12 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": true
   },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[python]": {

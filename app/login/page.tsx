@@ -3,10 +3,10 @@ import Messages from './messages';
 
 export default function Login() {
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+    <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
       <Link
         href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
+        className="text-foreground bg-btn-background hover:bg-btn-background-hover group absolute left-8 top-8 flex items-center rounded-md px-4 py-2 text-sm no-underline"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@ export default function Login() {
       </Link>
 
       <form
-        className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+        className="text-foreground flex w-full flex-1 flex-col justify-center gap-2"
         action="/auth/sign-in"
         method="post"
       >
@@ -34,7 +34,7 @@ export default function Login() {
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="mb-6 rounded-md border bg-inherit px-4 py-2"
           name="email"
           placeholder="you@example.com"
           required
@@ -43,18 +43,18 @@ export default function Login() {
           Password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="mb-6 rounded-md border bg-inherit px-4 py-2"
           type="password"
           name="password"
           placeholder="••••••••"
           required
         />
-        <button className="bg-green-700 rounded px-4 py-2 text-white mb-2">
+        <button className="mb-2 rounded bg-green-700 px-4 py-2 text-white">
           Sign In
         </button>
         <button
           formAction="/auth/sign-up"
-          className="border border-gray-700 rounded px-4 py-2 text-black mb-2"
+          className="mb-2 rounded border border-gray-700 px-4 py-2 text-black"
         >
           Sign Up
         </button>
