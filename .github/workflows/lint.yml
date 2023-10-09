@@ -28,4 +28,4 @@ jobs:
       run: pnpm lint
 
     - name: Python Lint
-      uses: chasemcdo/ruff-action
+      uses: chasemcdo/ruff-action@latest
