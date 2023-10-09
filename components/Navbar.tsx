@@ -20,9 +20,9 @@ function Navbar({ session }: Props) {
         <Link
           href="/events/manage"
           className={
-            (usePathname() === '/events/manage'
-              ? 'font-bold underline-offset-auto  '
-              : 'hover:opacity-50 ') + ''
+            usePathname() === '/events/manage'
+              ? 'font-bold underline-offset-auto'
+              : 'hover:opacity-50'
           }
         >
           Manage Events
@@ -30,9 +30,9 @@ function Navbar({ session }: Props) {
         <Link
           href="/events"
           className={
-            (usePathname() === '/events'
-              ? 'font-bold underline-offset-auto '
-              : 'hover:opacity-50 ') + ''
+            usePathname() === '/events'
+              ? 'font-bold underline-offset-auto'
+              : 'hover:opacity-50'
           }
         >
           Find Events
