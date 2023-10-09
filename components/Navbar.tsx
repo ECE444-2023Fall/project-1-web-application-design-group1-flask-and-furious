@@ -10,23 +10,12 @@ type Props = {
 
 function Navbar({ session }: Props) {
   return (
-    <nav className="flex h-16 w-full flex-row border-b bg-white p-6 text-black">
+    <nav className="flex h-16 w-full flex-row justify-between border-b bg-white p-6 text-black">
       <Link href="/" className="flex flex-row items-center">
         ClubHub
       </Link>
 
-      <div className="flex grow flex-row-reverse items-center gap-2">
-        <NavbarProfile session={session} />
-        <Link
-          href="/events/manage"
-          className={
-            usePathname() === '/events/manage'
-              ? 'font-bold underline-offset-auto'
-              : 'hover:opacity-50'
-          }
-        >
-          Manage Events
-        </Link>
+      <div className="flex items-center gap-2">
         <Link
           href="/events"
           className={
@@ -37,6 +26,17 @@ function Navbar({ session }: Props) {
         >
           Find Events
         </Link>
+        <Link
+          href="/events/manage"
+          className={
+            usePathname() === '/events/manage'
+              ? 'font-bold underline-offset-auto'
+              : 'hover:opacity-50'
+          }
+        >
+          Manage Events
+        </Link>
+        <NavbarProfile session={session} />
       </div>
     </nav>
   );
