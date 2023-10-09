@@ -10,7 +10,7 @@ type Props = {
 
 function Navbar({ session }: Props) {
   return (
-    <nav className="flex h-16 w-full flex-row border-b bg-white p-6">
+    <nav className="flex h-16 w-full flex-row border-b bg-white p-6 text-black">
       <Link href="/" className="flex flex-row items-center">
         ClubHub
       </Link>
