@@ -1,4 +1,4 @@
-name: ES Lint
+name: Lint
 
 on:
   push:
@@ -24,5 +24,8 @@ jobs:
           version: latest
           run_install: true
 
-    - name: Build & Lint
+    - name: TS Lint
       run: pnpm lint
+
+    - name: Python Lint
+      uses: chartboost/ruff-action@v1
