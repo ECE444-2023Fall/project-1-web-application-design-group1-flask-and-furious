@@ -7,16 +7,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  mirror-git-repo:
+  mirror:
     runs-on: ubuntu-latest
     steps:
-      - uses: ThamognyaKodi/mirror-git-repo@0.0.1
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          EMAIL: ${{ github.event.pusher.email }}
-          NAME: ${{ github.event.pusher.name }}
-          BRANCH_FOR_DESTINATION_REPO: "main"
-          BRANCH_ON_SOURCE_REPO: "main"
+      - uses: actions/checkout@v4
+      - uses: pixta-dev/repository-mirroring-action@v1
         with:
-          source-repo: "git@github.com:ECE444-2023Fall/project-1-web-application-design-group1-flask-and-furious.git"
-          destination-repo: "git@github.com:chasemcdo/ECE444-app-deployment.git"
+          target_repo_url:
+            git@github.com:chasemcdo/ECE444-app-deployment.git
+          ssh_private_key:
+            ${{ secrets.SSH_PRIVATE_KEY }}
