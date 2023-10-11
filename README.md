@@ -29,7 +29,7 @@ Windows: venv\Scripts\activate
 Install required python packages with:
 
 ```bash
-pip install -r requirements.txt
+pip install -r api/requirements.txt
 ```
 
 Setup your env variables:
