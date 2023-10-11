@@ -17,14 +17,6 @@ SUPABASE_PROJECT_URL: str = os.getenv("PUBLIC_SUPABASE_URL")
 SUPABASE_API_KEY: str = os.getenv("PUBLIC_SUPABASE_ANON_KEY")
 supabase: Client = create_client(SUPABASE_PROJECT_URL, SUPABASE_API_KEY)
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
-
-@app.route('/about')
-def about():
-    return 'About'
-
 api = Api(
     title="ECE444 API",
     version="1.0",
