@@ -1,22 +1,40 @@
 import os
 
 from dotenv import load_dotenv
-from flask import request
-from flask_restx import Namespace, Resource
+from flask import Flask, request
+from flask_cors import CORS
+from flask_restx import Namespace, Resource, Api
 from supabase import Client, create_client
 
 load_dotenv()
+
+app = Flask(__name__)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 SUPABASE_PROJECT_URL: str = os.getenv("PUBLIC_SUPABASE_URL")
 SUPABASE_API_KEY: str = os.getenv("PUBLIC_SUPABASE_ANON_KEY")
 supabase: Client = create_client(SUPABASE_PROJECT_URL, SUPABASE_API_KEY)
 
-print(SUPABASE_PROJECT_URL)
+@app.route('/')
+def home():
+    return 'Hello, World!'
 
-api = Namespace("event", description="event related operations")
+@app.route('/about')
+def about():
+    return 'About'
 
+api = Api(
+    title="ECE444 API",
+    version="1.0",
+    description="A simple API manage events",
+    prefix="/api",
+)
 
-@api.route("/")
+event_api = Namespace("event", description="event related operations")
+
+@event_api.route("/")
 class Event(Resource):
     def get(self):
         print("headers: ", request.headers)
@@ -33,3 +51,6 @@ class Event(Resource):
 
     def post(self):
         return {"message": "Hello, World!"}
+
+api.add_namespace(event_api)
+api.init_app(app)
