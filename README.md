@@ -37,6 +37,9 @@ Setup your env variables:
 cp .env.template .env
 ```
 Fill this with your credentials from [supabase](https://supabase.com/dashboard/project/yqrgbzoauzaaznsztnwb/settings/api)
+```bash
+source .env
+```
 
 Then, run the frontend and backend together with:
 
