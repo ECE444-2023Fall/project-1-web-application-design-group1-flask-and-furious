@@ -2,15 +2,11 @@
 
 Club Hub seeks to provoide University of Toronto students with convenient access to events on campus. The application is composed of a NextJS frontend and a Flask backend as part of a Software Engineering course (ECE444) taken at the University of Toronto.
 
-
-
 [<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="drawing" height="30"/>][Next-url]
 [<img src="https://flask.palletsprojects.com/en/3.0.x/_images/flask-horizontal.png" alt="drawing" height="30"/>][Flask-url]
 
 [Next-url]: https://nextjs.org/
 [Flask-url]: https://flask.palletsprojects.com/en/3.0.x/
-
-
 
 ## Prerequisites
 
