@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import Messages from './messages';
 
 export default function Login() {
   return (
-    <div className="flex w-full flex-1 flex-col gap-2 px-8 sm:max-w-md">
+    <div className="flex w-full flex-1 flex-col gap-2 px-8 sm:max-w-xl">
       <Link
         href="/"
         className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md top-18 group absolute left-2 flex items-center rounded-md px-4 py-2 no-underline"
@@ -30,9 +29,29 @@ export default function Login() {
       </p>
       <form
         className="text-foreground flex w-full flex-col gap-2"
-        action="/auth/sign-in"
+        action="/auth/sign-up"
         method="post"
       >
+        <div className="mb-6 flex">
+          <div className="mr-4">
+            <label className="text-md">First Name</label>
+            <input
+              className="w-full rounded-md border-2 border-neutral-400 bg-inherit px-4 py-2"
+              name="firstName"
+              placeholder="John"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-md">Last Name</label>
+            <input
+              className="w-full rounded-md border-2 border-neutral-400 bg-inherit px-4 py-2"
+              name="lastName"
+              placeholder="Doe"
+              required
+            />
+          </div>
+        </div>
         <label className="text-md" htmlFor="email">
           Email
         </label>
@@ -52,18 +71,27 @@ export default function Login() {
           placeholder="••••••••"
           required
         />
+        <label className="text-md" htmlFor="password">
+          Re-type Password
+        </label>
+        <input
+          className="mb-6 rounded-md border-2 border-neutral-400 bg-inherit px-4 py-2"
+          type="password"
+          name="password"
+          placeholder="••••••••"
+          required
+        />
         <button className="mb-2 mt-4 rounded bg-purple-700 px-4 py-2 font-bold text-white hover:bg-purple-900">
-          Sign In
+          Sign Up
         </button>
-        <Messages />
       </form>
       <div className="mt-2 flex">
-        <p className=""> Don&apos;t have an account? </p>
+        <p className=""> Already have an account? </p>
         <Link
-          href="/register"
+          href="/login"
           className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md rounded-md px-2 font-bold text-purple-700 no-underline"
         >
-          Register
+          Login
         </Link>
       </div>
     </div>
