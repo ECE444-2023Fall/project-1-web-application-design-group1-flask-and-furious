@@ -8,13 +8,14 @@ import { useEffect, useRef } from 'react';
 
 function MapBox() {
   const mapContainer = useRef(null);
+  console.log(process.env);
+
   useEffect(() => {
     // create the map and configure it
     // check out the API reference for more options
     // https://docs.mapbox.com/mapbox-gl-js/api/map/
     const map = new mapboxgl.Map({
-      accessToken:
-        'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw',
+      accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
       container: 'map',
       style: 'mapbox://styles/mapbox/standard-beta',
       center: [-79.39486600749379, 43.66027265761257],
