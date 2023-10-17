@@ -1,10 +1,9 @@
-import Clicker from '@/components/Clicker';
+import MapBox from '@/components/MapBox';
 
 export default async function Home() {
   return (
     <main className="flex w-full flex-col items-center">
-      <Clicker />
-      <div>Hello World</div>
+      <MapBox />
     </main>
   );
 }
