@@ -8,6 +8,8 @@ import { useEffect, useRef } from 'react';
 
 function MapBox() {
   const mapContainer = useRef(null);
+  console.log(process.env);
+
   useEffect(() => {
     // create the map and configure it
     // check out the API reference for more options
