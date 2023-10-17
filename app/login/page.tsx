@@ -52,10 +52,13 @@ export default function Login() {
           placeholder="••••••••"
           required
         />
-        <button className="mb-2 mt-4 rounded bg-purple-700 px-4 py-2 font-bold text-white hover:bg-purple-900">
+        <Messages />
+        <button
+          type="submit"
+          className="mb-2 mt-4 rounded bg-purple-700 px-4 py-2 font-bold text-white hover:bg-purple-900"
+        >
           Sign In
         </button>
-        <Messages />
       </form>
       <div className="mt-2 flex">
         <p className=""> Don&apos;t have an account? </p>

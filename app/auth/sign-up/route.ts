@@ -6,15 +6,21 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
-  const formData = await request.formData();
-  const email = String(formData.get('email'));
-  const password = String(formData.get('password'));
+  const formData = await request.json();
+  const email = formData.email;
+  const password = formData.password;
+  const firstName = formData.firstName;
+  const lastName = formData.lastName;
   const supabase = createRouteHandlerClient<Database>({ cookies });
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
+      data: {
+        firstName: firstName,
+        lastName: lastName
+      },
       emailRedirectTo: `${requestUrl.origin}/auth/callback`
     }
   });
