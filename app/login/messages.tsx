@@ -8,16 +8,8 @@ export default function Messages() {
   const message = searchParams.get('message');
   return (
     <>
-      {error && (
-        <p className="mt-4 bg-neutral-900 p-4 text-center text-neutral-300">
-          {error}
-        </p>
-      )}
-      {message && (
-        <p className="mt-4 bg-neutral-900 p-4 text-center text-neutral-300">
-          {message}
-        </p>
-      )}
+      {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
+      {message && <div className="mb-4 text-sm text-red-500">{message}</div>}
     </>
   );
 }
