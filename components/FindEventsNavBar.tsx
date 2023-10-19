@@ -8,7 +8,7 @@ const FindEventsNavBar = () => {
       <Link
         href="/events/feed"
         className={
-          'flex flex-auto items-center justify-center bg-slate-50 shadow ' +
+          'flex flex-auto items-center justify-center shadow ' +
           (usePathname() === '/events/feed'
             ? 'bg-slate-200'
             : 'bg-slate-50 hover:opacity-50')
