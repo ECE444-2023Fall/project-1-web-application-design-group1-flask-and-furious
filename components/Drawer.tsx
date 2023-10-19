@@ -58,7 +58,7 @@ function EventForm(props: { onClose: () => void }) {
 
   return (
     <div className="flex-grow items-center bg-slate-50">
-      <form onSubmit={handleSubmit} className="flex w-1/2 w-full flex-col p-6">
+      <form onSubmit={handleSubmit} className="flex w-full flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="title"
