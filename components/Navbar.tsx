@@ -19,7 +19,7 @@ function Navbar({ session }: Props) {
         <Link
           href="/events/feed"
           className={
-            usePathname() === '/events/feed'
+            ['/events/feed', '/events/map'].includes(usePathname())
               ? 'font-bold underline-offset-auto'
               : 'hover:opacity-50'
           }
