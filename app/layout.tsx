@@ -40,7 +40,7 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <Navbar session={session} />
-        <main className="flex min-h-screen flex-col items-center bg-purple-100">
+        <main className="flex min-h-screen flex-col items-center bg-purple-100 text-black">
           {children}
         </main>
       </body>

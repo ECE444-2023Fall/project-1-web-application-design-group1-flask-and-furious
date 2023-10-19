@@ -16,6 +16,7 @@ const Filters = () => {
 
   return (
     <div>
+      {/* TODO: add rest of search and filter components */}
       <Slider list={times} value={sliderIndex} setValue={setSliderIndex} />
     </div>
   );

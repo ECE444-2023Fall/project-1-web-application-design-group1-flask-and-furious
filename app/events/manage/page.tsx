@@ -1,6 +1,7 @@
 'use client';
 import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
+import EventForm from '@/components/EventForm';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -32,7 +33,9 @@ export default function Home() {
           isDrawerOpen ? '' : '-translate-x-full'
         }`}
         onClose={onCloseDrawer}
-      />
+      >
+        <EventForm onClose={onCloseDrawer} />
+      </Drawer>
       <div
         className={`transform-transition absolute right-0 h-screen duration-500 ${
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
