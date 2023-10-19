@@ -22,6 +22,12 @@ function MapBox() {
       pitch: 60
     });
 
+    const event_location = [
+      [-79.39486600749379, 43.66027265761257],
+      [-79.3959892, 43.659543],
+      [-79.3894661, 43.6671491]
+    ]; // Three example locations for the events
+
     map.on('load', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (map as any).setConfigProperty('basemap', 'lightPreset', 'dusk');
@@ -42,6 +48,15 @@ function MapBox() {
         }
       });
     });
+
+    // Adding markers for the events
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    for (let i = 0; i < event_location.length; i++) {
+      const marker = new mapboxgl.Marker()
+        .setLngLat(event_location[i])
+        .addTo(map);
+    }
+    /* eslint-enable @typescript-eslint/no-unused-vars */
   }, []);
 
   return (
