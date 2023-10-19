@@ -28,7 +28,7 @@ export default function Home() {
     <main className="relative h-screen w-full">
       <Drawer
         isOpen={isDrawerOpen}
-        style={`overflow-y-auto absolute h-screen bg-slate-50 left-0 transform-transition duration-500 w-1/3 bg-slate-50 ${
+        style={`overflow-y-auto absolute h-screen bg-slate-50 left-0 transform-transition duration-500 w-1/3 ${
           isDrawerOpen ? '' : '-translate-x-full'
         }`}
         onClose={onCloseDrawer}
