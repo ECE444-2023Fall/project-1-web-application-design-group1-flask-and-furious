@@ -26,6 +26,7 @@ function EventForm({ onClose }: Props) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Send the formData to your server or perform any desired action
+    // eslint-disable-next-line no-console
     console.log(formData);
     onClose();
   };
