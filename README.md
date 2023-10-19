@@ -33,10 +33,13 @@ pip install -r api/requirements.txt
 ```
 
 Setup your env variables:
+
 ```bash
 cp .env.template .env
 ```
-Fill this with your credentials from [supabase](https://supabase.com/dashboard/project/yqrgbzoauzaaznsztnwb/settings/api)
+
+Fill this with your credentials from [supabase](https://supabase.com/dashboard/project/yqrgbzoauzaaznsztnwb/settings/api) also message @Joshua-Pow for the MapBox token
+
 ```bash
 source .env
 ```

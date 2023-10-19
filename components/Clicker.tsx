@@ -7,6 +7,7 @@ const Clicker = () => {
   const session = supabase.auth.getSession();
 
   const callBackend = async () => {
+    // eslint-disable-next-line no-console
     console.log(session);
     fetch('/api/event', {
       headers: {
@@ -14,6 +15,7 @@ const Clicker = () => {
       }
     })
       .then((res) => res.json())
+      // eslint-disable-next-line no-console
       .then((data) => console.log(data));
   };
   return <button onClick={callBackend}>Clicker</button>;
