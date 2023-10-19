@@ -1,8 +1,8 @@
 import EventCard from '@/components/EventCard';
 
-export default async function Home() {
+export default function page() {
   return (
-    <main className="flex w-full flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       <div className="grid grid-cols-3 gap-4 p-4">
         {/* Create some dummy events */}
         {[1, 2, 3, 4, 5, 6, 7].map((id) => (
@@ -19,6 +19,6 @@ export default async function Home() {
           />
         ))}
       </div>
-    </main>
+    </div>
   );
 }

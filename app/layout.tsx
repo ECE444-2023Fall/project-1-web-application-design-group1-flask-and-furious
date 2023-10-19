@@ -32,6 +32,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v3.0.0-beta.1/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </head>
       <body className={inter.className}>
         <Navbar session={session} />
         <main className="flex min-h-screen flex-col items-center bg-purple-100">

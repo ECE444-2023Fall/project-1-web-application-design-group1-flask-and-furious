@@ -17,9 +17,9 @@ function Navbar({ session }: Props) {
 
       <div className="flex items-center gap-2">
         <Link
-          href="/events"
+          href="/events/feed"
           className={
-            usePathname() === '/events'
+            ['/events/feed', '/events/map'].includes(usePathname())
               ? 'font-bold underline-offset-auto'
               : 'hover:opacity-50'
           }
