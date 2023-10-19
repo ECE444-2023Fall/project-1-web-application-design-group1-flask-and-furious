@@ -1,4 +1,12 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Club Hub
+
+Club Hub seeks to provoide University of Toronto students with convenient access to events on campus. The application is composed of a NextJS frontend and a Flask backend as part of a Software Engineering course (ECE444) taken at the University of Toronto.
+
+[<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="drawing" height="30"/>][Next-url]
+[<img src="https://flask.palletsprojects.com/en/3.0.x/_images/flask-horizontal.png" alt="drawing" height="30"/>][Flask-url]
+
+[Next-url]: https://nextjs.org/
+[Flask-url]: https://flask.palletsprojects.com/en/3.0.x/
 
 ## Prerequisites
 
@@ -89,8 +97,7 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- App deployment is setup using [Vercel](https://vercel.com/home)
+- On merge to main your changes will be automatically deployed to https://club-hub.vercel.app

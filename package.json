@@ -8,7 +8,9 @@
     "dev": "concurrently \"pnpm run next-dev\" \"pnpm run flask-dev\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "flask-lint": "python -m ruff check .",
+    "next-lint": "next lint",
+    "lint": "pnpm next-lint && pnpm flask-lint",
     "prepare": "husky install"
   },
   "dependencies": {
