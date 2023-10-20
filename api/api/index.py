@@ -34,7 +34,10 @@ class Event(Resource):
             token = request.headers.get("Authentication").split()[1]
             print("token: ", token)
             print("session: ", supabase.auth.get_user(token))
-            return {"message": "Hello, World!, youre authnticated"}
+            req = supabase.table('Events').select('*').execute()
+            data = req.json()
+            print("here:",req,"a",data,"b")
+            return (data)
         except Exception as e:
             print("error: ", e)
             return {
@@ -43,6 +46,8 @@ class Event(Resource):
 
     def post(self):
         return {"message": "Hello, World!"}
-
+    
 api.add_namespace(event_api)
 api.init_app(app)
+
+

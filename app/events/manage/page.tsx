@@ -3,7 +3,8 @@ import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect, useState } from 'react';
 
 export interface EventCardProps {
   eventName: string;
@@ -15,7 +16,10 @@ export interface EventCardProps {
   eventDescription: string;
 }
 
-export interface eventData {
+interface EventData {
+  id: number;
+  created_at: string;
+  Owner: string;
   Title: string;
   Description: string;
   Location: string;
@@ -29,11 +33,50 @@ export interface eventData {
 export default function Home() {
   // Initialize isOpen state
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
+  const [events, setEvents] = useState<EventData[]>([]);
+  // Backend
+  const supabase = createClientComponentClient();
+  const session = supabase.auth.getSession();
+
+  const Get = async () => {
+    console.log(session);
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authentication: `Bearer ${(await session).data.session?.access_token}`
+      }
+    };
+    fetch('/api/event', requestOptions)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(JSON.parse(data)['data']);
+        setEvents(JSON.parse(data)['data']);
+      });
+  };
+
+  useEffect(() => {
+    // This code will run when the component mounts (i.e., when the page loads)
+    Get();
+  }, []);
 
   const toggleDrawer = () => {
     setIsDrawerOpen((prevState) => !prevState);
   };
   
+
+  const formatTime = (timeString: string): string => {
+    const [hours, minutes] = timeString.split(':');
+    const parsedTime = new Date();
+    parsedTime.setHours(parseInt(hours, 10));
+    parsedTime.setMinutes(parseInt(minutes, 10));
+    const options: Intl.DateTimeFormatOptions = {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    };
+    return parsedTime.toLocaleTimeString([], options);
+  };
 
   return (
     <main className="relative h-screen w-full">
@@ -59,18 +102,17 @@ export default function Home() {
           />
         </div>
         <div className="grid grid-cols-3 gap-4 p-4">
-          {/* Create some dummy events */}
-          {[1, 2, 3, 4, 5, 6, 7].map((id) => (
+          {events.map((event) => (
             <EventCard
-              key={id}
-              eventName={'Awesome Concert'}
-              eventDescription={
-                'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.'
-              }
-              eventLocation={'Galbraith 202'}
-              eventDate={'29/10/2023'}
-              eventTime={'8-10 pm'}
-              eventTags={['Programming', 'Music', 'Dance']}
+              key={event.id}
+              eventName={event.Title}
+              eventDescription={event.Description}
+              eventLocation={event.Location}
+              eventDate={event.Date}
+              eventTime={`${formatTime(event.StartTime)} - ${formatTime(
+                event.EndTime
+              )}`}
+              eventTags={event.Tags}
             />
           ))}
         </div>
