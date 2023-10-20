@@ -15,8 +15,20 @@ export interface EventCardProps {
   eventDescription: string;
 }
 
+export interface eventData {
+  Title: string;
+  Description: string;
+  Location: string;
+  StartTime: string;
+  EndTime: string;
+  Frequency: string;
+  Tags: string[];
+  Date: string;
+}
+
 export default function Home() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true); // Initialize isOpen state
+  // Initialize isOpen state
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
 
   const toggleDrawer = () => {
     setIsDrawerOpen((prevState) => !prevState);
