@@ -47,7 +47,7 @@ export default function Home() {
         Authentication: `Bearer ${(await session).data.session?.access_token}`
       }
     };
-    fetch('/api/event', requestOptions)
+    fetch('/api/manageevent', requestOptions)
       .then((res) => res.json())
       .then((data) => {
         console.log(JSON.parse(data)['data']);

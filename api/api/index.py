@@ -24,7 +24,7 @@ api = Api(
     prefix="/api",
 )
 
-event_api = Namespace("event", description="event related operations")
+event_api = Namespace("manageevent", description="event related operations")
 
 @event_api.route("/")
 class Event(Resource):
@@ -33,9 +33,12 @@ class Event(Resource):
         try:
             token = request.headers.get("Authentication").split()[1]
             print("token: ", token)
-            print("session: ", supabase.auth.get_user(token))
-            req = supabase.table('Events').select('*').execute()
-            data = req.json()
+            user = supabase.auth.get_user(token)
+            print("user: ",user)
+            uuid = user.user.id
+            print("uuid: ",uuid)
+            req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
+            data = req.model_dump_json()
             print("here:",req,"a",data,"b")
             return (data)
         except Exception as e:
