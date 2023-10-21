@@ -45,6 +45,16 @@ export default function Home() {
   // Initialize isOpen state
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
+  const [changeFormData, setFormData] = useState<formData>({
+    title: '',
+    description: '',
+    location: '',
+    startTime: '',
+    endTime: '',
+    date: '',
+    frequency: '',
+    tags: []
+  });
   // Backend
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
@@ -95,8 +105,21 @@ export default function Home() {
     Get();
   }, []);
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen((prevState) => !prevState);
+  const onCloseDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+  const onOpenDrawer = () => {
+    setFormData({
+      title: '',
+      description: '',
+      location: '',
+      startTime: '',
+      endTime: '',
+      date: '',
+      frequency: '',
+      tags: []
+    });
+    setIsDrawerOpen(true);
   };
   
 
@@ -120,17 +143,18 @@ export default function Home() {
         style={`overflow-y-auto absolute h-screen bg-slate-50 left-0 transform-transition duration-500 w-1/3 bg-slate-50 ${
           isDrawerOpen ? '' : '-translate-x-full'
         }`}
-        onClose={toggleDrawer}
+        onClose={onCloseDrawer}
         Post={Post}
+        initialFormData={changeFormData}
       >
-        <EventForm  onClose={toggleDrawer}/>
+        <EventForm onClose={onCloseDrawer}/>
       </Drawer>
       <div
         className={`transform-transition absolute right-0 h-screen duration-500 ${
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
-        <div onClick={toggleDrawer} className="cursor-pointer flex h-9 w-full items-center bg-slate-50 p-3">
+        <div onClick={onOpenDrawer} className="cursor-pointer flex h-9 w-full items-center bg-slate-50 p-3">
           <h5 className="text-lg font-bold">Create Event</h5>
           <SquaresPlusIcon
             className="ml-2 h-5 w-5 fill-current stroke-1 text-black"

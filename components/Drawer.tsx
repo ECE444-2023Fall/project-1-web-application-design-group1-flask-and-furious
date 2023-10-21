@@ -19,6 +19,7 @@ export interface DrawerProps {
   children: React.ReactNode;
   // data: eventData
   Post: (formData: formData) => void;
+  initialFormData: formData;
 }
 
 export default function Drawer(props: DrawerProps) {
