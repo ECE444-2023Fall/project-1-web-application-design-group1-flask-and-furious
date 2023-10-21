@@ -1,12 +1,24 @@
 'use client';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
+interface formData {
+  title: string;
+  description: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  date: string;
+  frequency: string;
+  tags: string[];
+}
+
 export interface DrawerProps {
   isOpen: boolean;
   style: string;
   onClose: () => void;
   children: React.ReactNode;
   // data: eventData
+  Post: (formData: formData) => void;
 }
 
 export default function Drawer(props: DrawerProps) {

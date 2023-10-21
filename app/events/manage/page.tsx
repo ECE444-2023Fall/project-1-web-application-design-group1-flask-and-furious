@@ -30,6 +30,17 @@ interface EventData {
   Date: string;
 }
 
+interface formData {
+  title: string;
+  description: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  date: string;
+  frequency: string;
+  tags: string[];
+}
+
 export default function Home() {
   // Initialize isOpen state
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
@@ -55,8 +66,32 @@ export default function Home() {
       });
   };
 
+  const Post = async (formData: formData) => {
+    console.log('IN POST: ', formData);
+    console.log('Proper Form: ', events);
+    try {
+      const requestBody = JSON.stringify(formData);
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authentication: `Bearer ${(await session).data.session?.access_token}`
+        },
+        body: requestBody
+      };
+      const response = await fetch('/api/manageevent', requestOptions);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Successful response:', data);
+      } else {
+        console.error('Error:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
-    // This code will run when the component mounts (i.e., when the page loads)
     Get();
   }, []);
 
@@ -86,8 +121,9 @@ export default function Home() {
           isDrawerOpen ? '' : '-translate-x-full'
         }`}
         onClose={toggleDrawer}
+        Post={Post}
       >
-        <EventForm onClose={toggleDrawer}/>
+        <EventForm  onClose={toggleDrawer}/>
       </Drawer>
       <div
         className={`transform-transition absolute right-0 h-screen duration-500 ${
