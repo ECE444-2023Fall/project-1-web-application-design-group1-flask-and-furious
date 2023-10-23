@@ -50,6 +50,7 @@
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
     "tailwindcss": "latest",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.2.2"
   }
 }
