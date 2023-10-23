@@ -29,5 +29,5 @@ jobs:
 
     # Re-enable when we have a python test suite
     - name: Python Test
-      uses: pnpm flask-test
+      run: pnpm flask-test
       if: false
