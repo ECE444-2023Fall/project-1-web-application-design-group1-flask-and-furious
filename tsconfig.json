@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".lintstagedrc.js"
-  ],
+    ".lintstagedrc.js",
+    "__tests__/**/*.tsx"  ],
   "exclude": ["node_modules"]
 }

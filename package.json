@@ -11,7 +11,9 @@
     "flask-lint": "python -m ruff check .",
     "next-lint": "next lint",
     "lint": "pnpm next-lint && pnpm flask-lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "next-test": "jest",
+    "test": "pnpm run next-test"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -27,6 +29,9 @@
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.6",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -38,11 +43,14 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^14.0.1",
     "postcss": "latest",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
     "tailwindcss": "latest",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.2.2"
   }
 }
