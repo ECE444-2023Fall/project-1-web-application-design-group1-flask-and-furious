@@ -11,7 +11,9 @@ export interface DrawerProps {
 
 export default function Drawer(props: DrawerProps) {
   return (
-    <div className={`overflow-y-auto ${props.style}`}>
+    <div
+      className={`transform-transition absolute left-0 flex h-auto w-1/3 flex-col bg-slate-50 duration-500 ${props.style}`}
+    >
       <div className="items-top flex h-52 justify-between bg-violet-400 p-3">
         <PhotoIcon
           className="h-7 w-7 stroke-1 text-black "

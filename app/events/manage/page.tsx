@@ -21,32 +21,32 @@ export default function Home() {
   const onCloseDrawer = () => {
     setIsDrawerOpen(false);
   };
-  const openDrawer = () => {
-    setIsDrawerOpen(true);
+  const toggleDrawer = () => {
+    setIsDrawerOpen((prev) => !prev);
   };
 
   return (
-    <main className="relative h-screen w-full">
+    <div className="flex h-full flex-row">
       <Drawer
         isOpen={isDrawerOpen}
-        style={`overflow-y-auto absolute h-screen bg-slate-50 left-0 transform-transition duration-500 w-1/3 ${
-          isDrawerOpen ? '' : '-translate-x-full'
-        }`}
+        style={isDrawerOpen ? '' : '-translate-x-full'}
         onClose={onCloseDrawer}
       >
         <EventForm onClose={onCloseDrawer} />
       </Drawer>
       <div
-        className={`transform-transition absolute right-0 h-screen duration-500 ${
+        className={`transform-transition absolute right-0 duration-500 ${
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
-        <div className="flex h-9 w-full items-center bg-slate-50 p-3">
+        <div
+          className="flex h-9 w-full items-center bg-slate-50 p-3"
+          onClick={toggleDrawer}
+        >
           <h5 className="text-lg font-bold">Create Event</h5>
           <SquaresPlusIcon
             className="ml-2 h-5 w-5 fill-current stroke-1 text-black"
             aria-hidden="true"
-            onClick={openDrawer}
           />
         </div>
         <div className="grid grid-cols-3 gap-4 p-4">
@@ -66,6 +66,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

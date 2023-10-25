@@ -6,10 +6,10 @@ const FindEventsNavBar = () => {
   return (
     <div className="flex h-16 w-full flex-row justify-evenly border-b text-black">
       <Link
-        href="/events/feed"
+        href="/events/find/feed"
         className={
           'flex flex-auto items-center justify-center shadow ' +
-          (usePathname() === '/events/feed'
+          (usePathname() === '/events/find/feed'
             ? 'bg-slate-200'
             : 'bg-slate-50 hover:opacity-50')
         }
@@ -17,10 +17,10 @@ const FindEventsNavBar = () => {
         Feed
       </Link>
       <Link
-        href="/events/map"
+        href="/events/find/map"
         className={
           'flex flex-auto items-center justify-center shadow ' +
-          (usePathname() === '/events/map'
+          (usePathname() === '/events/find/map'
             ? 'bg-slate-200'
             : 'bg-slate-50 hover:opacity-50')
         }
