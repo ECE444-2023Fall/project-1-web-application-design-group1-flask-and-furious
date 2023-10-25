@@ -20,7 +20,7 @@ export default function Drawer(props: DrawerProps) {
           aria-hidden="true"
         />
         <XMarkIcon
-          className="h-7 w-7 stroke-1 text-black"
+          className="h-7 w-7 cursor-pointer stroke-1 text-black"
           aria-hidden="true"
           onClick={props.onClose}
         />

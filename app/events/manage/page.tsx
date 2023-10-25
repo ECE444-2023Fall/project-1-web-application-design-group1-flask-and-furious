@@ -39,14 +39,17 @@ export default function Home() {
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
-        <div
-          className="flex h-9 w-full items-center bg-slate-50 p-3"
-          onClick={toggleDrawer}
-        >
-          <h5 className="text-lg font-bold">Create Event</h5>
+        <div className="flex h-9 w-full items-center bg-slate-50 p-3">
+          <h5
+            className="cursor-pointer text-lg font-bold"
+            onClick={toggleDrawer}
+          >
+            Create Event
+          </h5>
           <SquaresPlusIcon
-            className="ml-2 h-5 w-5 fill-current stroke-1 text-black"
+            className="ml-2 h-5 w-5 cursor-pointer fill-current stroke-1 text-black"
             aria-hidden="true"
+            onClick={toggleDrawer}
           />
         </div>
         <div className="grid h-[calc(100vh-64px-36px)] grid-cols-3 gap-4 overflow-y-auto p-4">
