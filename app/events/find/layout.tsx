@@ -1,4 +1,4 @@
-import FindEventsNavBar from '@/components/FindEventsNavBar';
+import FindEventsNavBar from '@/components/EventsNavBar';
 
 export default function DashboardLayout({
   children // will be a page or nested layout

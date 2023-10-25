@@ -1,6 +1,6 @@
 export default async function Home() {
   return (
-    <div className="flex min-h-screen w-screen flex-col items-center justify-center bg-purple-50">
+    <div className="flex h-full w-screen flex-col items-center justify-center bg-purple-50">
       <div className="group relative">
         <div className="absolute -inset-0.5 animate-tilt rounded-lg bg-purple-600 bg-gradient-to-r from-pink-600 to-purple-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
         <div className="relative rounded-lg bg-purple-100 px-7 py-4">

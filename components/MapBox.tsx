@@ -48,7 +48,8 @@ function MapBox() {
     <div
       id="map"
       ref={mapContainer}
-      style={{ width: '100%', height: '100vh' }}
+      // className="h-[calc(100vh-4rem)]] w-full"
+      style={{ width: '100%', height: 'calc(100vh - 4rem - 4rem)' }}
     />
   );
 }

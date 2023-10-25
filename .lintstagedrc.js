@@ -11,5 +11,5 @@ const ruffCommand = 'ruff check .';
 module.exports = {
   '*.{js,jsx,ts,tsx}': [formatCommand, eslintCommand],
   '*.{css,scss}': [formatCommand],
-  '*.{py}': [ruffCommand]
+  '*.py': [ruffCommand]
 };
