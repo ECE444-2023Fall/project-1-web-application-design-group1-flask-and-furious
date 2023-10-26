@@ -15,13 +15,13 @@ Club Hub seeks to provoide University of Toronto students with convenient access
 
 ## Getting Started (make sure youre in the root of the project)
 
-Install required backages with:
+Install required packages with:
 
 ```bash
 pnpm install
 ```
 
-Create a python virtual environment with:
+Create a Python virtual environment with:
 
 ```bash
 python3 -m venv venv
@@ -34,7 +34,7 @@ Mac/Linux: source venv/bin/activate
 Windows: venv\Scripts\activate
 ```
 
-Install required python packages with:
+Install required Python packages with:
 
 ```bash
 pip install -r api/requirements.txt
@@ -72,7 +72,7 @@ pnpm run next-dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-The Backened runs on [http://localhost:5328/api/](http://localhost:5328/api/)
+The Backend runs on [http://localhost:5328/api/](http://localhost:5328/api/)
 
 To see Backend documentation go to [http://localhost:5328](http://localhost:5328)
 
@@ -82,7 +82,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Adding Python Packages
 
-To add a python package you need to make sure to add it to the requirements.txt file
+To add a Python package you need to make sure to add it to the requirements.txt file
 
 ```bash
 pip freeze > requirements.txt
