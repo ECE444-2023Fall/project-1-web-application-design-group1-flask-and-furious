@@ -90,11 +90,21 @@ export default function Home() {
         body: requestBody
       };
       await fetch('/api/events', requestOptions);
+      setFormData({
+        title: '',
+        description: '',
+        location: '',
+        startTime: '',
+        endTime: '',
+        date: '',
+        frequency: '',
+        tags: []
+      });
+      Get();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error fetching events: ', error);
     }
-    Get();
   };
 
   useEffect(() => {
@@ -102,16 +112,6 @@ export default function Home() {
   }, []);
 
   const onCloseDrawer = () => {
-    setFormData({
-      title: '',
-      description: '',
-      location: '',
-      startTime: '',
-      endTime: '',
-      date: '',
-      frequency: '',
-      tags: []
-    });
     setIsDrawerOpen(false);
   };
   const onOpenDrawer = () => {
