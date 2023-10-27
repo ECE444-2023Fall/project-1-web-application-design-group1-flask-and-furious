@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-type Props = {
+export type Props = {
   value: number;
   setValue: React.Dispatch<React.SetStateAction<number>>;
   list: Array<string>;
