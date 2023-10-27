@@ -68,7 +68,7 @@ export default function Home() {
         Authentication: `Bearer ${(await session).data.session?.access_token}`
       }
     };
-    fetch('/api/manageevent', requestOptions)
+    fetch('/api/event', requestOptions)
       .then((res) => res.json())
       .then((data) => {
         console.log(JSON.parse(data)['data']);
@@ -89,7 +89,7 @@ export default function Home() {
         },
         body: requestBody
       };
-      const response = await fetch('/api/manageevent', requestOptions);
+      const response = await fetch('/api/event', requestOptions);
       if (response.ok) {
         const data = await response.json();
         console.log('Successful response:', data);
