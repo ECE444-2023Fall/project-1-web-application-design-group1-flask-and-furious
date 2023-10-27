@@ -144,10 +144,8 @@ export default function Home() {
           isDrawerOpen ? '' : '-translate-x-full'
         }`}
         onClose={onCloseDrawer}
-        Post={Post}
-        initialFormData={changeFormData}
       >
-        <EventForm onClose={onCloseDrawer}/>
+        <EventForm onClose={onCloseDrawer} Post={Post} initialFormData={changeFormData}/>
       </Drawer>
       <div
         className={`transform-transition absolute right-0 h-screen duration-500 ${

@@ -1,35 +1,82 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
-type Props = { onClose: () => void };
+interface formData {
+  title: string;
+  description: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  date: string;
+  frequency: string;
+  tags: string[];
+}
 
-function EventForm({ onClose }: Props) {
+export default function EventForm(props: {
+  onClose: () => void;
+  Post: (formData: formData) => void;
+  initialFormData: formData;
+}) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     location: '',
-    time: '',
+    startTime: '',
+    endTime: '',
     date: '',
     frequency: '',
-    tags: ''
+    tags: [] as string[]
   });
 
+  useEffect(() => {
+    setFormData(props.initialFormData);
+  }, [props.initialFormData]);
+
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    const { name, value, type } = e.target;
+
+    if (type === 'select-multiple') {
+      // Cast the event target to HTMLSelectElement to access options property
+      const selectElement = e.target as HTMLSelectElement;
+
+      // Extract the selected values and convert them into an array
+      const selectedOptions = Array.from(selectElement.options).filter(
+        (option) => option.selected
+      );
+      const selectedValues = selectedOptions.map((option) => option.value);
+
+      setFormData({
+        ...formData,
+        [name]: selectedValues
+      });
+    } else {
+      if (name === 'startTime' || name === 'endTime') {
+        setFormData({
+          ...formData,
+          [name]: value + ':00'
+        });
+      } else {
+        setFormData({
+          ...formData,
+          [name]: value
+        });
+      }
+    }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Send the formData to your server or perform any desired action
-    // eslint-disable-next-line no-console
     console.log(formData);
-    onClose();
+    try {
+      props.Post(formData);
+      props.onClose();
+    } catch (error) {
+      console.error('Error while calling the backend:', error);
+    }
   };
+
+  const tagOptions = ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5']; //update later
 
   return (
     <div className="flex-grow items-center bg-slate-50">
@@ -83,16 +130,32 @@ function EventForm({ onClose }: Props) {
         </div>
         <div className="mb-4 flex items-start justify-between">
           <label
-            htmlFor="time"
+            htmlFor="startTime"
             className="mr-2 text-lg font-bold text-violet-700"
           >
-            Time:
+            Start Time:
           </label>
           <input
-            type="text"
-            id="time"
-            name="time"
-            value={formData.time}
+            type="time"
+            id="startTime"
+            name="startTime"
+            value={formData.startTime}
+            onChange={handleChange}
+            className="w-2/3 rounded border border-gray-300 p-2"
+          />
+        </div>
+        <div className="mb-4 flex items-start justify-between">
+          <label
+            htmlFor="endTime"
+            className="mr-2 text-lg font-bold text-violet-700"
+          >
+            End Time:
+          </label>
+          <input
+            type="time"
+            id="endTime"
+            name="endTime"
+            value={formData.endTime}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -120,14 +183,21 @@ function EventForm({ onClose }: Props) {
           >
             Frequency:
           </label>
-          <input
-            type="text"
+          <select
             id="frequency"
             name="frequency"
             value={formData.frequency}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
-          />
+          >
+            <option value="">Select Frequency</option>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Biweekly">Biweekly</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="Yearly">Yearly</option>
+          </select>
         </div>
         <div className="mb-4 flex items-start justify-between">
           <label
@@ -136,14 +206,20 @@ function EventForm({ onClose }: Props) {
           >
             Tags:
           </label>
-          <input
-            type="text"
+          <select
             id="tags"
             name="tags"
             value={formData.tags}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
-          />
+            multiple // Add the 'multiple' attribute to enable multi-select
+          >
+            {tagOptions.map((tag, index) => (
+              <option key={index} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="absolute bottom-3 right-3">
           <button
@@ -157,5 +233,3 @@ function EventForm({ onClose }: Props) {
     </div>
   );
 }
-
-export default EventForm;
