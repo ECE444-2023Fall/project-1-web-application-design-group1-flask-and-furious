@@ -131,12 +131,10 @@ export default function Home() {
   };
 
   return (
-    <main className="relative h-screen w-full">
+    <main className="flex h-full flex-row">
       <Drawer
         isOpen={isDrawerOpen}
-        style={`overflow-y-auto absolute h-screen bg-slate-50 left-0 transform-transition duration-500 w-1/3 bg-slate-50 ${
-          isDrawerOpen ? '' : '-translate-x-full'
-        }`}
+        style={isDrawerOpen ? '' : '-translate-x-full'}
         onClose={onCloseDrawer}
       >
         <EventForm
@@ -146,7 +144,7 @@ export default function Home() {
         />
       </Drawer>
       <div
-        className={`transform-transition absolute right-0 h-screen duration-500 ${
+        className={`transform-transition absolute right-0 h-[calc(100vh-64px)] duration-500 ${
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
@@ -160,20 +158,22 @@ export default function Home() {
             aria-hidden="true"
           />
         </div>
-        <div className="grid grid-cols-3 gap-4 p-4">
-          {events.map((event) => (
-            <EventCard
-              key={event.id}
-              eventName={event.Title}
-              eventDescription={event.Description}
-              eventLocation={event.Location}
-              eventDate={event.Date}
-              eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                event.EndTime
-              )}`}
-              eventTags={event.Tags}
-            />
-          ))}
+        <div className="h-[calc(100vh-64px-36px)] overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
+            {events.map((event) => (
+              <EventCard
+                key={event.id}
+                eventName={event.Title}
+                eventDescription={event.Description}
+                eventLocation={event.Location}
+                eventDate={event.Date}
+                eventTime={`${formatTime(event.StartTime)} - ${formatTime(
+                  event.EndTime
+                )}`}
+                eventTags={event.Tags}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </main>
