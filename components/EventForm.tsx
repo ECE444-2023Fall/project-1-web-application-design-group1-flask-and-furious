@@ -67,11 +67,12 @@ export default function EventForm(props: {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
     try {
       props.Post(formData);
       props.onClose();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error while calling the backend:', error);
     }
   };

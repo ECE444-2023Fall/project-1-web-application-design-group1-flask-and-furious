@@ -60,7 +60,7 @@ export default function Home() {
   const session = supabase.auth.getSession();
 
   const Get = async () => {
-    console.log(session);
+    //console.log(session);
     const requestOptions = {
       method: 'GET',
       headers: {
@@ -71,14 +71,14 @@ export default function Home() {
     fetch('/api/event', requestOptions)
       .then((res) => res.json())
       .then((data) => {
-        console.log(JSON.parse(data)['data']);
+        //console.log(JSON.parse(data)['data']);
         setEvents(JSON.parse(data)['data']);
       });
   };
 
   const Post = async (formData: formData) => {
-    console.log('IN POST: ', formData);
-    console.log('Proper Form: ', events);
+    //console.log('IN POST: ', formData);
+    //console.log('Proper Form: ', events);
     try {
       const requestBody = JSON.stringify(formData);
       const requestOptions = {
@@ -89,15 +89,10 @@ export default function Home() {
         },
         body: requestBody
       };
-      const response = await fetch('/api/event', requestOptions);
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Successful response:', data);
-      } else {
-        console.error('Error:', response.statusText);
-      }
+      await fetch('/api/event', requestOptions);
     } catch (error) {
-      console.error('Error:', error);
+      // eslint-disable-next-line no-console
+      console.error('Error fetching events: ', error);
     }
   };
 
@@ -121,7 +116,6 @@ export default function Home() {
     });
     setIsDrawerOpen(true);
   };
-  
 
   const formatTime = (timeString: string): string => {
     const [hours, minutes] = timeString.split(':');
@@ -145,14 +139,21 @@ export default function Home() {
         }`}
         onClose={onCloseDrawer}
       >
-        <EventForm onClose={onCloseDrawer} Post={Post} initialFormData={changeFormData}/>
+        <EventForm
+          onClose={onCloseDrawer}
+          Post={Post}
+          initialFormData={changeFormData}
+        />
       </Drawer>
       <div
         className={`transform-transition absolute right-0 h-screen duration-500 ${
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
-        <div onClick={onOpenDrawer} className="cursor-pointer flex h-9 w-full items-center bg-slate-50 p-3">
+        <div
+          onClick={onOpenDrawer}
+          className="flex h-9 w-full cursor-pointer items-center bg-slate-50 p-3"
+        >
           <h5 className="text-lg font-bold">Create Event</h5>
           <SquaresPlusIcon
             className="ml-2 h-5 w-5 fill-current stroke-1 text-black"
