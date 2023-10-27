@@ -24,7 +24,7 @@ api = Api(
     prefix="/api",
 )
 
-event_api = Namespace("event", description="event related operations")
+event_api = Namespace("events", description="event related operations")
 
 @event_api.route("/")
 class Event(Resource):

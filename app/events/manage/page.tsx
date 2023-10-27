@@ -68,7 +68,7 @@ export default function Home() {
         Authentication: `Bearer ${(await session).data.session?.access_token}`
       }
     };
-    fetch('/api/event', requestOptions)
+    fetch('/api/events', requestOptions)
       .then((res) => res.json())
       .then((data) => {
         //console.log(JSON.parse(data)['data']);
@@ -89,7 +89,7 @@ export default function Home() {
         },
         body: requestBody
       };
-      await fetch('/api/event', requestOptions);
+      await fetch('/api/events', requestOptions);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error fetching events: ', error);
