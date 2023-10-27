@@ -94,6 +94,7 @@ export default function Home() {
       // eslint-disable-next-line no-console
       console.error('Error fetching events: ', error);
     }
+    Get();
   };
 
   useEffect(() => {
@@ -101,9 +102,6 @@ export default function Home() {
   }, []);
 
   const onCloseDrawer = () => {
-    setIsDrawerOpen(false);
-  };
-  const onOpenDrawer = () => {
     setFormData({
       title: '',
       description: '',
@@ -114,6 +112,9 @@ export default function Home() {
       frequency: '',
       tags: []
     });
+    setIsDrawerOpen(false);
+  };
+  const onOpenDrawer = () => {
     setIsDrawerOpen(true);
   };
 
@@ -148,15 +149,17 @@ export default function Home() {
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
-        <div
-          onClick={onOpenDrawer}
-          className="flex h-9 w-full cursor-pointer items-center bg-slate-50 p-3"
-        >
-          <h5 className="text-lg font-bold">Create Event</h5>
-          <SquaresPlusIcon
-            className="ml-2 h-5 w-5 fill-current stroke-1 text-black"
-            aria-hidden="true"
-          />
+        <div className="flex h-9 w-full  items-center bg-slate-50 p-3">
+          <div
+            className="flex cursor-pointer items-center"
+            onClick={() => (isDrawerOpen ? onCloseDrawer() : onOpenDrawer())}
+          >
+            <h5 className="text-lg font-bold">Create Event</h5>
+            <SquaresPlusIcon
+              className="ml-2 h-5 w-5 fill-current stroke-1 text-black"
+              aria-hidden="true"
+            />
+          </div>
         </div>
         <div className="h-[calc(100vh-64px-36px)] overflow-y-auto">
           <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
