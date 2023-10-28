@@ -24,6 +24,7 @@ const Slider = ({ value, setValue, list }: Props) => {
         onChange={handleSliderChange}
         className="range range-primary range-xs"
         step={1}
+        aria-label="slider-input"
       />
       <div className="flex w-full justify-between px-2 text-[6px]">
         {list.map((value) => (
