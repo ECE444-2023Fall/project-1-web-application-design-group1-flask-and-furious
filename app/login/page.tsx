@@ -1,3 +1,4 @@
+import LoginForm from '@/components/LoginForm';
 import Link from 'next/link';
 import Messages from './messages';
 
@@ -28,38 +29,8 @@ export default function Login() {
         {' '}
         What&apos;s Litty In Your City?{' '}
       </p>
-      <form
-        className="text-foreground flex w-full flex-col gap-2"
-        action="/auth/sign-in"
-        method="post"
-      >
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="mb-6 rounded-md border-2 border-neutral-400 bg-inherit px-4 py-2"
-          name="email"
-          placeholder="you@example.com"
-          required
-        />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="mb-6 rounded-md border-2 border-neutral-400 bg-inherit px-4 py-2"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
-        <Messages />
-        <button
-          type="submit"
-          className="mb-2 mt-4 rounded bg-purple-700 px-4 py-2 font-bold text-white hover:bg-purple-900"
-        >
-          Sign In
-        </button>
-      </form>
+      <LoginForm />
+      <Messages />
       <div className="mt-2 flex">
         <p className=""> Don&apos;t have an account? </p>
         <Link
