@@ -161,7 +161,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="h-[calc(100vh-64px-36px)] overflow-y-auto">
+        <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
           <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
             {events.map((event) => (
               <EventCard
