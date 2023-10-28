@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
-interface formData {
+export interface formData {
   title: string;
   description: string;
   location: string;
@@ -11,11 +11,13 @@ interface formData {
   tags: string[];
 }
 
-export default function EventForm(props: {
+export interface formProps {
   onClose: () => void;
   Post: (formData: formData) => void;
   initialFormData: formData;
-}) {
+}
+
+export default function EventForm(props: formProps) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
