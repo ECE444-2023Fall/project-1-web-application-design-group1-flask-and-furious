@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Register() {
   return (
-    <div className="flex w-full flex-1 flex-col gap-2 px-8 sm:max-w-xl">
+    <div className="mx-auto flex w-full flex-1 flex-col gap-2 px-8 sm:max-w-xl">
       <Link
         href="/"
         className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md top-18 group absolute left-2 flex items-center rounded-md px-4 py-2 no-underline"
