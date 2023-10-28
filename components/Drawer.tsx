@@ -6,7 +6,6 @@ export interface DrawerProps {
   style: string;
   onClose: () => void;
   children: React.ReactNode;
-  // data: eventData
 }
 
 export default function Drawer(props: DrawerProps) {
@@ -14,7 +13,7 @@ export default function Drawer(props: DrawerProps) {
     <div
       className={`transform-transition absolute left-0 flex h-[calc(100vh-64px)] w-1/3 flex-col bg-slate-50 duration-500 ${props.style}`}
     >
-      <div className="items-top flex h-52 justify-between bg-violet-400 p-3">
+      <div className="items-top flex h-32 justify-between bg-violet-400 p-3">
         <PhotoIcon
           className="h-7 w-7 stroke-1 text-black "
           aria-hidden="true"
