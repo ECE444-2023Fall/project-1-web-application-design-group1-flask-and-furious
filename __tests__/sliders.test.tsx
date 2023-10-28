@@ -1,24 +1,31 @@
-'use client';
-import Slider, { Props } from '@/components/Slider';
-import { useState } from 'react';
+import Slider from '@/components/Slider';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
-import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+
+// Rowan Honeywell
 
 describe('Slider', () => {
-  it('Renders Event Name', async () => {
-    const props: Props = {
-      value: 1,
-      setValue: useState(0)[1],
-      list: ['1 hour', '2 hours', '3 hours', '4 hours', '5 hours']
-    };
+  const setStateMock = jest.fn();
+  const props = {
+    value: 2,
+    setValue: setStateMock,
+    list: ['1 hour', '2 hours', '3 hours', '4 hours', '5 hours']
+  };
 
-    render(<Slider {...props} />);
+  const setup = () => {
+    const utils = render(<Slider {...props} />);
+    const input = screen.getByLabelText('slider-input');
+    return { input, ...utils };
+  };
 
-    const heading = screen.getByRole('heading', {
-      name: /Awesome Concert/i
-    });
+  it('Renders Slider Correctly', async () => {
+    const { getByText } = setup();
+    expect(getByText('3 hours')).toBeInTheDocument();
+  });
 
-    expect(heading).toBeInTheDocument();
+  it('Change Event Gets Fired', () => {
+    const { input } = setup();
+    fireEvent.change(input, { target: { value: '1' } });
+    expect(setStateMock).toHaveBeenCalled();
   });
 });
