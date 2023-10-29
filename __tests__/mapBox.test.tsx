@@ -19,10 +19,12 @@ describe('MapBox', () => {
     jest.clearAllMocks();
   });
 
+  //Joshua-Pow
   it('renders without crashing', () => {
     render(<MapBox />);
   });
 
+  //Joshua-Pow
   it('initializes the map', () => {
     act(() => {
       render(<MapBox />);
