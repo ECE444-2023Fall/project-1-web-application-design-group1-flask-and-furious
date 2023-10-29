@@ -8,7 +8,7 @@ const Tags = async () => {
   const { data } = await supabase.from('Tags').select();
 
   return (
-    <div className="dropdown">
+    <div className="dropdown" data-testid="tagsDropdown">
       <label tabIndex={0} className="btn m-1">
         Tags
       </label>
