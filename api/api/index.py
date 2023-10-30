@@ -32,14 +32,14 @@ class Event(Resource):
         print("headers: ", request.headers)
         try:
             token = request.headers.get("Authentication").split()[1]
-            print("token: ", token)
+            #print("token: ", token)
             user = supabase.auth.get_user(token)
-            print("user: ",user)
+            #print("user: ",user)
             uuid = user.user.id
-            print("uuid: ",uuid)
+            #print("uuid: ",uuid)
             req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
             data = req.model_dump_json()
-            print("here:",req,"a",data,"b")
+            #print("here:",req,"a",data,"b")
             return (data)
         except Exception as e:
             print("error: ", e)
@@ -50,7 +50,7 @@ class Event(Resource):
     def post(self):
         try:
             data = request.get_json()
-            print("Received data:", data)
+            #print("Received data:", data)
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
@@ -65,13 +65,34 @@ class Event(Resource):
                 "Tags": data.get("tags", []),
                 "Title": data["title"]
             }
-            print("UPLOADING THIS: ",data_to_insert)
+            #print("UPLOADING THIS: ",data_to_insert)
             supabase.table('Events').upsert(data_to_insert).execute()
             return "Done"
         except Exception as e:
             print("Error:", e)
             return {"message": "Server Error: Something went wrong while processing the data"}
     
+    def put(self):
+        try:
+            data = request.get_json()
+            print("\n\n\nReceived data:", data)
+            data_to_update = {
+                "Date": data["date"],
+                "Description": data["description"],
+                "EndTime": data["endTime"],
+                "Frequency": data["frequency"],
+                "Location": data["location"],
+                "StartTime": data["startTime"],
+                "Tags": data.get("tags", []),
+                "Title": data["title"]
+            }
+            print("\n\n\nUPDATING DATA: ", data_to_update)
+            supabase.table('Events').update(data_to_update).eq('id', data["eventId"]).execute()
+            return "Done"
+        except Exception as e:
+            print("Update Error:", e)
+            return {"message": "Server Error: Something went wrong while processing the update"}
+
 api.add_namespace(event_api)
 api.init_app(app)
 

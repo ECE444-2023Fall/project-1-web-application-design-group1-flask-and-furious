@@ -32,6 +32,7 @@ interface EventData {
 }
 
 interface formData {
+  eventId: number;
   title: string;
   description: string;
   location: string;
@@ -48,6 +49,7 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [changeFormData, setFormData] = useState<formData>({
+    eventId: 0,
     title: '',
     description: '',
     location: '',
@@ -98,6 +100,7 @@ export default function Home() {
       };
       await fetch('/api/events', requestOptions);
       setFormData({
+        eventId: 0,
         title: '',
         description: '',
         location: '',
@@ -114,16 +117,44 @@ export default function Home() {
     }
   };
 
-  const Update = async () => {
+  const Update = async (formData: formData) => {
     // eslint-disable-next-line no-console
-    console.log('Update');
+    console.error('Formdata: ', formData);
+    try {
+      const requestBody = JSON.stringify(formData);
+      const requestOptions = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authentication: `Bearer ${(await session).data.session?.access_token}`
+        },
+        body: requestBody
+      };
+      await fetch(`/api/events`, requestOptions);
+      setFormData({
+        eventId: 0,
+        title: '',
+        description: '',
+        location: '',
+        startTime: '',
+        endTime: '',
+        date: '',
+        frequency: '',
+        tags: []
+      });
+      Get();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error updating event: ', error);
+    }
   };
 
-  const test = (id: number) => {
+  const editEvent = (id: number) => {
     setIsNewEvent(false);
     const selectedEvent = events.find((event) => event.id === id);
     if (selectedEvent) {
       setFormData({
+        eventId: selectedEvent.id,
         title: selectedEvent.Title,
         description: selectedEvent.Description,
         location: selectedEvent.Location,
@@ -191,6 +222,7 @@ export default function Home() {
                 onOpenDrawer();
                 setIsNewEvent(true);
                 setFormData({
+                  eventId: 0,
                   title: '',
                   description: '',
                   location: '',
@@ -212,21 +244,26 @@ export default function Home() {
         </div>
         <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
           <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
-            {events.map((event) => (
-              <ManageEventCard
-                key={event.id}
-                eventId={event.id}
-                eventName={event.Title}
-                eventDescription={event.Description}
-                eventLocation={event.Location}
-                eventDate={event.Date}
-                eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                  event.EndTime
-                )}`}
-                eventTags={event.Tags}
-                action={test}
-              />
-            ))}
+            {events
+              .sort(
+                (a, b) =>
+                  new Date(a.Date).getTime() - new Date(b.Date).getTime()
+              )
+              .map((event) => (
+                <ManageEventCard
+                  key={event.id}
+                  eventId={event.id}
+                  eventName={event.Title}
+                  eventDescription={event.Description}
+                  eventLocation={event.Location}
+                  eventDate={event.Date}
+                  eventTime={`${formatTime(event.StartTime)} - ${formatTime(
+                    event.EndTime
+                  )}`}
+                  eventTags={event.Tags}
+                  action={editEvent}
+                />
+              ))}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 export interface formData {
+  eventId: number;
   title: string;
   description: string;
   location: string;
@@ -15,12 +16,13 @@ export interface formProps {
   onClose: () => void;
   Post: (formData: formData) => void;
   initialFormData: formData;
-  Update: () => void;
+  Update: (formData: formData) => void;
   isNewEvent: boolean;
 }
 
 export default function EventForm(props: formProps) {
   const [formData, setFormData] = useState({
+    eventId: 0,
     title: '',
     description: '',
     location: '',
@@ -76,7 +78,7 @@ export default function EventForm(props: formProps) {
       if (props.isNewEvent) {
         props.Post(formData);
       } else {
-        props.Update();
+        props.Update(formData);
       }
       props.onClose();
     } catch (error) {
