@@ -6,7 +6,7 @@ import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Get, Post } from '../event.api';
+import { apiCreateEvent, apiGetEvents } from '../event.api';
 import { EventData, formData, formatTime } from '../event.helpers';
 
 export interface EventCardProps {
@@ -43,11 +43,11 @@ export default function Home() {
       router.push('/login');
       return;
     }
-    Get((await session).data.session, setEvents);
+    apiGetEvents((await session).data.session, setEvents);
   };
 
   const createEvent = async (formData: formData) => {
-    await Post((await session).data.session, formData);
+    await apiCreateEvent((await session).data.session, formData);
     setFormData({
       title: '',
       description: '',

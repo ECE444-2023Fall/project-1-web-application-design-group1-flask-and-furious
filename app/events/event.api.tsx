@@ -2,7 +2,7 @@ import { Session } from '@supabase/gotrue-js';
 import { Dispatch, SetStateAction } from 'react';
 import { EventData, formData } from './event.helpers';
 
-export const Get = async (
+export const apiGetEvents = async (
   session: Session | null,
   setEvents: Dispatch<SetStateAction<EventData[]>>
 ) => {
@@ -20,7 +20,10 @@ export const Get = async (
     });
 };
 
-export const Post = async (session: Session | null, formData: formData) => {
+export const apiCreateEvent = async (
+  session: Session | null,
+  formData: formData
+) => {
   try {
     const requestBody = JSON.stringify(formData);
     const requestOptions = {
