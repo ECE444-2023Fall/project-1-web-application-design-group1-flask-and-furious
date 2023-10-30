@@ -39,7 +39,30 @@ function Navbar({ session }: Props) {
             Manage Events
           </Link>
         )}
-        <NavbarProfile session={session} />
+        {session ? (
+          <NavbarProfile session={session} />
+        ) : (
+          <div className="m-2 flex items-center justify-center">
+            <Link
+              href="/login"
+              className={
+                'rounded-l-xl border bg-violet-600 px-4 py-1 text-white transition hover:bg-violet-500 ' +
+                (pathname === '/login' ? 'bg-violet-500' : '')
+              }
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className={
+                'rounded-r-xl border bg-neutral-50 px-4 py-1 transition hover:bg-neutral-200 ' +
+                (pathname === '/register' ? 'bg-neutral-200' : '')
+              }
+            >
+              Sign Up
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );
