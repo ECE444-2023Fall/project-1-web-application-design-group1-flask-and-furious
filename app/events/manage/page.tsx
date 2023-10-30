@@ -1,7 +1,7 @@
 'use client';
 import Drawer from '@/components/Drawer';
-import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
+import ManageEventCard from '@/components/ManageEventCard';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -45,6 +45,7 @@ interface formData {
 export default function Home() {
   // Initialize isOpen state
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
+  const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [changeFormData, setFormData] = useState<formData>({
     title: '',
@@ -113,6 +114,29 @@ export default function Home() {
     }
   };
 
+  const Update = async () => {
+    // eslint-disable-next-line no-console
+    console.log('Update');
+  };
+
+  const test = (id: number) => {
+    setIsNewEvent(false);
+    const selectedEvent = events.find((event) => event.id === id);
+    if (selectedEvent) {
+      setFormData({
+        title: selectedEvent.Title,
+        description: selectedEvent.Description,
+        location: selectedEvent.Location,
+        startTime: selectedEvent.StartTime,
+        endTime: selectedEvent.EndTime,
+        date: selectedEvent.Date,
+        frequency: selectedEvent.Frequency,
+        tags: selectedEvent.Tags
+      });
+    }
+    onOpenDrawer();
+  };
+
   useEffect(() => {
     Get();
   }, []);
@@ -148,6 +172,8 @@ export default function Home() {
           onClose={onCloseDrawer}
           Post={Post}
           initialFormData={changeFormData}
+          Update={Update}
+          isNewEvent={isNewEvent}
         />
       </Drawer>
       <div
@@ -158,7 +184,24 @@ export default function Home() {
         <div className="flex h-9 w-full  items-center bg-slate-50 p-3">
           <div
             className="flex cursor-pointer items-center"
-            onClick={() => (isDrawerOpen ? onCloseDrawer() : onOpenDrawer())}
+            onClick={() => {
+              if (isDrawerOpen) {
+                onCloseDrawer();
+              } else {
+                onOpenDrawer();
+                setIsNewEvent(true);
+                setFormData({
+                  title: '',
+                  description: '',
+                  location: '',
+                  startTime: '',
+                  endTime: '',
+                  date: '',
+                  frequency: '',
+                  tags: []
+                });
+              }
+            }}
           >
             <h5 className="text-lg font-bold">Create Event</h5>
             <SquaresPlusIcon
@@ -170,8 +213,9 @@ export default function Home() {
         <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
           <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
             {events.map((event) => (
-              <EventCard
+              <ManageEventCard
                 key={event.id}
+                eventId={event.id}
                 eventName={event.Title}
                 eventDescription={event.Description}
                 eventLocation={event.Location}
@@ -180,6 +224,7 @@ export default function Home() {
                   event.EndTime
                 )}`}
                 eventTags={event.Tags}
+                action={test}
               />
             ))}
           </div>

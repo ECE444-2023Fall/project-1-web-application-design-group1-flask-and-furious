@@ -15,6 +15,8 @@ export interface formProps {
   onClose: () => void;
   Post: (formData: formData) => void;
   initialFormData: formData;
+  Update: () => void;
+  isNewEvent: boolean;
 }
 
 export default function EventForm(props: formProps) {
@@ -71,7 +73,11 @@ export default function EventForm(props: formProps) {
     e.preventDefault();
     //console.log(formData);
     try {
-      props.Post(formData);
+      if (props.isNewEvent) {
+        props.Post(formData);
+      } else {
+        props.Update();
+      }
       props.onClose();
     } catch (error) {
       // eslint-disable-next-line no-console
