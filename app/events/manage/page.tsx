@@ -4,6 +4,7 @@ import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export interface EventCardProps {
@@ -58,9 +59,14 @@ export default function Home() {
   // Backend
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
+  const router = useRouter();
 
   const Get = async () => {
-    //console.log(session);
+    if (!(await session).data?.session) {
+      router.push('/login');
+      return;
+    }
+
     const requestOptions = {
       method: 'GET',
       headers: {
