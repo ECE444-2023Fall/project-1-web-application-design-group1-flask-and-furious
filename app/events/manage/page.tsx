@@ -118,12 +118,40 @@ export default function Home() {
   };
 
   const Update = async (formData: formData) => {
-    // eslint-disable-next-line no-console
-    console.error('Formdata: ', formData);
     try {
       const requestBody = JSON.stringify(formData);
       const requestOptions = {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authentication: `Bearer ${(await session).data.session?.access_token}`
+        },
+        body: requestBody
+      };
+      await fetch(`/api/events`, requestOptions);
+      setFormData({
+        eventId: 0,
+        title: '',
+        description: '',
+        location: '',
+        startTime: '',
+        endTime: '',
+        date: '',
+        frequency: '',
+        tags: []
+      });
+      Get();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error updating event: ', error);
+    }
+  };
+
+  const Delete = async (formData: formData) => {
+    try {
+      const requestBody = JSON.stringify(formData);
+      const requestOptions = {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authentication: `Bearer ${(await session).data.session?.access_token}`
@@ -205,6 +233,7 @@ export default function Home() {
           initialFormData={changeFormData}
           Update={Update}
           isNewEvent={isNewEvent}
+          Delete={Delete}
         />
       </Drawer>
       <div

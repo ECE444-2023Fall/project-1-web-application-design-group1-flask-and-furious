@@ -92,6 +92,15 @@ class Event(Resource):
         except Exception as e:
             print("Update Error:", e)
             return {"message": "Server Error: Something went wrong while processing the update"}
+    
+    def delete(self):
+        try:
+            data = request.get_json()
+            supabase.table('Events').delete().eq('id', data["eventId"]).execute()
+            return "Deleted Successfully"
+        except Exception as e:
+            print("Delete Error:", e)
+            return {"message": "Server Error: Something went wrong while processing the delete"}
 
 api.add_namespace(event_api)
 api.init_app(app)

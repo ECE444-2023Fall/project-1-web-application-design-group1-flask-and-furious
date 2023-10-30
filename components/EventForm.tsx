@@ -18,9 +18,11 @@ export interface formProps {
   initialFormData: formData;
   Update: (formData: formData) => void;
   isNewEvent: boolean;
+  Delete: (formData: formData) => void;
 }
 
 export default function EventForm(props: formProps) {
+  const [isDelete, setIsDelete] = useState<boolean>(true);
   const [formData, setFormData] = useState({
     eventId: 0,
     title: '',
@@ -78,7 +80,11 @@ export default function EventForm(props: formProps) {
       if (props.isNewEvent) {
         props.Post(formData);
       } else {
-        props.Update(formData);
+        if (isDelete) {
+          props.Delete(formData);
+        } else {
+          props.Update(formData);
+        }
       }
       props.onClose();
     } catch (error) {
@@ -232,8 +238,18 @@ export default function EventForm(props: formProps) {
             ))}
           </select>
         </div>
+        <div className="absolute bottom-3 left-3">
+          <button
+            onClick={() => setIsDelete(true)}
+            type="submit"
+            className="rounded-md bg-red-500 px-3 py-1 text-white"
+          >
+            Delete
+          </button>
+        </div>
         <div className="absolute bottom-3 right-3">
           <button
+            onClick={() => setIsDelete(false)}
             type="submit"
             className="rounded-md bg-violet-700 px-3 py-1 text-white"
           >
