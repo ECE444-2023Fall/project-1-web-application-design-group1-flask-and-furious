@@ -26,7 +26,7 @@ function Navbar({ session }: Props) {
         >
           Find Events
         </Link>
-        <Link
+        { session && <Link
           href="/events/manage"
           className={
             usePathname() === '/events/manage'
@@ -35,7 +35,7 @@ function Navbar({ session }: Props) {
           }
         >
           Manage Events
-        </Link>
+        </Link> }
         <NavbarProfile session={session} />
       </div>
     </nav>
