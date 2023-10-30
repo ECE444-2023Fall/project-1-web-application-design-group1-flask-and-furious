@@ -6,6 +6,8 @@ import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Get, Post } from '../event.api';
+import { EventData, formData, formatTime } from '../event.helpers';
 
 export interface EventCardProps {
   eventName: string;
@@ -15,31 +17,6 @@ export interface EventCardProps {
   eventFrequency: string;
   eventTags: string[];
   eventDescription: string;
-}
-
-interface EventData {
-  id: number;
-  created_at: string;
-  Owner: string;
-  Title: string;
-  Description: string;
-  Location: string;
-  StartTime: string;
-  EndTime: string;
-  Frequency: string;
-  Tags: string[];
-  Date: string;
-}
-
-interface formData {
-  title: string;
-  description: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  date: string;
-  frequency: string;
-  tags: string[];
 }
 
 export default function Home() {
@@ -61,60 +38,31 @@ export default function Home() {
   const session = supabase.auth.getSession();
   const router = useRouter();
 
-  const Get = async () => {
+  const getEvents = async () => {
     if (!(await session).data?.session) {
       router.push('/login');
       return;
     }
-
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authentication: `Bearer ${(await session).data.session?.access_token}`
-      }
-    };
-    fetch('/api/events', requestOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        //console.log(JSON.parse(data)['data']);
-        setEvents(JSON.parse(data)['data']);
-      });
+    Get((await session).data.session, setEvents);
   };
 
-  const Post = async (formData: formData) => {
-    //console.log('IN POST: ', formData);
-    //console.log('Proper Form: ', events);
-    try {
-      const requestBody = JSON.stringify(formData);
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authentication: `Bearer ${(await session).data.session?.access_token}`
-        },
-        body: requestBody
-      };
-      await fetch('/api/events', requestOptions);
-      setFormData({
-        title: '',
-        description: '',
-        location: '',
-        startTime: '',
-        endTime: '',
-        date: '',
-        frequency: '',
-        tags: []
-      });
-      Get();
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching events: ', error);
-    }
+  const createEvent = async (formData: formData) => {
+    await Post((await session).data.session, formData);
+    setFormData({
+      title: '',
+      description: '',
+      location: '',
+      startTime: '',
+      endTime: '',
+      date: '',
+      frequency: '',
+      tags: []
+    });
+    getEvents();
   };
 
   useEffect(() => {
-    Get();
+    getEvents();
   }, []);
 
   const onCloseDrawer = () => {
@@ -122,19 +70,6 @@ export default function Home() {
   };
   const onOpenDrawer = () => {
     setIsDrawerOpen(true);
-  };
-
-  const formatTime = (timeString: string): string => {
-    const [hours, minutes] = timeString.split(':');
-    const parsedTime = new Date();
-    parsedTime.setHours(parseInt(hours, 10));
-    parsedTime.setMinutes(parseInt(minutes, 10));
-    const options: Intl.DateTimeFormatOptions = {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    };
-    return parsedTime.toLocaleTimeString([], options);
   };
 
   return (
@@ -146,7 +81,7 @@ export default function Home() {
       >
         <EventForm
           onClose={onCloseDrawer}
-          Post={Post}
+          Post={createEvent}
           initialFormData={changeFormData}
         />
       </Drawer>
