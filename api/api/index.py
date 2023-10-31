@@ -1,3 +1,4 @@
+import json
 import os
 
 from dotenv import load_dotenv
@@ -76,6 +77,16 @@ class Event(Resource):
         try:
             data = request.get_json()
             print("\n\n\nReceived data:", data)
+            #valid user check
+            token = request.headers.get("Authentication").split()[1]
+            user = supabase.auth.get_user(token)
+            uuid = user.user.id
+            event = supabase.table('Events').select("Owner").eq('id', data["eventId"]).execute()
+            eventdata = json.loads(event.model_dump_json())
+            owner = eventdata['data'][0]['Owner']
+            if owner != uuid:
+                return {"message": "Unauthorized: You cannot delete this event"}, 401
+            #perform update
             data_to_update = {
                 "Date": data["date"],
                 "Description": data["description"],
@@ -96,6 +107,16 @@ class Event(Resource):
     def delete(self):
         try:
             data = request.get_json()
+            #valid user check
+            token = request.headers.get("Authentication").split()[1]
+            user = supabase.auth.get_user(token)
+            uuid = user.user.id
+            event = supabase.table('Events').select("Owner").eq('id', data["eventId"]).execute()
+            eventdata = json.loads(event.model_dump_json())
+            owner = eventdata['data'][0]['Owner']
+            if owner != uuid:
+                return {"message": "Unauthorized: You cannot delete this event"}, 401
+            #perform delete
             supabase.table('Events').delete().eq('id', data["eventId"]).execute()
             return "Deleted Successfully"
         except Exception as e:

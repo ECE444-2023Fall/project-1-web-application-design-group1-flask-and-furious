@@ -5,17 +5,26 @@ import {
 } from '@heroicons/react/24/outline';
 
 export interface EventCardProps {
+  eventId: number;
   eventName: string;
   eventDescription: string;
   eventDate: string;
   eventTime: string;
   eventLocation: string;
   eventTags: string[];
+  action?: (id: number) => void;
 }
 
 export default function EventCard(props: EventCardProps) {
   return (
-    <div className="flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white p-3 shadow">
+    <div
+      className="flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white p-3 shadow hover:bg-gray-100"
+      onClick={() => {
+        if (typeof props.action === 'function') {
+          props.action(props.eventId);
+        }
+      }}
+    >
       {/* <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" /> */}
 
       <div className="flex flex-row items-center justify-between">
@@ -53,7 +62,7 @@ export default function EventCard(props: EventCardProps) {
 
       <div className="flex flex-row gap-1">
         {props.eventTags.map((tag, id) => (
-          <div key={id} className="rounded-full bg-gray-100 px-2">
+          <div key={id} className="rounded-full bg-gray-200 px-2">
             <p className="text-sm font-normal text-gray-700">{tag}</p>
           </div>
         ))}

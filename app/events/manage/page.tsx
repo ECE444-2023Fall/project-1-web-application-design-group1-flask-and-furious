@@ -1,7 +1,7 @@
 'use client';
 import Drawer from '@/components/Drawer';
+import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
-import ManageEventCard from '@/components/ManageEventCard';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -279,7 +279,7 @@ export default function Home() {
                   new Date(a.Date).getTime() - new Date(b.Date).getTime()
               )
               .map((event) => (
-                <ManageEventCard
+                <EventCard
                   key={event.id}
                   eventId={event.id}
                   eventName={event.Title}
