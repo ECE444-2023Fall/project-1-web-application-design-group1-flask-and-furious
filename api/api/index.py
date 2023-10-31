@@ -33,14 +33,10 @@ class Event(Resource):
         print("headers: ", request.headers)
         try:
             token = request.headers.get("Authentication").split()[1]
-            #print("token: ", token)
             user = supabase.auth.get_user(token)
-            #print("user: ",user)
             uuid = user.user.id
-            #print("uuid: ",uuid)
             req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
             data = req.model_dump_json()
-            #print("here:",req,"a",data,"b")
             return (data)
         except Exception as e:
             print("error: ", e)
@@ -51,7 +47,6 @@ class Event(Resource):
     def post(self):
         try:
             data = request.get_json()
-            #print("Received data:", data)
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
@@ -66,7 +61,6 @@ class Event(Resource):
                 "Tags": data.get("tags", []),
                 "Title": data["title"]
             }
-            #print("UPLOADING THIS: ",data_to_insert)
             supabase.table('Events').upsert(data_to_insert).execute()
             return "Done"
         except Exception as e:
@@ -76,7 +70,6 @@ class Event(Resource):
     def put(self):
         try:
             data = request.get_json()
-            print("\n\n\nReceived data:", data)
             #valid user check
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
@@ -97,7 +90,6 @@ class Event(Resource):
                 "Tags": data.get("tags", []),
                 "Title": data["title"]
             }
-            print("\n\n\nUPDATING DATA: ", data_to_update)
             supabase.table('Events').update(data_to_update).eq('id', data["eventId"]).execute()
             return "Done"
         except Exception as e:
