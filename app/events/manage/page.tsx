@@ -6,8 +6,9 @@ import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { apiCreateEvent, apiGetEvents } from '../event.api';
-import { EventData, formData, formatTime } from '../event.helpers';
+import { apiCreateEvent, apiGetEvents } from '../api';
+import { formatTime } from '../helpers';
+import { EventData, formData } from '../types';
 
 export interface EventCardProps {
   eventName: string;

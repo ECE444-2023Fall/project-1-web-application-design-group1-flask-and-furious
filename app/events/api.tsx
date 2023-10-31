@@ -1,6 +1,6 @@
 import { Session } from '@supabase/gotrue-js';
 import { Dispatch, SetStateAction } from 'react';
-import { EventData, formData } from './event.helpers';
+import { EventData, formData } from './types';
 
 export const apiGetEvents = async (
   session: Session | null,
