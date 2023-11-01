@@ -40,3 +40,35 @@ export const apiCreateEvent = async (
     console.error('Error fetching events: ', error);
   }
 };
+
+export const apiUpdateEvent = async (
+  session: Session | null,
+  formData: formData
+) => {
+  const requestBody = JSON.stringify(formData);
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authentication: `Bearer ${session?.access_token}`
+    },
+    body: requestBody
+  };
+  await fetch(`/api/events`, requestOptions);
+};
+
+export const apiDeleteEvent = async (
+  session: Session | null,
+  formData: formData
+) => {
+  const requestBody = JSON.stringify(formData);
+  const requestOptions = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authentication: `Bearer ${session?.access_token}`
+    },
+    body: requestBody
+  };
+  await fetch(`/api/events`, requestOptions);
+};

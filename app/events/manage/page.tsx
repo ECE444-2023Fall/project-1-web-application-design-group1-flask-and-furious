@@ -6,7 +6,12 @@ import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { apiCreateEvent, apiGetEvents } from '../api';
+import {
+  apiCreateEvent,
+  apiDeleteEvent,
+  apiGetEvents,
+  apiUpdateEvent
+} from '../api';
 import { formatTime } from '../helpers';
 import { EventData, formData } from '../types';
 
@@ -65,18 +70,9 @@ export default function Home() {
     getEvents();
   };
 
-  const Update = async (formData: formData) => {
+  const updateEvent = async (formData: formData) => {
     try {
-      const requestBody = JSON.stringify(formData);
-      const requestOptions = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authentication: `Bearer ${(await session).data.session?.access_token}`
-        },
-        body: requestBody
-      };
-      await fetch(`/api/events`, requestOptions);
+      await apiUpdateEvent((await session).data.session, formData);
       setFormData({
         eventId: 0,
         title: '',
@@ -95,18 +91,9 @@ export default function Home() {
     }
   };
 
-  const Delete = async (formData: formData) => {
+  const deleteEvent = async (formData: formData) => {
     try {
-      const requestBody = JSON.stringify(formData);
-      const requestOptions = {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authentication: `Bearer ${(await session).data.session?.access_token}`
-        },
-        body: requestBody
-      };
-      await fetch(`/api/events`, requestOptions);
+      await apiDeleteEvent((await session).data.session, formData);
       setFormData({
         eventId: 0,
         title: '',
@@ -166,9 +153,9 @@ export default function Home() {
           onClose={onCloseDrawer}
           Post={createEvent}
           initialFormData={changeFormData}
-          Update={Update}
+          Update={updateEvent}
           isNewEvent={isNewEvent}
-          Delete={Delete}
+          Delete={deleteEvent}
         />
       </Drawer>
       <div
