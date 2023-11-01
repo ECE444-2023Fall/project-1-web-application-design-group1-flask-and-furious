@@ -1,3 +1,4 @@
+import json
 import os
 
 from dotenv import load_dotenv
@@ -32,14 +33,10 @@ class Event(Resource):
         print("headers: ", request.headers)
         try:
             token = request.headers.get("Authentication").split()[1]
-            print("token: ", token)
             user = supabase.auth.get_user(token)
-            print("user: ",user)
             uuid = user.user.id
-            print("uuid: ",uuid)
             req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
             data = req.model_dump_json()
-            print("here:",req,"a",data,"b")
             return (data)
         except Exception as e:
             print("error: ", e)
@@ -50,7 +47,6 @@ class Event(Resource):
     def post(self):
         try:
             data = request.get_json()
-            print("Received data:", data)
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
@@ -65,13 +61,60 @@ class Event(Resource):
                 "Tags": data.get("tags", []),
                 "Title": data["title"]
             }
-            print("UPLOADING THIS: ",data_to_insert)
             supabase.table('Events').upsert(data_to_insert).execute()
             return "Done"
         except Exception as e:
             print("Error:", e)
             return {"message": "Server Error: Something went wrong while processing the data"}
     
+    def put(self):
+        try:
+            data = request.get_json()
+            #valid user check
+            token = request.headers.get("Authentication").split()[1]
+            user = supabase.auth.get_user(token)
+            uuid = user.user.id
+            event = supabase.table('Events').select("Owner").eq('id', data["eventId"]).execute()
+            eventdata = json.loads(event.model_dump_json())
+            owner = eventdata['data'][0]['Owner']
+            if owner != uuid:
+                return {"message": "Unauthorized: You cannot delete this event"}, 401
+            #perform update
+            data_to_update = {
+                "Date": data["date"],
+                "Description": data["description"],
+                "EndTime": data["endTime"],
+                "Frequency": data["frequency"],
+                "Location": data["location"],
+                "StartTime": data["startTime"],
+                "Tags": data.get("tags", []),
+                "Title": data["title"]
+            }
+            supabase.table('Events').update(data_to_update).eq('id', data["eventId"]).execute()
+            return "Done"
+        except Exception as e:
+            print("Update Error:", e)
+            return {"message": "Server Error: Something went wrong while processing the update"}
+    
+    def delete(self):
+        try:
+            data = request.get_json()
+            #valid user check
+            token = request.headers.get("Authentication").split()[1]
+            user = supabase.auth.get_user(token)
+            uuid = user.user.id
+            event = supabase.table('Events').select("Owner").eq('id', data["eventId"]).execute()
+            eventdata = json.loads(event.model_dump_json())
+            owner = eventdata['data'][0]['Owner']
+            if owner != uuid:
+                return {"message": "Unauthorized: You cannot delete this event"}, 401
+            #perform delete
+            supabase.table('Events').delete().eq('id', data["eventId"]).execute()
+            return "Deleted Successfully"
+        except Exception as e:
+            print("Delete Error:", e)
+            return {"message": "Server Error: Something went wrong while processing the delete"}
+
 api.add_namespace(event_api)
 api.init_app(app)
 

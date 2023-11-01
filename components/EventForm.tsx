@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 export interface formData {
+  eventId: number;
   title: string;
   description: string;
   location: string;
@@ -15,10 +16,15 @@ export interface formProps {
   onClose: () => void;
   Post: (formData: formData) => void;
   initialFormData: formData;
+  Update: (formData: formData) => void;
+  isNewEvent: boolean;
+  Delete: (formData: formData) => void;
 }
 
 export default function EventForm(props: formProps) {
+  const [isDelete, setIsDelete] = useState<boolean>(true);
   const [formData, setFormData] = useState({
+    eventId: -1,
     title: '',
     description: '',
     location: '',
@@ -71,7 +77,15 @@ export default function EventForm(props: formProps) {
     e.preventDefault();
     //console.log(formData);
     try {
-      props.Post(formData);
+      if (props.isNewEvent) {
+        props.Post(formData);
+      } else {
+        if (isDelete) {
+          props.Delete(formData);
+        } else {
+          props.Update(formData);
+        }
+      }
       props.onClose();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -224,8 +238,20 @@ export default function EventForm(props: formProps) {
             ))}
           </select>
         </div>
+        {props.initialFormData.eventId >= 0 && (
+          <div className="absolute bottom-3 left-3">
+            <button
+              onClick={() => setIsDelete(true)}
+              type="submit"
+              className="rounded-md bg-red-500 px-3 py-1 text-white"
+            >
+              Delete
+            </button>
+          </div>
+        )}
         <div className="absolute bottom-3 right-3">
           <button
+            onClick={() => setIsDelete(false)}
             type="submit"
             className="rounded-md bg-violet-700 px-3 py-1 text-white"
           >

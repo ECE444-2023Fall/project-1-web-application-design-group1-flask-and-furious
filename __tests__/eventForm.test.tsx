@@ -5,10 +5,12 @@ import { render, screen } from '@testing-library/react';
 describe('EventForm', () => {
   const mockOnClose = jest.fn();
   const mockPost = jest.fn();
+  const mockUpdate = jest.fn();
   const props: formProps = {
     onClose: mockOnClose,
     Post: mockPost,
     initialFormData: {
+      eventId: 1,
       title: 'Awesome Cool Concert',
       description: 'Super awesome concert that everyone want to go to!',
       location: 'Perfect Location',
@@ -17,7 +19,9 @@ describe('EventForm', () => {
       date: '2023-10-28',
       frequency: 'Weekly',
       tags: ['Tag 1', 'Tag 3']
-    }
+    },
+    Update: mockUpdate,
+    isNewEvent: false
   };
 
   it('Render form with the appropriate initialFormData', async () => {

@@ -13,6 +13,7 @@ export interface EventData {
 }
 
 export interface formData {
+  eventId: number;
   title: string;
   description: string;
   location: string;
