@@ -31,7 +31,7 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [changeFormData, setFormData] = useState<formData>({
-    eventId: 0,
+    eventId: -1,
     title: '',
     description: '',
     location: '',
@@ -57,7 +57,7 @@ export default function Home() {
   const createEvent = async (formData: formData) => {
     await apiCreateEvent((await session).data.session, formData);
     setFormData({
-      eventId: 0,
+      eventId: -1,
       title: '',
       description: '',
       location: '',
@@ -74,7 +74,7 @@ export default function Home() {
     try {
       await apiUpdateEvent((await session).data.session, formData);
       setFormData({
-        eventId: 0,
+        eventId: -1,
         title: '',
         description: '',
         location: '',
@@ -95,7 +95,7 @@ export default function Home() {
     try {
       await apiDeleteEvent((await session).data.session, formData);
       setFormData({
-        eventId: 0,
+        eventId: -1,
         title: '',
         description: '',
         location: '',
@@ -173,7 +173,7 @@ export default function Home() {
                 onOpenDrawer();
                 setIsNewEvent(true);
                 setFormData({
-                  eventId: 0,
+                  eventId: -1,
                   title: '',
                   description: '',
                   location: '',

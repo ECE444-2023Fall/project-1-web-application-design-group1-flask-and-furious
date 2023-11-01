@@ -24,7 +24,7 @@ export interface formProps {
 export default function EventForm(props: formProps) {
   const [isDelete, setIsDelete] = useState<boolean>(true);
   const [formData, setFormData] = useState({
-    eventId: 0,
+    eventId: -1,
     title: '',
     description: '',
     location: '',
@@ -238,15 +238,17 @@ export default function EventForm(props: formProps) {
             ))}
           </select>
         </div>
-        <div className="absolute bottom-3 left-3">
-          <button
-            onClick={() => setIsDelete(true)}
-            type="submit"
-            className="rounded-md bg-red-500 px-3 py-1 text-white"
-          >
-            Delete
-          </button>
-        </div>
+        {props.initialFormData.eventId >= 0 && (
+          <div className="absolute bottom-3 left-3">
+            <button
+              onClick={() => setIsDelete(true)}
+              type="submit"
+              className="rounded-md bg-red-500 px-3 py-1 text-white"
+            >
+              Delete
+            </button>
+          </div>
+        )}
         <div className="absolute bottom-3 right-3">
           <button
             onClick={() => setIsDelete(false)}
