@@ -41,13 +41,15 @@ export default function Home() {
     endTime: '',
     date: '',
     frequency: '',
+    file: null,
     tags: []
   });
   // Backend
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
   const router = useRouter();
-
+  const defaultImage =
+    'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
   const getEvents = async () => {
     if (!(await session).data?.session) {
       router.push('/login');
@@ -67,13 +69,25 @@ export default function Home() {
       endTime: '',
       date: '',
       frequency: '',
+      file: null,
       tags: []
     });
+    setSelectedFile(null);
     getEvents();
   };
 
   const updateEvent = async (formData: formData) => {
     try {
+      // eslint-disable-next-line no-console
+      console.log('here is my file:', selectedFile);
+      // eslint-disable-next-line no-console
+      console.log('here is the data:', formData);
+      if (selectedFile) {
+        formData.file = selectedFile;
+        // eslint-disable-next-line no-console
+        console.log('here is the modified data:', formData);
+        //i want to send the file and the form data to the backend
+      }
       await apiUpdateEvent((await session).data.session, formData);
       setFormData({
         eventId: -1,
@@ -84,6 +98,7 @@ export default function Home() {
         endTime: '',
         date: '',
         frequency: '',
+        file: null,
         tags: []
       });
       getEvents();
@@ -91,8 +106,7 @@ export default function Home() {
       // eslint-disable-next-line no-console
       console.error('Error updating event: ', error);
     }
-    // eslint-disable-next-line no-console
-    console.log(selectedFile);
+    setSelectedFile(null);
   };
 
   const deleteEvent = async (formData: formData) => {
@@ -107,8 +121,10 @@ export default function Home() {
         endTime: '',
         date: '',
         frequency: '',
+        file: null,
         tags: []
       });
+      setSelectedFile(null);
       getEvents();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -129,18 +145,22 @@ export default function Home() {
         endTime: selectedEvent.EndTime,
         date: selectedEvent.Date,
         frequency: selectedEvent.Frequency,
+        file: null,
         tags: selectedEvent.Tags
       });
+      setImageURL(selectedEvent.image_url);
     }
     onOpenDrawer();
   };
 
   useEffect(() => {
     getEvents();
+    setImageURL(defaultImage);
   }, []);
 
   const onCloseDrawer = () => {
     setIsDrawerOpen(false);
+    setImageURL(defaultImage);
   };
   const onOpenDrawer = () => {
     setIsDrawerOpen(true);
@@ -150,6 +170,8 @@ export default function Home() {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setSelectedFile(file);
+      // eslint-disable-next-line no-console
+      console.log('Uploaded file: ', selectedFile);
       const newImageURL = URL.createObjectURL(file);
       setImageURL(newImageURL);
       // eslint-disable-next-line no-console
@@ -198,6 +220,7 @@ export default function Home() {
                   endTime: '',
                   date: '',
                   frequency: '',
+                  file: null,
                   tags: []
                 });
               }

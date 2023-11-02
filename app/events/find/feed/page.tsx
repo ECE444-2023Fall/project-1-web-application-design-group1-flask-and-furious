@@ -19,6 +19,7 @@ export default function page() {
               eventDate={'29/10/2023'}
               eventTime={'8-10 pm'}
               eventTags={['Programming', 'Music', 'Dance']}
+              eventImage={''}
             />
           )
         )}

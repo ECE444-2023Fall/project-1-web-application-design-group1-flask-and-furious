@@ -22,5 +22,6 @@ export interface formData {
   endTime: string;
   date: string;
   frequency: string;
+  file: File | null;
   tags: string[];
 }

@@ -37,7 +37,7 @@ class Event(Resource):
             uuid = user.user.id
             req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
             events_data = req.data
-            print("\n\n\nHere is the Data: ", events_data, "\n\n\n")
+            # print("\n\n\nHere is the Data: ", events_data, "\n\n\n")
 
             # Iterate over each event and get the public URL for the image
             for event in events_data:
@@ -48,7 +48,7 @@ class Event(Resource):
                     event['image_url'] = image_req
                 else:
                     event['image_url'] = None
-            print("\n\n\nHere is the Data with Images: ", events_data, "\n\n\n")
+            # print("\n\n\nHere is the Data with Images: ", events_data, "\n\n\n")
             return req.model_dump_json(), 200
         except Exception as e:
             print("error: ", e)
@@ -86,6 +86,7 @@ class Event(Resource):
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
+            print("\n\n\nHere is image: ",data,"\n\n\n")
             event = supabase.table('Events').select("Owner").eq('id', data["eventId"]).execute()
             eventdata = json.loads(event.model_dump_json())
             owner = eventdata['data'][0]['Owner']
