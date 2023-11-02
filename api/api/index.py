@@ -32,11 +32,18 @@ class Event(Resource):
     def get(self):
         print("headers: ", request.headers)
         try:
-            token = request.headers.get("Authentication").split()[1]
-            user = supabase.auth.get_user(token)
-            uuid = user.user.id
-            req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
-            data = req.model_dump_json()
+            table = supabase.table('Events').select('*')
+            
+            # Apply Filters
+            user_uuid = request.args.get('userUuid')
+            if user_uuid:
+                table = table.eq('Owner', user_uuid)
+
+            # Rough Filter Format:
+            # param = request.args.get(<NAME IN PARAMS>)
+            # if param: table = table.eq(<TABLE_COLUMN>, param)
+
+            data = table.execute().model_dump_json()
             return (data)
         except Exception as e:
             print("error: ", e)
