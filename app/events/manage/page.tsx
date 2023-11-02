@@ -229,6 +229,7 @@ export default function Home() {
                     event.EndTime
                   )}`}
                   eventTags={event.Tags}
+                  eventImage={event.image_url}
                   action={editEvent}
                 />
               ))}

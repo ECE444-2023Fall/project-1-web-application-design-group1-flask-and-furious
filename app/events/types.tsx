@@ -10,6 +10,7 @@ export interface EventData {
   Frequency: string;
   Tags: string[];
   Date: string;
+  image_url: string;
 }
 
 export interface formData {

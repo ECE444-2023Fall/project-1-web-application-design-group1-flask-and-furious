@@ -2,11 +2,10 @@ import json
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Namespace, Resource, Api
 from supabase import Client, create_client
-from werkzeug.utils import secure_filename
 
 load_dotenv()
 
@@ -28,25 +27,6 @@ api = Api(
 
 event_api = Namespace("events", description="event related operations")
 
-@event_api.route("/upload")
-class Upload(Resource):
-    def post(self):
-        if 'file' not in request.files:
-            return {"message": "No file part"}, 400
-        file = request.files['file']
-        if file.filename == '':
-            return {"message": "No selected file"}, 400
-        if file:
-            filename = secure_filename(file.filename)
-            # Upload file to Supabase Storage - since Python client lacks support for Storage,
-            # you would need to make direct HTTP requests to Supabase Storage API.
-            # Refer to Supabase documentation on how to do this.
-            # For now, I'll just save it locally:
-            file.save(os.path.join('/path/to/save', filename))
-            # TODO: Upload to Supabase and get the URL
-            file_url = "URL_FROM_SUPABASE"
-            return jsonify({"url": file_url})
-
 @event_api.route("/")
 class Event(Resource):
     def get(self):
@@ -56,8 +36,20 @@ class Event(Resource):
             user = supabase.auth.get_user(token)
             uuid = user.user.id
             req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
-            data = req.model_dump_json()
-            return (data)
+            events_data = req.data
+            print("\n\n\nHere is the Data: ", events_data, "\n\n\n")
+
+            # Iterate over each event and get the public URL for the image
+            for event in events_data:
+                # Here we use the event's ID to get the image URL
+                image_req = supabase.storage.from_('Images').get_public_url(f'event-{event["id"]}')
+                print("PublicUrl: ", image_req)
+                if image_req:
+                    event['image_url'] = image_req
+                else:
+                    event['image_url'] = None
+            print("\n\n\nHere is the Data with Images: ", events_data, "\n\n\n")
+            return req.model_dump_json(), 200
         except Exception as e:
             print("error: ", e)
             return {
