@@ -27,9 +27,11 @@ export interface EventCardProps {
 
 export default function Home() {
   // Initialize isOpen state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
+  const [imageURL, setImageURL] = useState<string | null>(null);
   const [changeFormData, setFormData] = useState<formData>({
     eventId: -1,
     title: '',
@@ -89,6 +91,8 @@ export default function Home() {
       // eslint-disable-next-line no-console
       console.error('Error updating event: ', error);
     }
+    // eslint-disable-next-line no-console
+    console.log(selectedFile);
   };
 
   const deleteEvent = async (formData: formData) => {
@@ -142,12 +146,25 @@ export default function Home() {
     setIsDrawerOpen(true);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      const newImageURL = URL.createObjectURL(file);
+      setImageURL(newImageURL);
+      // eslint-disable-next-line no-console
+      console.log(newImageURL);
+    }
+  };
+
   return (
     <main className="flex h-full flex-row">
       <Drawer
         isOpen={isDrawerOpen}
         style={isDrawerOpen ? '' : '-translate-x-full'}
         onClose={onCloseDrawer}
+        onFileSelect={handleFileChange}
+        backgroundImage={imageURL}
       >
         <EventForm
           onClose={onCloseDrawer}

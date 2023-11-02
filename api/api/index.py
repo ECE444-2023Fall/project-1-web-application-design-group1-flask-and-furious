@@ -2,10 +2,11 @@ import json
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_restx import Namespace, Resource, Api
 from supabase import Client, create_client
+from werkzeug.utils import secure_filename
 
 load_dotenv()
 
@@ -26,6 +27,25 @@ api = Api(
 )
 
 event_api = Namespace("events", description="event related operations")
+
+@event_api.route("/upload")
+class Upload(Resource):
+    def post(self):
+        if 'file' not in request.files:
+            return {"message": "No file part"}, 400
+        file = request.files['file']
+        if file.filename == '':
+            return {"message": "No selected file"}, 400
+        if file:
+            filename = secure_filename(file.filename)
+            # Upload file to Supabase Storage - since Python client lacks support for Storage,
+            # you would need to make direct HTTP requests to Supabase Storage API.
+            # Refer to Supabase documentation on how to do this.
+            # For now, I'll just save it locally:
+            file.save(os.path.join('/path/to/save', filename))
+            # TODO: Upload to Supabase and get the URL
+            file_url = "URL_FROM_SUPABASE"
+            return jsonify({"url": file_url})
 
 @event_api.route("/")
 class Event(Resource):
