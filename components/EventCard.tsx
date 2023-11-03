@@ -32,6 +32,10 @@ export default function EventCard(props: EventCardProps) {
         className="h-48 w-full rounded-t-lg object-cover"
         src={props.eventImage || defaultImage}
         alt={props.eventName}
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = defaultImage;
+        }}
       />
 
       <div className="flex flex-row items-center justify-between p-2">

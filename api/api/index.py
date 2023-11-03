@@ -144,13 +144,18 @@ class Event(Resource):
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
-            event = supabase.table('Events').select("Owner").eq('id', data["eventId"]).execute()
+            event_id = data["eventId"]
+            event = supabase.table('Events').select("Owner").eq('id',event_id).execute()
             eventdata = json.loads(event.model_dump_json())
             owner = eventdata['data'][0]['Owner']
             if owner != uuid:
                 return {"message": "Unauthorized: You cannot delete this event"}, 401
             #perform delete
             supabase.table('Events').delete().eq('id', data["eventId"]).execute()
+            #delete associated image:
+            filename = secure_filename(f'event-{event_id}')
+            # Delete the image from the Images bucket
+            supabase.storage.from_('Images').remove([filename])
             return "Deleted Successfully"
         except Exception as e:
             print("Delete Error:", e)
