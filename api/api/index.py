@@ -43,7 +43,8 @@ class Event(Resource):
 
             # Rough Filter Format:
             # param = request.args.get(<NAME IN PARAMS>)
-            # if param: table = table.eq(<TABLE_COLUMN>, param)
+            # if param:
+            #   table = table.eq(<TABLE_COLUMN>, param)
 
             data = table.execute().model_dump_json()
             return (data)
