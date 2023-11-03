@@ -1,4 +1,4 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Session } from '@supabase/gotrue-js';
 
 export const formatTime = (timeString: string): string => {
@@ -14,9 +14,10 @@ export const formatTime = (timeString: string): string => {
   return parsedTime.toLocaleTimeString([], options);
 };
 
-export const userUuidFromSession = async (session: Session | null) => {
-  const supabase = createClientComponentClient();
-
+export const userUuidFromSession = async (
+  session: Session | null,
+  supabase: SupabaseClient
+) => {
   const token = session?.access_token;
   const user = await supabase.auth.getUser(token);
   return user.data.user?.id;

@@ -54,7 +54,7 @@ export default function Home() {
 
     const awaitedSession = (await session).data.session;
     apiGetEvents(awaitedSession, setEvents, {
-      userUuid: await userUuidFromSession(awaitedSession)
+      userUuid: await userUuidFromSession(awaitedSession, supabase)
     });
   };
 
