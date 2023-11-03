@@ -12,7 +12,7 @@ import {
   apiGetEvents,
   apiUpdateEvent
 } from '../api';
-import { formatTime } from '../helpers';
+import { formatTime, userUuidFromSession } from '../helpers';
 import { EventData, formData } from '../types';
 
 export interface EventCardProps {
@@ -51,7 +51,11 @@ export default function Home() {
       router.push('/login');
       return;
     }
-    apiGetEvents((await session).data.session, setEvents);
+
+    const awaitedSession = (await session).data.session;
+    apiGetEvents(awaitedSession, setEvents, {
+      userUuid: await userUuidFromSession(awaitedSession, supabase)
+    });
   };
 
   const createEvent = async (formData: formData) => {

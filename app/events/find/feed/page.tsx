@@ -1,27 +1,42 @@
 'use client';
 import EventCard from '@/components/EventCard';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect, useState } from 'react';
+import { apiGetEvents } from '../../api';
+import { formatTime } from '../../helpers';
+import { EventData } from '../../types';
 
-export default function page() {
+export default function Page() {
+  const supabase = createClientComponentClient();
+  const session = supabase.auth.getSession();
+
+  const [events, setEvents] = useState<EventData[]>([]);
+
+  const getEvents = async () => {
+    apiGetEvents((await session).data.session, setEvents, {});
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
+
   return (
     <div className="flex h-[calc(100vh-64px-64px)] w-full flex-col items-center overflow-y-auto">
       <div className="grid grid-cols-3 gap-4 p-4">
-        {/* Create some dummy events */}
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map(
-          (id) => (
-            <EventCard
-              key={id}
-              eventId={id}
-              eventName={'Awesome Concert'}
-              eventDescription={
-                'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.'
-              }
-              eventLocation={'Galbraith 202'}
-              eventDate={'29/10/2023'}
-              eventTime={'8-10 pm'}
-              eventTags={['Programming', 'Music', 'Dance']}
-            />
-          )
-        )}
+        {events.map((event) => (
+          <EventCard
+            key={event.id}
+            eventId={event.id}
+            eventName={event.Title}
+            eventDescription={event.Description}
+            eventLocation={event.Location}
+            eventDate={event.Date}
+            eventTime={`${formatTime(event.StartTime)} - ${formatTime(
+              event.EndTime
+            )}`}
+            eventTags={event.Tags}
+          />
+        ))}
       </div>
     </div>
   );
