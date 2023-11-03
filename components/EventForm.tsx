@@ -1,4 +1,6 @@
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import Tags from './Tags';
 
 export interface formData {
   eventId: number;
@@ -24,7 +26,10 @@ export interface formProps {
 
 export default function EventForm(props: formProps) {
   const [isDelete, setIsDelete] = useState<boolean>(true);
-  const [formData, setFormData] = useState<formData>({
+  const supabase = createClientComponentClient();
+  const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
+
+  const [formData, setFormData] = useState({
     eventId: -1,
     title: '',
     description: '',
@@ -36,6 +41,27 @@ export default function EventForm(props: formProps) {
     file: null,
     tags: []
   });
+
+  useEffect(() => {
+    const getTags = async () => {
+      const { data } = await supabase.from('Tags').select();
+
+      //Convert data from {0: {id: 1, tag: 'tag1'}, 1: {id: 2, tag: 'tag2'}} to {tag1: false, tag2: false}
+      if (data) {
+        setTagOptions(Object.fromEntries(data.map((tag) => [tag.tag, false])));
+      }
+    };
+
+    getTags();
+  }, [supabase]);
+
+  useEffect(() => {
+    //Parse through tag options and save an array of the true values in the formData.tags
+    setFormData({
+      ...formData,
+      tags: Object.keys(tagOptions).filter((tag) => tagOptions[tag])
+    });
+  }, [formData, tagOptions]);
 
   useEffect(() => {
     setFormData(props.initialFormData);
@@ -94,8 +120,6 @@ export default function EventForm(props: formProps) {
       console.error('Error while calling the backend:', error);
     }
   };
-
-  const tagOptions = ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5']; //update later
 
   return (
     <div className="flex-grow items-center bg-slate-50">
@@ -219,26 +243,7 @@ export default function EventForm(props: formProps) {
           </select>
         </div>
         <div className="mb-4 flex items-start justify-between">
-          <label
-            htmlFor="tags"
-            className="mr-2 text-lg font-bold text-violet-700"
-          >
-            Tags:
-          </label>
-          <select
-            id="tags"
-            name="tags"
-            value={formData.tags}
-            onChange={handleChange}
-            className="w-2/3 rounded border border-gray-300 p-2"
-            multiple // Add the 'multiple' attribute to enable multi-select
-          >
-            {tagOptions.map((tag, index) => (
-              <option key={index} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
+          <Tags selectedTags={tagOptions} setSelectedTags={setTagOptions} />
         </div>
         {props.initialFormData.eventId >= 0 && (
           <div className="absolute bottom-3 left-3">
