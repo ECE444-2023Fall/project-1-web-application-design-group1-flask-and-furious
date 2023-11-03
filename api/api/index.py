@@ -53,12 +53,12 @@ class Event(Resource):
             for event in events_data:
                 # Here we use the event's ID to get the image URL
                 image_req = supabase.storage.from_('Images').get_public_url(f'event-{event["id"]}')
-                print("PublicUrl: ", image_req)
+                #print("PublicUrl: ", image_req)
                 if image_req:
                     event['image_url'] = image_req
                 else:
                     event['image_url'] = None
-            print("\n\n\nHere is the Data with Images: ", events_data, "\n\n\n")
+            #print("\n\n\nHere is the Data with Images: ", events_data, "\n\n\n")
             return req.model_dump_json(), 200
         except Exception as e:
             print("error: ", e)
@@ -68,23 +68,46 @@ class Event(Resource):
 
     def post(self):
         try:
-            data = request.get_json()
-            token = request.headers.get("Authentication").split()[1]
+            token = request.headers.get("Authorization").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
+            tags = request.form.get("tags")
+            if tags:
+                try:
+                    tags = json.loads(tags)
+                except json.JSONDecodeError:
+                    raise BadRequest("Invalid JSON format for tags")
             data_to_insert = {
-                "Date": data["date"],
-                "Description": data["description"],
-                "EndTime": data["endTime"],
-                "Frequency": data["frequency"],
-                "Location": data["location"],
+                "Date": request.form.get("date"),
+                "Description": request.form.get("description"),
+                "EndTime": request.form.get("endTime"),
+                "Frequency": request.form.get("frequency"),
+                "Location": request.form.get("location"),
                 "Owner": uuid,
-                "StartTime": data["startTime"],
-                "Tags": data.get("tags", []),
-                "Title": data["title"]
+                "StartTime": request.form.get("startTime"),
+                "Tags": tags,
+                "Title": request.form.get("title")
             }
-            supabase.table('Events').upsert(data_to_insert).execute()
-            return "Done"
+            print("\n\nA")
+            print(data_to_insert)
+            event_insert_response = supabase.table('Events').upsert(data_to_insert).execute()
+            print("\n\nB")
+            event_id = event_insert_response.data[0]['id']
+            print("\n\n\n Event ID: ",event_id)
+            file = request.files.get("file")
+            if file:
+                filename = secure_filename(f'event-{event_id}')
+                image_req = supabase.storage.from_('Images').get_public_url(filename)
+                if image_req:
+                    supabase.storage.from_('Images').remove([filename])
+                tempdir = gettempdir() 
+                temp_file_path = os.path.join(tempdir, filename)
+                file.save(temp_file_path)
+
+                supabase.storage.from_('Images').upload(f"{filename}",\
+                temp_file_path, file_options={"content-type": file.content_type})
+                file.close()
+            
         except Exception as e:
             print("Error:", e)
             return {"message": "Server Error: Something went wrong while processing the data"}
@@ -104,7 +127,7 @@ class Event(Resource):
             tags = request.form.get("tags")
             if tags:
                 try:
-                    tags = json.loads(tags)  # This should be a list after parsing
+                    tags = json.loads(tags)
                 except json.JSONDecodeError:
                     raise BadRequest("Invalid JSON format for tags")
             # Perform update

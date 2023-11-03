@@ -59,7 +59,21 @@ export default function Home() {
   };
 
   const createEvent = async (formData: formData) => {
-    await apiCreateEvent((await session).data.session, formData);
+    const data = new FormData();
+    if (selectedFile) {
+      data.append('file', selectedFile);
+    }
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('location', formData.location);
+    data.append('startTime', formData.startTime);
+    data.append('endTime', formData.endTime);
+    data.append('date', formData.date);
+    data.append('frequency', formData.frequency);
+    data.append('tags', JSON.stringify(formData.tags));
+    // eslint-disable-next-line no-console
+    console.log('NEW DATA: ', data);
+    await apiCreateEvent((await session).data.session, data);
     setFormData({
       eventId: -1,
       title: '',
@@ -72,18 +86,15 @@ export default function Home() {
       file: null,
       tags: []
     });
-    setSelectedFile(null);
     getEvents();
   };
 
   const updateEvent = async (formData: formData) => {
     try {
       const data = new FormData();
-      // Append file if present
       if (selectedFile) {
         data.append('file', selectedFile);
       }
-      // Append other form fields
       data.append('title', formData.title);
       data.append('description', formData.description);
       data.append('location', formData.location);
@@ -91,15 +102,13 @@ export default function Home() {
       data.append('endTime', formData.endTime);
       data.append('date', formData.date);
       data.append('frequency', formData.frequency);
-      data.append('tags', JSON.stringify(formData.tags)); // Tags might need to be stringified if they are an array
+      data.append('tags', JSON.stringify(formData.tags));
 
-      // If there's an eventId, append it as well, assuming your backend uses it to identify the event
       if (formData.eventId !== -1) {
         data.append('eventId', formData.eventId.toString());
       }
       // eslint-disable-next-line no-console
       console.log('NEW DATA: ', data);
-      // Call the API update function
       await apiUpdateEvent((await session).data.session, data);
       setFormData({
         eventId: -1,
