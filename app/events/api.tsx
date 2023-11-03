@@ -43,18 +43,32 @@ export const apiCreateEvent = async (
 
 export const apiUpdateEvent = async (
   session: Session | null,
-  formData: formData
+  formData: FormData // This should remain as FormData
 ) => {
-  const requestBody = JSON.stringify(formData);
-  const requestOptions = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authentication: `Bearer ${session?.access_token}`
-    },
-    body: requestBody
-  };
-  await fetch(`/api/events`, requestOptions);
+  try {
+    // Prepare the request options, including the request headers
+    const requestOptions = {
+      method: 'PUT', // This should match the HTTP method expected by your API for an update operation
+      headers: {
+        // 'Content-Type': 'application/json' should not be set when sending FormData
+        // The browser will automatically set the 'Content-Type' to 'multipart/form-data'
+        // with the correct boundary when sending FormData.
+        Authorization: `Bearer ${session?.access_token}` // Use 'Authorization', not 'Authentication'
+      },
+      body: formData // Send the FormData object directly
+    };
+
+    // Make the fetch request to the API endpoint
+    const response = await fetch(`/api/events`, requestOptions);
+
+    // You can check the response status and handle accordingly
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error updating event: ', error);
+  }
 };
 
 export const apiDeleteEvent = async (

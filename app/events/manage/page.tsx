@@ -78,17 +78,29 @@ export default function Home() {
 
   const updateEvent = async (formData: formData) => {
     try {
-      // eslint-disable-next-line no-console
-      console.log('here is my file:', selectedFile);
-      // eslint-disable-next-line no-console
-      console.log('here is the data:', formData);
+      const data = new FormData();
+      // Append file if present
       if (selectedFile) {
-        formData.file = selectedFile;
-        // eslint-disable-next-line no-console
-        console.log('here is the modified data:', formData);
-        //i want to send the file and the form data to the backend
+        data.append('file', selectedFile);
       }
-      await apiUpdateEvent((await session).data.session, formData);
+      // Append other form fields
+      data.append('title', formData.title);
+      data.append('description', formData.description);
+      data.append('location', formData.location);
+      data.append('startTime', formData.startTime);
+      data.append('endTime', formData.endTime);
+      data.append('date', formData.date);
+      data.append('frequency', formData.frequency);
+      data.append('tags', JSON.stringify(formData.tags)); // Tags might need to be stringified if they are an array
+
+      // If there's an eventId, append it as well, assuming your backend uses it to identify the event
+      if (formData.eventId !== -1) {
+        data.append('eventId', formData.eventId.toString());
+      }
+      // eslint-disable-next-line no-console
+      console.log('NEW DATA: ', data);
+      // Call the API update function
+      await apiUpdateEvent((await session).data.session, data);
       setFormData({
         eventId: -1,
         title: '',
@@ -101,6 +113,7 @@ export default function Home() {
         file: null,
         tags: []
       });
+
       getEvents();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -169,13 +182,13 @@ export default function Home() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setSelectedFile(file);
+      setSelectedFile(file); // Update the state to hold the selected file
+      const newImageURL = URL.createObjectURL(file); // Create a URL for the file
+      setImageURL(newImageURL); // Update the state to hold the new image URL
       // eslint-disable-next-line no-console
-      console.log('Uploaded file: ', selectedFile);
-      const newImageURL = URL.createObjectURL(file);
-      setImageURL(newImageURL);
+      console.log('Uploaded file: ', file); // Log the file object
       // eslint-disable-next-line no-console
-      console.log(newImageURL);
+      console.log(newImageURL); // Log the new image URL
     }
   };
 
@@ -252,7 +265,7 @@ export default function Home() {
                     event.EndTime
                   )}`}
                   eventTags={event.Tags}
-                  eventImage={event.image_url}
+                  eventImage={`${event.image_url}?v=${new Date().getTime()}`}
                   action={editEvent}
                 />
               ))}
