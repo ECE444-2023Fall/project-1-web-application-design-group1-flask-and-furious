@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Slider from './Slider';
+import SearchBar from './SearchBar';
 
 const Filters = () => {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -17,6 +18,7 @@ const Filters = () => {
   return (
     <div>
       {/* TODO: add rest of search and filter components */}
+      <SearchBar search="" />
       <Slider list={times} value={sliderIndex} setValue={setSliderIndex} />
     </div>
   );
