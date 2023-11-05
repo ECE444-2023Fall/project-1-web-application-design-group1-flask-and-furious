@@ -42,15 +42,23 @@ class Event(Resource):
     def get(self):
         print("headers: ", request.headers)
         try:
+            table = supabase.table('Events').select('*')
+            
+            # Apply Filters
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
-            uuid = user.user.id
-            req = supabase.table('Events').select('*').eq('Owner', uuid).execute()
-            events_data = req.data
-            # print("\n\n\nHere is the Data: ", events_data, "\n\n\n")
+            user_uuid = user.user.id
+            print("\n\n\nHere:",user_uuid)
+            if user_uuid:
+                table = table.eq('Owner', user_uuid)
 
-            # Iterate over each event and get the public URL for the image
-            for event in events_data:
+            # Rough Filter Format:
+            # param = request.args.get(<NAME IN PARAMS>)
+            # if param:
+            #   table = table.eq(<TABLE_COLUMN>, param)
+
+            table_query = table.execute()
+            for event in table_query.data:
                 # Here we use the event's ID to get the image URL
                 image_req = supabase.storage.from_('Images').get_public_url(f'event-{event["id"]}')
                 #print("PublicUrl: ", image_req)
@@ -58,8 +66,8 @@ class Event(Resource):
                     event['image_url'] = image_req
                 else:
                     event['image_url'] = None
-            #print("\n\n\nHere is the Data with Images: ", events_data, "\n\n\n")
-            return req.model_dump_json(), 200
+
+            return table_query.model_dump_json(), 200
         except Exception as e:
             print("error: ", e)
             return {
