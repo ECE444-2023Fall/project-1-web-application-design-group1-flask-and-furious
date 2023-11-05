@@ -44,7 +44,7 @@ export const apiCreateEvent = async (
 
 export const apiUpdateEvent = async (
   session: Session | null,
-  formData: FormData // This should remain as FormData
+  formData: FormData // NOTE: different from formData - "multipart/form-data"
 ) => {
   try {
     const requestOptions = {
