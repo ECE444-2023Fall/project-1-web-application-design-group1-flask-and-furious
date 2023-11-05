@@ -75,8 +75,6 @@ export default function Home() {
     data.append('date', formData.date);
     data.append('frequency', formData.frequency);
     data.append('tags', JSON.stringify(formData.tags));
-    // eslint-disable-next-line no-console
-    console.log('NEW DATA: ', data);
     await apiCreateEvent((await session).data.session, data);
     setFormData({
       eventId: -1,
@@ -111,8 +109,6 @@ export default function Home() {
       if (formData.eventId !== -1) {
         data.append('eventId', formData.eventId.toString());
       }
-      // eslint-disable-next-line no-console
-      console.log('NEW DATA: ', data);
       await apiUpdateEvent((await session).data.session, data);
       setFormData({
         eventId: -1,
@@ -198,10 +194,6 @@ export default function Home() {
       setSelectedFile(file); // Update the state to hold the selected file
       const newImageURL = URL.createObjectURL(file); // Create a URL for the file
       setImageURL(newImageURL); // Update the state to hold the new image URL
-      // eslint-disable-next-line no-console
-      console.log('Uploaded file: ', file); // Log the file object
-      // eslint-disable-next-line no-console
-      console.log(newImageURL); // Log the new image URL
     }
   };
 
