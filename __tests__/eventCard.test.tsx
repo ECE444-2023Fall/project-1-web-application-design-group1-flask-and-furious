@@ -1,17 +1,18 @@
-import EventCard, { EventCardProps } from '@/components/EventCard';
+import EventCard, { Props } from '@/components/EventCard';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
 describe('EventCard', () => {
   it('Renders Event Name', async () => {
-    const props: EventCardProps = {
-      eventName: 'Awesome Concert',
-      eventDescription:
+    const props: Props = {
+      eventId: 1,
+      title: 'Awesome Concert',
+      description:
         'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-      eventLocation: 'Galbraith 202',
-      eventDate: '29/10/2023',
-      eventTime: '8-10 pm',
-      eventTags: ['Programming', 'Music', 'Dance']
+      location: 'Galbraith 202',
+      date: '29/10/2023',
+      length: '8-10 pm',
+      tags: ['Programming', 'Music', 'Dance']
     };
 
     render(<EventCard {...props} />);

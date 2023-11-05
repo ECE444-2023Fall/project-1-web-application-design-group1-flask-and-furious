@@ -1,10 +1,10 @@
 import { Session } from '@supabase/gotrue-js';
 import { Dispatch, SetStateAction } from 'react';
-import { EventData, formData } from './types';
+import { EventData } from './types';
 
 export const apiGetEvents = async (
   session: Session | null,
-  setEvents: Dispatch<SetStateAction<EventData[]>>,
+  setEvents: Dispatch<SetStateAction<EventData[] | null>>,
   params: {
     userUuid?: string;
   }
@@ -19,13 +19,30 @@ export const apiGetEvents = async (
   fetch('/api/events?' + new URLSearchParams(params), requestOptions)
     .then((res) => res.json())
     .then((data) => {
-      setEvents(JSON.parse(data)['data']);
+      const jsonData = JSON.parse(data)['data'];
+      const reNamedIds = jsonData.map(
+        (event: Database['public']['Tables']['Events']['Row']) => {
+          return {
+            eventId: event.id,
+            title: event.Title,
+            owner: event.Owner,
+            description: event.Description,
+            location: event.Location,
+            startTime: event.StartTime,
+            endTime: event.EndTime,
+            date: event.Date,
+            frequency: event.Frequency,
+            tags: event.Tags
+          } as EventData;
+        }
+      );
+      setEvents(reNamedIds);
     });
 };
 
 export const apiCreateEvent = async (
   session: Session | null,
-  formData: formData
+  formData: EventData
 ) => {
   try {
     const requestBody = JSON.stringify(formData);
@@ -46,7 +63,7 @@ export const apiCreateEvent = async (
 
 export const apiUpdateEvent = async (
   session: Session | null,
-  formData: formData
+  formData: EventData
 ) => {
   const requestBody = JSON.stringify(formData);
   const requestOptions = {
@@ -62,7 +79,7 @@ export const apiUpdateEvent = async (
 
 export const apiDeleteEvent = async (
   session: Session | null,
-  formData: formData
+  formData: EventData
 ) => {
   const requestBody = JSON.stringify(formData);
   const requestOptions = {

@@ -2,6 +2,7 @@
 import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
+import { Json } from '@/lib/database.types';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -13,34 +14,27 @@ import {
   apiUpdateEvent
 } from '../api';
 import { formatTime, userUuidFromSession } from '../helpers';
-import { EventData, formData } from '../types';
+import { EventData } from '../types';
 
-export interface EventCardProps {
-  eventName: string;
-  eventLocation: string;
-  eventDate: string;
-  eventTime: string;
-  eventFrequency: string;
-  eventTags: string[];
-  eventDescription: string;
-}
+const defaultState: EventData = {
+  eventId: -1,
+  title: '',
+  owner: '',
+  description: '',
+  location: '',
+  startTime: '',
+  endTime: '',
+  date: '',
+  frequency: '',
+  tags: []
+};
 
 export default function Home() {
   // Initialize isOpen state
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
-  const [events, setEvents] = useState<EventData[]>([]);
-  const [changeFormData, setFormData] = useState<formData>({
-    eventId: -1,
-    title: '',
-    description: '',
-    location: '',
-    startTime: '',
-    endTime: '',
-    date: '',
-    frequency: '',
-    tags: []
-  });
+  const [events, setEvents] = useState<EventData[] | null>(null);
+  const [changeFormData, setFormData] = useState<EventData>(defaultState);
   // Backend
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
@@ -58,36 +52,16 @@ export default function Home() {
     });
   };
 
-  const createEvent = async (formData: formData) => {
+  const createEvent = async (formData: EventData) => {
     await apiCreateEvent((await session).data.session, formData);
-    setFormData({
-      eventId: -1,
-      title: '',
-      description: '',
-      location: '',
-      startTime: '',
-      endTime: '',
-      date: '',
-      frequency: '',
-      tags: []
-    });
+    setFormData(defaultState);
     getEvents();
   };
 
-  const updateEvent = async (formData: formData) => {
+  const updateEvent = async (formData: EventData) => {
     try {
       await apiUpdateEvent((await session).data.session, formData);
-      setFormData({
-        eventId: -1,
-        title: '',
-        description: '',
-        location: '',
-        startTime: '',
-        endTime: '',
-        date: '',
-        frequency: '',
-        tags: []
-      });
+      setFormData(defaultState);
       getEvents();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -95,20 +69,10 @@ export default function Home() {
     }
   };
 
-  const deleteEvent = async (formData: formData) => {
+  const deleteEvent = async (formData: EventData) => {
     try {
       await apiDeleteEvent((await session).data.session, formData);
-      setFormData({
-        eventId: -1,
-        title: '',
-        description: '',
-        location: '',
-        startTime: '',
-        endTime: '',
-        date: '',
-        frequency: '',
-        tags: []
-      });
+      setFormData(defaultState);
       getEvents();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -118,18 +82,19 @@ export default function Home() {
 
   const editEvent = (id: number) => {
     setIsNewEvent(false);
-    const selectedEvent = events.find((event) => event.id === id);
+    const selectedEvent = events?.find((event) => event.eventId === id);
     if (selectedEvent) {
       setFormData({
-        eventId: selectedEvent.id,
-        title: selectedEvent.Title,
-        description: selectedEvent.Description,
-        location: selectedEvent.Location,
-        startTime: selectedEvent.StartTime,
-        endTime: selectedEvent.EndTime,
-        date: selectedEvent.Date,
-        frequency: selectedEvent.Frequency,
-        tags: selectedEvent.Tags
+        eventId: selectedEvent.eventId,
+        title: selectedEvent.title,
+        owner: selectedEvent.owner,
+        description: selectedEvent.description,
+        location: selectedEvent.location,
+        startTime: selectedEvent.startTime,
+        endTime: selectedEvent.endTime,
+        date: selectedEvent.date,
+        frequency: selectedEvent.frequency,
+        tags: selectedEvent.tags
       });
     }
     onOpenDrawer();
@@ -176,17 +141,7 @@ export default function Home() {
               } else {
                 onOpenDrawer();
                 setIsNewEvent(true);
-                setFormData({
-                  eventId: -1,
-                  title: '',
-                  description: '',
-                  location: '',
-                  startTime: '',
-                  endTime: '',
-                  date: '',
-                  frequency: '',
-                  tags: []
-                });
+                setFormData(defaultState);
               }
             }}
           >
@@ -200,22 +155,23 @@ export default function Home() {
         <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
           <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
             {events
-              .sort(
+              ?.sort(
                 (a, b) =>
-                  new Date(a.Date).getTime() - new Date(b.Date).getTime()
+                  new Date(a.date as string).getTime() -
+                  new Date(b.date as string).getTime()
               )
               .map((event) => (
                 <EventCard
-                  key={event.id}
-                  eventId={event.id}
-                  eventName={event.Title}
-                  eventDescription={event.Description}
-                  eventLocation={event.Location}
-                  eventDate={event.Date}
-                  eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                    event.EndTime
-                  )}`}
-                  eventTags={event.Tags}
+                  key={event.eventId}
+                  eventId={event.eventId}
+                  title={event.title || ''}
+                  description={event.description || ''}
+                  location={event.location || ''}
+                  date={event.date || ''}
+                  length={`${formatTime(
+                    event.startTime as string
+                  )} - ${formatTime(event.endTime as string)}`}
+                  tags={event.tags as Json[]}
                   action={editEvent}
                 />
               ))}

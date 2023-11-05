@@ -1,38 +1,28 @@
+import { EventData } from '@/app/events/types';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-
-export interface formData {
-  eventId: number;
-  title: string;
-  description: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  date: string;
-  frequency: string;
-  tags: string[];
-}
 
 export interface formProps {
   onClose: () => void;
-  Post: (formData: formData) => void;
-  initialFormData: formData;
-  Update: (formData: formData) => void;
+  Post: (formData: EventData) => void;
+  initialFormData: EventData;
+  Update: (formData: EventData) => void;
   isNewEvent: boolean;
-  Delete: (formData: formData) => void;
+  Delete: (formData: EventData) => void;
 }
 
 export default function EventForm(props: formProps) {
   const [isDelete, setIsDelete] = useState<boolean>(true);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EventData>({
     eventId: -1,
     title: '',
+    owner: '',
     description: '',
     location: '',
     startTime: '',
     endTime: '',
     date: '',
     frequency: '',
-    tags: [] as string[]
+    tags: []
   });
 
   useEffect(() => {
@@ -109,7 +99,7 @@ export default function EventForm(props: formProps) {
             type="text"
             id="title"
             name="title"
-            value={formData.title}
+            value={formData.title || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -124,7 +114,7 @@ export default function EventForm(props: formProps) {
           <textarea
             id="description"
             name="description"
-            value={formData.description}
+            value={formData.description || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -140,7 +130,7 @@ export default function EventForm(props: formProps) {
             type="text"
             id="location"
             name="location"
-            value={formData.location}
+            value={formData.location || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -156,7 +146,7 @@ export default function EventForm(props: formProps) {
             type="time"
             id="startTime"
             name="startTime"
-            value={formData.startTime}
+            value={formData.startTime || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -172,7 +162,7 @@ export default function EventForm(props: formProps) {
             type="time"
             id="endTime"
             name="endTime"
-            value={formData.endTime}
+            value={formData.endTime || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -188,7 +178,7 @@ export default function EventForm(props: formProps) {
             type="date"
             id="date"
             name="date"
-            value={formData.date}
+            value={formData.date || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           />
@@ -203,7 +193,7 @@ export default function EventForm(props: formProps) {
           <select
             id="frequency"
             name="frequency"
-            value={formData.frequency}
+            value={formData.frequency || ''}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
           >
@@ -226,7 +216,7 @@ export default function EventForm(props: formProps) {
           <select
             id="tags"
             name="tags"
-            value={formData.tags}
+            value={formData.tags as string[]}
             onChange={handleChange}
             className="w-2/3 rounded border border-gray-300 p-2"
             multiple // Add the 'multiple' attribute to enable multi-select
