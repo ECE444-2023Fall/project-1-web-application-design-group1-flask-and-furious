@@ -39,6 +39,8 @@ event_api = Namespace("events", description="event related operations")
 
 @event_api.route("/")
 class Event(Resource):
+    @event_api.doc(description="Retrieve events. Optionally filtered by Query Parameters.")
+    @event_api.param("userUuid", "The uuid of the user to filter by")
     def get(self):
         print("headers: ", request.headers)
         try:

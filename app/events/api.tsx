@@ -4,7 +4,10 @@ import { EventData, formData } from './types';
 
 export const apiGetEvents = async (
   session: Session | null,
-  setEvents: Dispatch<SetStateAction<EventData[]>>
+  setEvents: Dispatch<SetStateAction<EventData[]>>,
+  params: {
+    userUuid?: string;
+  }
 ) => {
   const requestOptions = {
     method: 'GET',
@@ -13,7 +16,7 @@ export const apiGetEvents = async (
       Authentication: `Bearer ${session?.access_token}`
     }
   };
-  fetch('/api/events', requestOptions)
+  fetch('/api/events?' + new URLSearchParams(params), requestOptions)
     .then((res) => res.json())
     .then((data) => {
       setEvents(JSON.parse(data)['data']);
