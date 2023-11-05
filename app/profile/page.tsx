@@ -91,7 +91,7 @@ export default function Profile() {
         <p className="text-7xl font-bold">
           {profile.first_name !== '' ? (
             <>
-              {profile.first_name} {profile.last_name}`&apos`s Profile
+              {profile.first_name} {profile.last_name}&apos;s Profile
             </>
           ) : null}
         </p>
