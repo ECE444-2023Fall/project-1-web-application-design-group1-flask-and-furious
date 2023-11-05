@@ -190,8 +190,55 @@ class Event(Resource):
         except Exception as e:
             print("Delete Error:", e)
             return {"message": "Server Error: Something went wrong while processing the delete"}
+        
+profile_api = Namespace("profiles", description="profile related operations")
+
+@profile_api.route("/")
+class Profile(Resource):
+    @profile_api.doc(description="Retrieve Profile Information.")
+    @profile_api.param("userUuid", "The uuid of the user to filter by")
+
+    def get(self):
+        print("headers: ", request.headers)
+        try:
+            table = supabase.table('Profiles').select('*')
+            user_uuid = request.args.get('userUuid')
+            if user_uuid:
+                table = table.eq('id', user_uuid)
+
+            data = table.execute().model_dump_json()
+            return (data)
+        except Exception as e:
+            print("error: ", e)
+            return {
+                "message": "Server Error: Authentication token not found or invalid"
+            }
+        
+    def put(self):
+        try:
+            data = request.get_json()
+            print(data)
+
+            token = request.headers.get("Authentication").split()[1]
+            user = supabase.auth.get_user(token)
+            uuid = user.user.id
+            
+            data_to_update = {
+                "Age": data["Age"],
+                "Gender": data["Gender"],
+                "City": data["City"],
+                "University": data["University"],
+                "Program": data["Program"]
+            }
+
+            supabase.table('Profiles').update(data_to_update).eq('id', uuid).execute()
+            return "Done"
+        except Exception as e:
+            print("Update Error:", e)
+            return {"message": "Server Error: Something went wrong while processing the update"}
 
 api.add_namespace(event_api)
+api.add_namespace(profile_api)
 api.init_app(app)
 
 
