@@ -8,7 +8,7 @@ type Props = {
 const ProfilePhoto = ({ url, onFileUpload }: Props) => {
   return (
     <>
-      <div className="relative h-80 w-80 overflow-clip rounded-full border-8 border-violet-600 bg-white ">
+      <div className="relative flex h-80 w-80 items-center justify-center overflow-clip rounded-full border-8 border-violet-600 bg-white">
         {url ? (
           <Image src={url} fill objectFit="cover" alt="Profile Picture" />
         ) : (
@@ -17,8 +17,8 @@ const ProfilePhoto = ({ url, onFileUpload }: Props) => {
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-6 w-6"
+            stroke="#808080"
+            className="h-60 w-80"
           >
             <path
               strokeLinecap="round"
@@ -27,7 +27,7 @@ const ProfilePhoto = ({ url, onFileUpload }: Props) => {
             />
           </svg>
         )}
-      </div>{' '}
+      </div>
       <label
         htmlFor="uploadedProfilePhoto"
         className="group absolute flex h-80 w-80 cursor-pointer items-center justify-center rounded-full opacity-60 transition duration-500 hover:bg-gray-200"

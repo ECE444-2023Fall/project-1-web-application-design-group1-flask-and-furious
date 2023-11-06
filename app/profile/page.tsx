@@ -27,6 +27,7 @@ export default function Profile() {
   const [program, setProgram] = useState<ProfileData['program']>(null);
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [uploadMessage, setUploadMessage] = useState('');
 
   const getProfile = async () => {
     if (!(await session).data?.session) {
@@ -97,13 +98,24 @@ export default function Profile() {
   const onFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.includes('image') && profile) {
-      apiUpdateProfilePicture(
-        (await session).data.session,
-        file,
-        profile.profileId
+      setUploadMessage(
+        'Your profile picture will be updated in a few minutes.'
       );
+
+      try {
+        await apiUpdateProfilePicture(
+          (await session).data.session,
+          file,
+          profile.profileId
+        );
+
+        setTimeout(() => setUploadMessage(''), 3000);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error uploading profile picture:', error);
+        setUploadMessage('Failed to upload picture.');
+      }
     }
-    //TODO: Need to trigger a re-render of the profile picture for navbar and profile page
   };
 
   return (
@@ -122,6 +134,11 @@ export default function Profile() {
                 url={profile.pictureUrl}
                 onFileUpload={onFileUpload}
               />
+              {uploadMessage && (
+                <div className="mt-4 rounded-md bg-violet-600 p-2 text-center text-white">
+                  {uploadMessage}
+                </div>
+              )}
             </div>
             <div className="flex basis-3/4 flex-col">
               <div className="mt-4 flex h-60 flex-col rounded-lg border-2 border-violet-600 bg-white">
