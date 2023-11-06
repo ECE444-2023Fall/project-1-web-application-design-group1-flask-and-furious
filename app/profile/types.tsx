@@ -1,4 +1,5 @@
 export interface ProfileData {
+  profileId: Database['public']['Tables']['Profiles']['Row']['id'];
   first_name: Database['public']['Tables']['Profiles']['Row']['first_name'];
   last_name: Database['public']['Tables']['Profiles']['Row']['last_name'];
   age: Database['public']['Tables']['Profiles']['Row']['age'];

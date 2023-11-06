@@ -1,21 +1,54 @@
 import { Menu, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { Session } from '@supabase/gotrue-js';
+import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 type Props = {
   session: Session | null;
 };
 
 export default function NavbarProfile({ session }: Props) {
+  // Get profile picture from api/profiles/picture endpoint get request
+  const [pictureUrl, setPictureUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!session) {
+      return;
+    }
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authentication: `Bearer ${session?.access_token}`
+      }
+    };
+    fetch('/api/profiles/picture', requestOptions)
+      .then((res) => res.json())
+      .then((data) => {
+        const { pictureUrl } = JSON.parse(data)['data'][0];
+        setPictureUrl(pictureUrl);
+      });
+  }, []);
+
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button>
-        <UserCircleIcon
-          className="-mr-1 h-12 w-12 stroke-1 text-gray-400"
-          aria-hidden="true"
-        />
+      <Menu.Button className="relative h-12 w-12">
+        {pictureUrl ? (
+          <Image
+            src={pictureUrl}
+            fill
+            objectFit="cover"
+            className="overflow-clip rounded-full border-2 border-violet-600 transition hover:opacity-75"
+            alt={'Profile Photo'}
+          />
+        ) : (
+          <UserCircleIcon
+            className="-mr-1 h-12 w-12 stroke-1 text-gray-400"
+            aria-hidden="true"
+          />
+        )}
       </Menu.Button>
 
       <Transition

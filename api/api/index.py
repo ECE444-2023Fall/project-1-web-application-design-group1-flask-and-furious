@@ -263,6 +263,73 @@ class Profile(Resource):
             }
 
 
+@profile_api.route("/picture")
+class ProfilePicture(Resource):
+    def get(self):
+        try:
+            token = request.headers.get("Authentication").split()[1]
+            user = supabase.auth.get_user(token)
+            profileId = user.user.id
+            print(f"Profile ID: {user}")
+            if profileId:
+                # Get the profile picture url from the Profiles table
+                image_req = (
+                    supabase.table("Profiles")
+                    .select("pictureUrl")
+                    .eq("id", profileId)
+                    .execute()
+                )
+
+                return image_req.model_dump_json()
+            else:
+                return {"message": "No profileId provided"}, 400
+        except Exception as e:
+            print("Update Error:", e)
+            return {
+                "message": "Server Error: Something went wrong while processing the update"
+            }
+
+    def put(self):
+        try:
+            token = request.headers.get("Authentication").split()[1]
+            _user = supabase.auth.get_user(token)
+            file = request.files.get("picture")
+            profileId = request.form.get("profileId")
+            if file and profileId:
+                filename = secure_filename(f"profile-picture-{profileId}")
+                image_req = supabase.storage.from_("ProfilePhotos").get_public_url(
+                    filename
+                )
+                if image_req:
+                    supabase.storage.from_("ProfilePhotos").remove([filename])
+                tempdir = gettempdir()
+                temp_file_path = os.path.join(tempdir, filename)
+                file.save(temp_file_path)
+
+                supabase.storage.from_("ProfilePhotos").upload(
+                    filename,
+                    temp_file_path,
+                    file_options={"content-type": file.content_type},
+                )
+                file.close()
+
+                # get the newly uploaded image url
+                image_req = supabase.storage.from_("ProfilePhotos").get_public_url(
+                    filename
+                )
+                # Update the profile picture url in the Profiles table
+                supabase.table("Profiles").update({"pictureUrl": image_req}).eq(
+                    "id", profileId
+                ).execute()
+
+            return {"message": "Profile picture uploaded successfully"}, 200
+        except Exception as e:
+            print("Update Error:", e)
+            return {
+                "message": "Server Error: Something went wrong while processing the update"
+            }
+
+
 api.add_namespace(event_api)
 api.add_namespace(profile_api)
 api.init_app(app)
