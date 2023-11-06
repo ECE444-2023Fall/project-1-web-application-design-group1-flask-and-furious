@@ -33,7 +33,7 @@ export const apiUpdateProfile = async (
   const requestOptions = {
     method: 'PUT',
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json',
       Authentication: `Bearer ${session?.access_token}`
     },
     body: requestBody

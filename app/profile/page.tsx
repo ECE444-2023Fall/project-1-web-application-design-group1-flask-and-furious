@@ -84,7 +84,7 @@ export default function Profile() {
         program: program
       };
 
-      setProfile(updatedProfile);
+      await setProfile(updatedProfile);
       await updateProfile(updatedProfile);
       setProfileEdit(false);
       getProfile();
