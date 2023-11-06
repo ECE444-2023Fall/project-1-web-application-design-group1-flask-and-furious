@@ -13,6 +13,12 @@ export default function RegisterForm() {
   const router = useRouter();
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+
     if (password === retypePassword) {
       try {
         const response = await fetch('/auth/sign-up', {
