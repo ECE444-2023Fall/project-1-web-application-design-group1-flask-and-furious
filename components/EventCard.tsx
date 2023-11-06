@@ -12,22 +12,33 @@ export interface EventCardProps {
   eventTime: string;
   eventLocation: string;
   eventTags: string[];
+  eventImage: string;
   action?: (id: number) => void;
 }
 
 export default function EventCard(props: EventCardProps) {
+  const defaultImage =
+    'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
   return (
     <div
-      className="flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white p-3 shadow hover:bg-gray-100"
+      className="flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100"
       onClick={() => {
         if (typeof props.action === 'function') {
           props.action(props.eventId);
         }
       }}
     >
-      {/* <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" /> */}
+      <img
+        className="h-48 w-full rounded-t-lg object-cover"
+        src={props.eventImage || defaultImage}
+        alt={props.eventName}
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = defaultImage;
+        }}
+      />
 
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between p-2">
         <h5 className="text-lg font-bold text-gray-900 ">{props.eventName}</h5>
         <div className="flex flex-row-reverse gap-1">
           <CalendarDaysIcon
@@ -37,7 +48,7 @@ export default function EventCard(props: EventCardProps) {
           <p className="text-sm font-normal text-gray-700">{props.eventDate}</p>
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between p-2">
         <div className="flex flex-row gap-1">
           <MapPinIcon
             className="h-5 w-5 stroke-1 text-black"
@@ -56,11 +67,11 @@ export default function EventCard(props: EventCardProps) {
         </div>
       </div>
 
-      <p className="text-sm font-normal text-gray-700">
+      <p className="p-2 text-sm font-normal text-gray-700">
         {props.eventDescription}
       </p>
 
-      <div className="flex flex-row gap-1">
+      <div className="flex flex-row gap-1 p-2">
         {props.eventTags.map((tag, id) => (
           <div key={id} className="rounded-full bg-gray-200 px-2">
             <p className="text-sm font-normal text-gray-700">{tag}</p>

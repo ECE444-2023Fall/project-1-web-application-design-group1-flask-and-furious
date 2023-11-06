@@ -25,39 +25,46 @@ export const apiGetEvents = async (
 
 export const apiCreateEvent = async (
   session: Session | null,
-  formData: formData
+  formData: FormData
 ) => {
   try {
-    const requestBody = JSON.stringify(formData);
     const requestOptions = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        Authentication: `Bearer ${session?.access_token}`
+        Authorization: `Bearer ${session?.access_token}`
       },
-      body: requestBody
+      body: formData
     };
-    await fetch('/api/events', requestOptions);
+    const response = await fetch(`/api/events`, requestOptions);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error fetching events: ', error);
+    console.error('Error updating event: ', error);
   }
 };
 
 export const apiUpdateEvent = async (
   session: Session | null,
-  formData: formData
+  formData: FormData // NOTE: different from formData - "multipart/form-data"
 ) => {
-  const requestBody = JSON.stringify(formData);
-  const requestOptions = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authentication: `Bearer ${session?.access_token}`
-    },
-    body: requestBody
-  };
-  await fetch(`/api/events`, requestOptions);
+  try {
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${session?.access_token}`
+      },
+      body: formData
+    };
+    const response = await fetch(`/api/events`, requestOptions);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error updating event: ', error);
+  }
 };
 
 export const apiDeleteEvent = async (

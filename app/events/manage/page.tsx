@@ -27,9 +27,11 @@ export interface EventCardProps {
 
 export default function Home() {
   // Initialize isOpen state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
+  const [imageURL, setImageURL] = useState<string | null>(null);
   const [changeFormData, setFormData] = useState<formData>({
     eventId: -1,
     title: '',
@@ -39,13 +41,15 @@ export default function Home() {
     endTime: '',
     date: '',
     frequency: '',
+    file: null,
     tags: []
   });
   // Backend
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
   const router = useRouter();
-
+  const defaultImage =
+    'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
   const getEvents = async () => {
     if (!(await session).data?.session) {
       router.push('/login');
@@ -59,7 +63,19 @@ export default function Home() {
   };
 
   const createEvent = async (formData: formData) => {
-    await apiCreateEvent((await session).data.session, formData);
+    const data = new FormData();
+    if (selectedFile) {
+      data.append('file', selectedFile);
+    }
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('location', formData.location);
+    data.append('startTime', formData.startTime);
+    data.append('endTime', formData.endTime);
+    data.append('date', formData.date);
+    data.append('frequency', formData.frequency);
+    data.append('tags', JSON.stringify(formData.tags));
+    await apiCreateEvent((await session).data.session, data);
     setFormData({
       eventId: -1,
       title: '',
@@ -69,6 +85,7 @@ export default function Home() {
       endTime: '',
       date: '',
       frequency: '',
+      file: null,
       tags: []
     });
     getEvents();
@@ -76,7 +93,23 @@ export default function Home() {
 
   const updateEvent = async (formData: formData) => {
     try {
-      await apiUpdateEvent((await session).data.session, formData);
+      const data = new FormData();
+      if (selectedFile) {
+        data.append('file', selectedFile);
+      }
+      data.append('title', formData.title);
+      data.append('description', formData.description);
+      data.append('location', formData.location);
+      data.append('startTime', formData.startTime);
+      data.append('endTime', formData.endTime);
+      data.append('date', formData.date);
+      data.append('frequency', formData.frequency);
+      data.append('tags', JSON.stringify(formData.tags));
+
+      if (formData.eventId !== -1) {
+        data.append('eventId', formData.eventId.toString());
+      }
+      await apiUpdateEvent((await session).data.session, data);
       setFormData({
         eventId: -1,
         title: '',
@@ -86,13 +119,16 @@ export default function Home() {
         endTime: '',
         date: '',
         frequency: '',
+        file: null,
         tags: []
       });
+
       getEvents();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error updating event: ', error);
     }
+    setSelectedFile(null);
   };
 
   const deleteEvent = async (formData: formData) => {
@@ -107,8 +143,10 @@ export default function Home() {
         endTime: '',
         date: '',
         frequency: '',
+        file: null,
         tags: []
       });
+      setSelectedFile(null);
       getEvents();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -129,21 +167,34 @@ export default function Home() {
         endTime: selectedEvent.EndTime,
         date: selectedEvent.Date,
         frequency: selectedEvent.Frequency,
+        file: null,
         tags: selectedEvent.Tags
       });
+      setImageURL(selectedEvent.image_url);
     }
     onOpenDrawer();
   };
 
   useEffect(() => {
     getEvents();
+    setImageURL(defaultImage);
   }, []);
 
   const onCloseDrawer = () => {
     setIsDrawerOpen(false);
+    setImageURL(defaultImage);
   };
   const onOpenDrawer = () => {
     setIsDrawerOpen(true);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setSelectedFile(file); // Update the state to hold the selected file
+      const newImageURL = URL.createObjectURL(file); // Create a URL for the file
+      setImageURL(newImageURL); // Update the state to hold the new image URL
+    }
   };
 
   return (
@@ -152,6 +203,8 @@ export default function Home() {
         isOpen={isDrawerOpen}
         style={isDrawerOpen ? '' : '-translate-x-full'}
         onClose={onCloseDrawer}
+        onFileSelect={handleFileChange}
+        backgroundImage={imageURL}
       >
         <EventForm
           onClose={onCloseDrawer}
@@ -185,6 +238,7 @@ export default function Home() {
                   endTime: '',
                   date: '',
                   frequency: '',
+                  file: null,
                   tags: []
                 });
               }
@@ -216,6 +270,7 @@ export default function Home() {
                     event.EndTime
                   )}`}
                   eventTags={event.Tags}
+                  eventImage={`${event.image_url}?v=${new Date().getTime()}`}
                   action={editEvent}
                 />
               ))}

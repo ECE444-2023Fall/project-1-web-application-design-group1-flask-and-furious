@@ -35,6 +35,7 @@ export default function Page() {
               event.EndTime
             )}`}
             eventTags={event.Tags}
+            eventImage={''}
           />
         ))}
       </div>
