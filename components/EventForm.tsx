@@ -240,15 +240,17 @@ export default function EventForm(props: formProps) {
             ))}
           </select>
         </div>
-        <div className="absolute bottom-3 left-3">
-          <button
-            onClick={() => setIsDelete(true)}
-            type="submit"
-            className="rounded-md bg-red-500 px-3 py-1 text-white"
-          >
-            Delete
-          </button>
-        </div>
+        {props.initialFormData.eventId >= 0 && (
+          <div className="absolute bottom-3 left-3">
+            <button
+              onClick={() => setIsDelete(true)}
+              type="submit"
+              className="rounded-md bg-red-500 px-3 py-1 text-white"
+            >
+              Delete
+            </button>
+          </div>
+        )}
         <div className="absolute bottom-3 right-3">
           <button
             onClick={() => setIsDelete(false)}

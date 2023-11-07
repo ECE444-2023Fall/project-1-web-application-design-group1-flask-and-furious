@@ -35,7 +35,7 @@ export default function Page() {
               event.EndTime
             )}`}
             eventTags={event.Tags}
-            eventImage={''}
+            eventImage={`${event.image_url}?v=${new Date().getTime()}`}
           />
         ))}
       </div>
