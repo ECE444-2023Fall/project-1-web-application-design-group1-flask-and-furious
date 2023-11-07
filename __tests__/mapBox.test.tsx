@@ -12,7 +12,11 @@ jest.mock('mapbox-gl', () => ({
   })),
   Marker: jest.fn(() => ({
     setLngLat: jest.fn().mockReturnThis(),
-    addTo: jest.fn()
+    addTo: jest.fn().mockReturnThis(),
+    setPopup: jest.fn().mockReturnThis()
+  })),
+  Popup: jest.fn(() => ({
+    setHTML: jest.fn().mockReturnThis()
   }))
 }));
 
