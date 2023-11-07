@@ -42,6 +42,15 @@ const config: Config = {
       }
     }
   },
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: '#7C3AED'
+        }
+      }
+    ]
+  },
   plugins: [require('daisyui')]
 };
 export default config;
