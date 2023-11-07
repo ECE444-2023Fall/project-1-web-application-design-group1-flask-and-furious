@@ -10,6 +10,9 @@ const nextConfig = {
             : 'https://clubhub-backend.vercel.app/api/:path*'
       }
     ];
+  },
+  images: {
+    domains: ['yqrgbzoauzaaznsztnwb.supabase.co']
   }
 };
 
