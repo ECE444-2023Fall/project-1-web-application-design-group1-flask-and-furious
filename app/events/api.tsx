@@ -31,7 +31,7 @@ export const apiCreateEvent = async (
     const requestOptions = {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${session?.access_token}`
+        Authentication: `Bearer ${session?.access_token}`
       },
       body: formData
     };
@@ -53,7 +53,7 @@ export const apiUpdateEvent = async (
     const requestOptions = {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${session?.access_token}`
+        Authentication: `Bearer ${session?.access_token}`
       },
       body: formData
     };
