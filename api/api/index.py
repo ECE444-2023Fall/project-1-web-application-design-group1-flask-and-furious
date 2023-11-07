@@ -75,7 +75,7 @@ class Event(Resource):
 
     def post(self):
         try:
-            token = request.headers.get("Authorization").split()[1]
+            token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
             tags = request.form.get("tags")
@@ -121,7 +121,7 @@ class Event(Resource):
     
     def put(self):
         try:
-            token = request.headers.get("Authorization").split()[1]
+            token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             uuid = user.user.id
             event_id = request.form.get("eventId")
