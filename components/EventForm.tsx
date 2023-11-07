@@ -53,15 +53,15 @@ export default function EventForm(props: formProps) {
     };
 
     getTags();
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
-    //Parse through tag options and save an array of the true values in the formData.tags
-    setFormData({
-      ...formData,
+    //Keeps track of selected tags in the form data
+    setFormData((prevState) => ({
+      ...prevState,
       tags: Object.keys(tagOptions).filter((tag) => tagOptions[tag])
-    });
-  }, [formData, tagOptions]);
+    }));
+  }, [tagOptions]);
 
   useEffect(() => {
     setFormData(props.initialFormData);

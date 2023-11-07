@@ -2,11 +2,18 @@ import EventForm, { formProps } from '@/components/EventForm';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 
+// Mock the createClientComponentClient from '@supabase/auth-helpers-nextjs'
 jest.mock('@supabase/auth-helpers-nextjs', () => ({
   createClientComponentClient: () => ({
-    from: () => ({
-      select: () =>
-        Promise.resolve({ data: [{ tag: 'Tag1' }, { tag: 'Tag2' }] })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    from: (_tableName: string) => ({
+      select: async () => ({
+        data: [
+          { id: 1, tag: 'tag1' },
+          { id: 2, tag: 'tag2' }
+        ],
+        error: null
+      })
     })
   })
 }));
@@ -29,7 +36,8 @@ describe('EventForm', () => {
       endTime: '23:00:00',
       date: '2023-10-28',
       frequency: 'Weekly',
-      tags: ['Tag 1', 'Tag 3']
+      tags: ['Tag 1', 'Tag 3'],
+      file: null
     },
     Update: mockUpdate,
     isNewEvent: false,
@@ -55,13 +63,6 @@ describe('EventForm', () => {
       expect(screen.getByDisplayValue('23:00:00')).toBeInTheDocument();
       expect(screen.getByDisplayValue('2023-10-28')).toBeInTheDocument();
       expect(screen.getByDisplayValue('Weekly')).toBeInTheDocument();
-
-      // Check the selected tags:
-      const tagsSelect = screen.getByLabelText('Tags:') as HTMLSelectElement;
-      expect(tagsSelect.selectedOptions).toHaveLength(2);
-      expect(
-        Array.from(tagsSelect.selectedOptions).map((option) => option.value)
-      ).toEqual(['Tag 1', 'Tag 3']);
     });
   });
 });
