@@ -1,5 +1,7 @@
 'use client';
 import mapboxgl from 'mapbox-gl';
+import { renderToStaticMarkup } from 'react-dom/server';
+import EventCard from './EventCard';
 import { useEffect, useRef } from 'react';
 
 // this is where all of our map logic is going to live
@@ -28,6 +30,16 @@ function MapBox() {
       [-79.3894661, 43.6671491]
     ]; // Three example locations for the events
 
+    const event_details = {
+      eventId: 12,
+      eventName: 'test',
+      eventDescription: "it's gonna be so fun",
+      eventDate: 'Nov 6, 2023',
+      eventTime: '4 to 6 pm',
+      eventLocation: 'bahen',
+      eventTags: ['fun', 'eng', 'alcoholic drinks']
+    };
+
     map.on('load', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (map as any).setConfigProperty('basemap', 'lightPreset', 'dusk');
@@ -52,10 +64,17 @@ function MapBox() {
     // Adding markers for the events
     /* eslint-disable @typescript-eslint/no-unused-vars */
     for (let i = 0; i < event_location.length; i++) {
+      const eventCardHtml = renderToStaticMarkup(
+        <EventCard {...event_details} />
+      );
+      const popup = new mapboxgl.Popup({ offset: 25 }) // Adjust the offset as needed
+        .setHTML(eventCardHtml);
       const marker = new mapboxgl.Marker()
         .setLngLat(event_location[i])
-        .addTo(map);
+        .addTo(map)
+        .setPopup(popup);
     }
+
     /* eslint-enable @typescript-eslint/no-unused-vars */
   }, []);
 
