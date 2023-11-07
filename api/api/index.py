@@ -47,10 +47,7 @@ class Event(Resource):
             table = supabase.table('Events').select('*')
             
             # Apply Filters
-            token = request.headers.get("Authentication").split()[1]
-            user = supabase.auth.get_user(token)
-            user_uuid = user.user.id
-            print("\n\n\nHere:",user_uuid)
+            user_uuid = request.args.get('userUuid')
             if user_uuid:
                 table = table.eq('Owner', user_uuid)
 
