@@ -29,7 +29,7 @@ export default function EventForm(props: formProps) {
   const supabase = createClientComponentClient();
   const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<formData>({
     eventId: -1,
     title: '',
     description: '',
@@ -47,8 +47,12 @@ export default function EventForm(props: formProps) {
       const { data } = await supabase.from('Tags').select();
 
       //Convert data from {0: {id: 1, tag: 'tag1'}, 1: {id: 2, tag: 'tag2'}} to {tag1: false, tag2: false}
+
       if (data) {
-        setTagOptions(Object.fromEntries(data.map((tag) => [tag.tag, false])));
+        const sortedTags = data.sort((a, b) => a.tag.localeCompare(b.tag));
+        setTagOptions(
+          Object.fromEntries(sortedTags.map((tag) => [tag.tag, false]))
+        );
       }
     };
 
