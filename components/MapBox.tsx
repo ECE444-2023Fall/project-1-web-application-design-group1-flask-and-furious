@@ -1,8 +1,8 @@
 'use client';
 import mapboxgl from 'mapbox-gl';
+import { useEffect, useRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import EventCard from './EventCard';
-import { useEffect, useRef } from 'react';
 
 // this is where all of our map logic is going to live
 // adding the empty dependency array ensures that the map
@@ -65,7 +65,7 @@ function MapBox() {
     /* eslint-disable @typescript-eslint/no-unused-vars */
     for (let i = 0; i < event_location.length; i++) {
       const eventCardHtml = renderToStaticMarkup(
-        <EventCard {...event_details} />
+        <EventCard eventImage={''} {...event_details} />
       );
       const popup = new mapboxgl.Popup({ offset: 25 }) // Adjust the offset as needed
         .setHTML(eventCardHtml);
