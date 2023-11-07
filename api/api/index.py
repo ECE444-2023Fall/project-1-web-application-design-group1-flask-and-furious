@@ -252,6 +252,7 @@ class Profile(Resource):
                 "city": data["city"],
                 "university": data["university"],
                 "program": data["program"],
+                "tags": data["tags"]
             }
 
             supabase.table("Profiles").update(data_to_update).eq("id", uuid).execute()

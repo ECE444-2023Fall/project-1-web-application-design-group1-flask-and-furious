@@ -1,10 +1,11 @@
 'use client';
 
 import PersonalInfo from '@/components/PersonalInfo';
+import PersonalTags from '@/components/PersonalTags';
 import ProfilePhoto from '@/components/ProfilePhoto';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { userUuidFromSession } from '../events/helpers';
 import {
   apiGetProfile,
@@ -19,17 +20,33 @@ export default function Profile() {
   const router = useRouter();
 
   const [profileEdit, setProfileEdit] = useState(false);
+  const [profileTagsEdit, setProfileTagsEdit] = useState(false);
 
   const [age, setAge] = useState<ProfileData['age']>(null);
   const [gender, setGender] = useState<ProfileData['gender']>(null);
   const [city, setCity] = useState<ProfileData['city']>(null);
   const [university, setUniversity] = useState<ProfileData['university']>(null);
   const [program, setProgram] = useState<ProfileData['program']>(null);
+  const [tags, setTags] = useState<ProfileData['tags']>(null);
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [uploadMessage, setUploadMessage] = useState('');
 
-  const getProfile = async () => {
+  const [tagOptions, setTagOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getTags = async () => {
+      const { data } = await supabase.from('Tags').select();
+
+      if (data) {
+        const tagList = data.map((item) => item.tag);
+        setTagOptions(tagList);
+      }
+    };
+    getTags();
+  }, [supabase]);
+
+  const getProfile = useCallback(async () => {
     if (!(await session).data?.session) {
       router.push('/login');
       return;
@@ -39,7 +56,7 @@ export default function Profile() {
     apiGetProfile(awaitedSession, setProfile, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
     });
-  };
+  }, [router, session, supabase]);
 
   useEffect(() => {
     if (!profile) {
@@ -50,14 +67,19 @@ export default function Profile() {
     setCity(profile.city);
     setUniversity(profile.university);
     setProgram(profile.program);
+    setTags(profile.tags);
   }, [profile]);
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
   const onEditClick = () => {
     setProfileEdit(true);
+  };
+
+  const onTagsEditClick = () => {
+    setProfileTagsEdit(true);
   };
 
   const updateProfile = async (formData: ProfileData) => {
@@ -82,12 +104,14 @@ export default function Profile() {
         gender: gender,
         city: city,
         university: university,
-        program: program
+        program: program,
+        tags: tags
       };
 
       await setProfile(updatedProfile);
       await updateProfile(updatedProfile);
       setProfileEdit(false);
+      setProfileTagsEdit(false);
       getProfile();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -162,14 +186,22 @@ export default function Profile() {
                   onEditClick={onEditClick}
                 />
               </div>
-              <div className="mt-8 flex h-48 flex-col rounded-lg border-2 border-violet-600 bg-white">
+              <div className="mt-8 flex h-60 flex-col rounded-lg border-2 border-violet-600 bg-white">
                 <p className="ml-4 mt-2 basis-1/6 text-3xl font-semibold text-violet-600">
                   Help us guide you in the right direction!
                 </p>
                 <p className="ml-4 mt-2 basis-1/6 text-2xl font-semibold text-violet-600">
                   Add your preferences below:
                 </p>
-                {/* {TODO: add tags component here} */}
+                <PersonalTags
+                  edit={profileTagsEdit}
+                  setEdit={setProfileTagsEdit}
+                  tags={tags}
+                  setTags={setTags}
+                  onSaveClick={onSaveClick}
+                  onEditClick={onTagsEditClick}
+                  tagOptions={tagOptions}
+                />
               </div>
             </div>
           </div>
