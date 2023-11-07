@@ -72,7 +72,8 @@ export default function Profile() {
 
   useEffect(() => {
     getProfile();
-  }, [getProfile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onEditClick = () => {
     setProfileEdit(true);
