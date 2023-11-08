@@ -9,11 +9,20 @@ jest.mock('mapbox-gl', () => ({
     addSource: jest.fn(),
     setTerrain: jest.fn(),
     addLayer: jest.fn()
+  })),
+  Marker: jest.fn(() => ({
+    setLngLat: jest.fn().mockReturnThis(),
+    addTo: jest.fn().mockReturnThis(),
+    setPopup: jest.fn().mockReturnThis()
+  })),
+  Popup: jest.fn(() => ({
+    setHTML: jest.fn().mockReturnThis()
   }))
 }));
 
 describe('MapBox', () => {
   const mockedMapboxglMap = mapboxgl.Map;
+  const mockedMapboxglMarker = mapboxgl.Marker;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -41,5 +50,14 @@ describe('MapBox', () => {
         pitch: 60
       })
     );
+  });
+
+  //Ardavan-Alaei-Fard
+  it('checks the event locations', () => {
+    act(() => {
+      render(<MapBox />);
+    });
+
+    expect(mockedMapboxglMarker).toHaveBeenCalled();
   });
 });
