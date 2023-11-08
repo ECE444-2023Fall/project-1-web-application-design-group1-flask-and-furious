@@ -30,4 +30,3 @@ jobs:
     # Re-enable when we have a python test suite
     - name: Python Test
       run: pnpm flask-test
-      if: false
