@@ -2,8 +2,8 @@
 import EventCard from '@/components/EventCard';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
-import { apiGetEvents } from '../../api';
-import { formatTime } from '../../helpers';
+import { apiGetEvents, apiGetRSVPEvents } from '../../api';
+import { formatTime, userUuidFromSession } from '../../helpers';
 import { EventData } from '../../types';
 
 export default function Page() {
@@ -12,6 +12,7 @@ export default function Page() {
 
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [RSVPevents, setRSVPEvents] = useState<number[]>([]);
 
   const getEvents = async () => {
     setLoading(true);
@@ -19,8 +20,17 @@ export default function Page() {
     setLoading(false);
   };
 
+  const getRSVPEvents = async () => {
+    const awaitedSession = (await session).data.session;
+    apiGetRSVPEvents(awaitedSession, setRSVPEvents, {
+      userUuid: await userUuidFromSession(awaitedSession, supabase)
+    });
+  };
+
   useEffect(() => {
     getEvents();
+    getRSVPEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -40,6 +50,9 @@ export default function Page() {
               )}`}
               eventTags={event.Tags}
               eventImage={`${event.image_url}?v=${new Date().getTime()}`}
+              renderRSVP={true}
+              setRSVPEvents={setRSVPEvents}
+              RSVPEvents={RSVPevents}
             />
           ))}
         </div>

@@ -209,6 +209,74 @@ class Event(Resource):
             print("Delete Error:", e)
             return e, 500
 
+rsvp_api = Namespace("rsvp", description="rsvp related operations")
+
+@rsvp_api.route("/")
+class RSVP (Resource):
+    @rsvp_api.doc(description="Retrieve RSVPs. Optionally filtered by Query Parameters.")
+    @rsvp_api.param("userUuid", "The uuid of the user to filter by")
+    def get(self):
+        try:
+            token = request.headers.get("Authorization").split()[1]
+            user = supabase.auth.get_user(token)
+
+            # Apply Filters
+            user_uuid = user.user.id
+            table = supabase.table('RSVP').select('*').eq('profileId', user_uuid)
+
+            table_query = table.execute()
+            # print("table_query:", table_query)
+            return table_query.model_dump_json(), 200
+        except Exception as e:
+            print("error: ", e)
+            return {
+                "message": "Server Error: Authentication token not found or invalid"
+            }
+
+    @rsvp_api.param("userUuid", "The uuid of the user to filter by")
+    @rsvp_api.param("eventId", "The id of the event")
+    def put(self):
+        try:
+            print("test")
+            token = request.headers.get("Authorization").split()[1]
+            user = supabase.auth.get_user(token)
+            print("test 1")
+            uuid = user.user.id
+            event_id = (int)(request.args.get("eventId"))
+            print("user_uuid:", uuid)
+            print("event_id:", event_id)
+            event = supabase.table('Events').select("Owner").eq('id', event_id).execute()
+            eventdata = json.loads(event.model_dump_json())
+            owner = eventdata['data'][0]['Owner']
+
+            if owner == uuid:
+                return jsonify({"message": "Unauthorized: You cannot RSVP to your own event"}), 401
+
+            # Perform update
+            rsvpevents = supabase.table('RSVP').select('events').eq('profileId', uuid).execute()
+            rsvpeventsdata = json.loads(rsvpevents.model_dump_json())
+            rsvpeventsarray = rsvpeventsdata['data'][0]['events']
+            print("rsvpeventsarray:", rsvpeventsarray)
+            if event_id in rsvpeventsarray:
+                rsvpeventsarray.remove(event_id)
+                print("rsvpeventsarray:", rsvpeventsarray)
+                data_to_update = {
+                    "events": rsvpeventsarray
+                }
+                supabase.table('RSVP').update(data_to_update).eq('profileId', uuid).execute()
+                return 200
+            else:
+                rsvpeventsarray.append(event_id)
+                data_to_update = {
+                    "events": rsvpeventsarray
+                }
+                supabase.table('RSVP').update(data_to_update).eq('profileId', uuid).execute()
+                return 200
+
+        except Exception as e:
+            print("Update Error:", e)
+            return "Error"
+
 
 profile_api = Namespace("profiles", description="profile related operations")
 
@@ -326,5 +394,6 @@ class ProfilePicture(Resource):
 
 
 api.add_namespace(event_api)
+api.add_namespace(rsvp_api)
 api.add_namespace(profile_api)
 api.init_app(app)

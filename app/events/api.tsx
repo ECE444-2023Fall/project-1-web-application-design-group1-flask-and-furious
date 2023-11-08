@@ -57,3 +57,41 @@ export const apiDeleteEvent = async (
     },
     body: JSON.stringify(formData)
   });
+
+export const apiGetRSVPEvents = async (
+  session: Session | null,
+  setRSVPEvents: Dispatch<SetStateAction<number[]>>,
+  params: {
+    userUuid?: string;
+  }
+) => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session?.access_token}`
+    }
+  };
+  fetch('/api/rsvp?' + new URLSearchParams(params), requestOptions)
+    .then((res) => res.json())
+    .then((data) => {
+      setRSVPEvents(JSON.parse(data)['data'][0]['events']);
+    });
+};
+
+export const apiUpdateRSVPEvents = async (
+  session: Session | null,
+  params: {
+    userUuid?: string;
+    eventId?: string;
+  }
+) => {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session?.access_token}`
+    }
+  };
+  await fetch('/api/rsvp?' + new URLSearchParams(params), requestOptions);
+};
