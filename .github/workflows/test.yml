@@ -35,3 +35,8 @@ jobs:
 
     - name: Python Test
       run: pnpm flask-test
+      env:
+        PUBLIC_SUPABASE_URL: ${{ env.PUBLIC_SUPABASE_URL }}
+        PUBLIC_SUPABASE_ANON_KEY: ${{ env.PUBLIC_SUPABASE_ANON_KEY }}
+        TEST_EMAIL: ${{ env.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ env.TEST_PASSWORD }}
