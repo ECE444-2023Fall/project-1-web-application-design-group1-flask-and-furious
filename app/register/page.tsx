@@ -29,7 +29,7 @@ export default function Register() {
         What&apos;s Litty In Your City?{' '}
       </p>
       <RegisterForm />
-      <div className="mt-2 flex">
+      <div className="mt-2 flex pb-10">
         <p className=""> Already have an account? </p>
         <Link
           href="/login"

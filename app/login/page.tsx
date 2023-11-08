@@ -31,7 +31,7 @@ export default function Login() {
       </p>
       <LoginForm />
       <Messages />
-      <div className="mt-2 flex">
+      <div className="mt-2 flex pb-10">
         <p className=""> Don&apos;t have an account? </p>
         <Link
           href="/register"

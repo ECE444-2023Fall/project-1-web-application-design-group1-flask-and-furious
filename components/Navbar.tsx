@@ -16,7 +16,7 @@ function Navbar({ session }: Props) {
         ClubHub
       </Link>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         <Link
           href="/events/find/feed"
           className={

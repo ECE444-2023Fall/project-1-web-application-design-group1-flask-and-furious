@@ -99,6 +99,7 @@ function MapBox() {
     } else {
       setSelectedTime('night');
     }
+
   }, []);
 
   return (
