@@ -1,5 +1,6 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { SetStateAction, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { SetStateAction } from 'react';
 import { apiUpdateRSVPEvents } from '../app/events/api';
 
 type Props = {
@@ -12,7 +13,9 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
 
-  const [hovered, setHovered] = useState(false);
+  const router = useRouter();
+
+  // const [hovered, setHovered] = useState(false);
 
   const RSVPed = RSVPEvents.includes(eventId);
 
@@ -23,32 +26,28 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
           id="RSVP-button"
           className={`btn btn-primary !border-transparent text-white ${
             RSVPed
-              ? 'bg-green-600 hover:bg-red-600'
-              : 'bg-violet-500 hover:bg-green-600'
+              ? 'bg-gray-600 hover:bg-gray-500'
+              : 'bg-violet-500 hover:bg-violet-400'
           }`}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
+          // onMouseEnter={() => setHovered(true)}
+          // onMouseLeave={() => setHovered(false)}
           onClick={async () => {
-            setRSVPEvents((prevEvents) =>
-              RSVPed
-                ? RSVPEvents.filter((id) => id !== eventId)
-                : [...prevEvents, eventId]
-            );
-            apiUpdateRSVPEvents((await session).data.session, {
-              userUuid: (await session).data.session?.user.id,
-              eventId: String(eventId)
-            });
+            if ((await session).data.session) {
+              setRSVPEvents((prevEvents) =>
+                RSVPed
+                  ? RSVPEvents.filter((id) => id !== eventId)
+                  : [...prevEvents, eventId]
+              );
+              apiUpdateRSVPEvents((await session).data.session, {
+                userUuid: (await session).data.session?.user.id,
+                eventId: String(eventId)
+              });
+            } else {
+              router.push('/login');
+            }
           }}
         >
-          {RSVPed ? (
-            hovered ? (
-              <h1>Stop Attending?</h1>
-            ) : (
-              <h1>RSVP&#39;d</h1>
-            )
-          ) : (
-            <h1>RSVP?</h1>
-          )}
+          {RSVPed ? <h1>Cancel</h1> : <h1>RSVP</h1>}
         </button>
       </div>
     </div>
