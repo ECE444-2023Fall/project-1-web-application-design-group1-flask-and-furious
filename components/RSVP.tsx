@@ -21,7 +21,7 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
       <div className="flex flex-row gap-1">
         <button
           id="RSVP-button"
-          className={`btn btn-primary ${
+          className={`btn btn-primary !border-transparent text-white ${
             RSVPed
               ? 'bg-green-600 hover:bg-red-600'
               : 'bg-violet-500 hover:bg-green-600'
