@@ -42,7 +42,7 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
         >
           {RSVPed ? (
             hovered ? (
-              <h1>Stop Atteneding?</h1>
+              <h1>Stop Attending?</h1>
             ) : (
               <h1>RSVP&#39;d</h1>
             )
