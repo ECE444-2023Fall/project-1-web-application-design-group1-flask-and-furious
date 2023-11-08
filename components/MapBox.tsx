@@ -24,7 +24,7 @@ function MapBox() {
       pitch: 60
     });
 
-    const event_location = [
+    const event_location: [number, number][] = [
       [-79.39486600749379, 43.66027265761257],
       [-79.3959892, 43.659543],
       [-79.3894661, 43.6671491]
