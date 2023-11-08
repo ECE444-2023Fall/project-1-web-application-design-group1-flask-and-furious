@@ -1,15 +1,21 @@
 'use client';
 import mapboxgl from 'mapbox-gl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import EventCard from './EventCard';
+import TimeOfDaySelector from './timeOfDaySelector';
 
-// this is where all of our map logic is going to live
-// adding the empty dependency array ensures that the map
-// is only created once
+const timesOfDay = ['day', 'dusk', 'dawn', 'night'] as const;
+
+export type TimeOfDay = (typeof timesOfDay)[number];
 
 function MapBox() {
+  const [selectedTime, setSelectedTime] = useState<TimeOfDay>('day'); // ['day', 'dusk', 'dawn', 'night'
   const mapContainer = useRef(null);
+
+  // this is where all of our map logic is going to live
+  // adding the empty dependency array ensures that the map
+  // is only created once
 
   useEffect(() => {
     // create the map and configure it
@@ -20,7 +26,7 @@ function MapBox() {
       container: 'map',
       style: 'mapbox://styles/mapbox/standard-beta',
       center: [-79.39486600749379, 43.66027265761257],
-      zoom: 14,
+      zoom: 16,
       pitch: 60
     });
 
@@ -42,7 +48,7 @@ function MapBox() {
 
     map.on('load', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (map as any).setConfigProperty('basemap', 'lightPreset', 'dusk');
+      (map as any).setConfigProperty('basemap', 'lightPreset', selectedTime);
       map.addSource('mapbox-dem', {
         type: 'raster-dem',
         url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
@@ -69,22 +75,47 @@ function MapBox() {
       );
       const popup = new mapboxgl.Popup({ offset: 25 }) // Adjust the offset as needed
         .setHTML(eventCardHtml);
-      const marker = new mapboxgl.Marker()
-        .setLngLat(event_location[i])
+      new mapboxgl.Marker()
+        .setLngLat(event_location[i] as [number, number])
         .addTo(map)
         .setPopup(popup);
     }
+  }, [selectedTime]);
 
-    /* eslint-enable @typescript-eslint/no-unused-vars */
+  useEffect(() => {
+    const timeOfDay = new Date().getHours();
+    //Dawn: 5:01 - 7:00
+    //Day: 7:01 - 17:00
+    //Dusk: 17:01 - 19:00
+    //Night: 19:01 - 5:00
+
+    //Depedning on the time of day, the map will change
+    if (timeOfDay >= 5 && timeOfDay <= 7) {
+      setSelectedTime('dawn');
+    } else if (timeOfDay > 7 && timeOfDay < 17) {
+      setSelectedTime('day');
+    } else if (timeOfDay >= 17 && timeOfDay <= 19) {
+      setSelectedTime('dusk');
+    } else {
+      setSelectedTime('night');
+    }
   }, []);
 
   return (
-    <div
-      id="map"
-      ref={mapContainer}
-      // className="h-[calc(100vh-4rem)]] w-full"
-      style={{ width: '100%', height: 'calc(100vh - 4rem - 4rem)' }}
-    />
+    <>
+      <div
+        id="map"
+        ref={mapContainer}
+        style={{
+          width: '100%',
+          height: 'calc(100vh - 4rem - 4rem)'
+        }}
+      />
+      <TimeOfDaySelector
+        selectedTime={selectedTime}
+        setSelectedTime={setSelectedTime}
+      />
+    </>
   );
 }
 

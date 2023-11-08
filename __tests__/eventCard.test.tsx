@@ -11,7 +11,9 @@ describe('EventCard', () => {
       eventLocation: 'Galbraith 202',
       eventDate: '29/10/2023',
       eventTime: '8-10 pm',
-      eventTags: ['Programming', 'Music', 'Dance']
+      eventTags: ['Programming', 'Music', 'Dance'],
+      eventId: 0,
+      eventImage: ''
     };
 
     render(<EventCard {...props} />);

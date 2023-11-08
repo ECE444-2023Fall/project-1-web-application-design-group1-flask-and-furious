@@ -39,14 +39,14 @@ describe('MapBox', () => {
       render(<MapBox />);
     });
 
-    expect(mockedMapboxglMap).toHaveBeenCalledTimes(1);
+    expect(mockedMapboxglMap).toHaveBeenCalled();
     expect(mockedMapboxglMap).toHaveBeenCalledWith(
       expect.objectContaining({
         accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
         container: 'map',
         style: 'mapbox://styles/mapbox/standard-beta',
         center: [-79.39486600749379, 43.66027265761257],
-        zoom: 14,
+        zoom: 16,
         pitch: 60
       })
     );
