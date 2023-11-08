@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import EventCard from './EventCard';
-import TimeOfDaySelector from './timeOfDaySelector';
+import TimeOfDaySelector from './TimeOfDaySelector';
 
 const timesOfDay = ['day', 'dusk', 'dawn', 'night'] as const;
 
