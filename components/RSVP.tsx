@@ -15,8 +15,6 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
 
   const router = useRouter();
 
-  // const [hovered, setHovered] = useState(false);
-
   const RSVPed = RSVPEvents.includes(eventId);
 
   return (
@@ -29,8 +27,6 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
               ? 'bg-gray-600 hover:bg-gray-500'
               : 'bg-violet-500 hover:bg-violet-400'
           }`}
-          // onMouseEnter={() => setHovered(true)}
-          // onMouseLeave={() => setHovered(false)}
           onClick={async () => {
             if ((await session).data.session) {
               setRSVPEvents((prevEvents) =>
@@ -47,7 +43,7 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
             }
           }}
         >
-          {RSVPed ? <h1>Cancel</h1> : <h1>RSVP</h1>}
+          {RSVPed ? <h1>Cancel </h1> : <h1>RSVP</h1>}
         </button>
       </div>
     </div>
