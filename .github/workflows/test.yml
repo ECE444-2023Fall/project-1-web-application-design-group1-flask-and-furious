@@ -27,6 +27,5 @@ jobs:
     - name: TS Test
       run: pnpm next-test
 
-    # Re-enable when we have a python test suite
     - name: Python Test
       run: pnpm flask-test
