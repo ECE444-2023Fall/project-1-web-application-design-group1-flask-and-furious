@@ -14,6 +14,7 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const getEvents = async () => {
+    setLoading(true);
     await apiGetEvents((await session).data.session, setEvents, {});
     setLoading(false);
   };
