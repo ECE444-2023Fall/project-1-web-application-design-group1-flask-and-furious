@@ -3,8 +3,29 @@ import {
   ClockIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
+import { AuthError, Session } from '@supabase/gotrue-js';
 import { SetStateAction } from 'react';
 import RSVP from './RSVP';
+
+type SessionData =
+  | {
+      data: {
+        session: Session;
+      };
+      error: null;
+    }
+  | {
+      data: {
+        session: null;
+      };
+      error: AuthError;
+    }
+  | {
+      data: {
+        session: null;
+      };
+      error: null;
+    };
 
 export interface EventCardProps {
   eventId: number;
@@ -19,6 +40,7 @@ export interface EventCardProps {
   renderRSVP?: boolean;
   setRSVPEvents?: React.Dispatch<React.SetStateAction<number[]>>;
   RSVPEvents?: number[];
+  session?: Promise<SessionData>;
 }
 
 export default function EventCard(props: EventCardProps) {
@@ -91,6 +113,7 @@ export default function EventCard(props: EventCardProps) {
               props.setRSVPEvents as React.Dispatch<SetStateAction<number[]>>
             }
             RSVPEvents={props.RSVPEvents as number[]}
+            session={props.session}
           />
         )}
       </div>

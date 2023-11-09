@@ -1,18 +1,36 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { AuthError, Session } from '@supabase/gotrue-js';
 import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 import { apiUpdateRSVPEvents } from '../app/events/api';
+
+type SessionData =
+  | {
+      data: {
+        session: Session;
+      };
+      error: null;
+    }
+  | {
+      data: {
+        session: null;
+      };
+      error: AuthError;
+    }
+  | {
+      data: {
+        session: null;
+      };
+      error: null;
+    };
 
 type Props = {
   eventId: number;
   setRSVPEvents: React.Dispatch<SetStateAction<number[]>>;
   RSVPEvents: number[];
+  session: Promise<SessionData>;
 };
 
-const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
-  const supabase = createClientComponentClient();
-  const session = supabase.auth.getSession();
-
+const RSVP = ({ eventId, setRSVPEvents, RSVPEvents, session }: Props) => {
   const router = useRouter();
 
   const RSVPed = RSVPEvents.includes(eventId);

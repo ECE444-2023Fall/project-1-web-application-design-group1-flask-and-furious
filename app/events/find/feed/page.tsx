@@ -55,6 +55,7 @@ export default function Page() {
               renderRSVP={true}
               setRSVPEvents={setRSVPEvents}
               RSVPEvents={RSVPevents}
+              session={session}
             />
           ))}
         </div>
