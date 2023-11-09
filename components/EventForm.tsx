@@ -1,4 +1,5 @@
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { SearchBoxRetrieveResponse } from '@mapbox/search-js-core';
 import { SearchBox } from '@mapbox/search-js-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
@@ -10,7 +11,9 @@ export interface formData {
   eventId: number;
   title: string;
   description: string;
-  location: string;
+  location: string | undefined;
+  latitude: number | undefined;
+  longitude: number | undefined;
   startTime: string;
   endTime: string;
   date: string;
@@ -42,6 +45,8 @@ export default function EventForm(props: formProps) {
     title: '',
     description: '',
     location: '',
+    latitude: -1,
+    longitude: -1,
     startTime: '',
     endTime: '',
     date: '',
@@ -139,9 +144,24 @@ export default function EventForm(props: formProps) {
     }
   };
 
-  // const handleLocation = (e: SearchBoxRetrieveResponse) => {
-  //   console.log(e.attribution);
-  // };
+  const handleLocation = (e: SearchBoxRetrieveResponse) => {
+    // Find the latitude, longitude and name of the selected location
+    const lat = e.features.at(0)?.geometry.coordinates[0];
+    const lon = e.features.at(0)?.geometry.coordinates[1];
+    const name = e.features.at(0)?.properties.name.toString();
+
+    // Update the form
+    setFormData({
+      ...formData,
+      ['location']: name,
+      ['latitude']: lat,
+      ['longitude']: lon
+    });
+    // console.log(lat);
+    // console.log(lon);
+    // console.log(name);
+    // console.log(e.features);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -247,6 +267,10 @@ export default function EventForm(props: formProps) {
             accessToken={
               'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
             }
+            options={{
+              language: 'en',
+              country: 'CA'
+            }}
             value={formData.location}
             onChange={(val) =>
               setFormData({
@@ -254,6 +278,7 @@ export default function EventForm(props: formProps) {
                 ['location']: val
               })
             }
+            onRetrieve={handleLocation}
           />
         </div>
         <div className="mb-4 flex items-start justify-between">
