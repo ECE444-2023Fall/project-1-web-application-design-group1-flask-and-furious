@@ -242,25 +242,19 @@ export default function EventForm(props: formProps) {
           >
             Location:
           </label>
-          <>
-            <SearchBox
-              accessToken={
-                'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
-              }
-              options={{
-                language: 'en',
-                country: 'CA'
-              }}
-              value={formData.location}
-              onChange={(val) =>
-                setFormData({
-                  ...formData,
-                  ['location']: val
-                })
-              }
-              // onRetrieve={handleLocation}
-            />
-          </>
+
+          <SearchBox
+            accessToken={
+              'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
+            }
+            value={formData.location}
+            onChange={(val) =>
+              setFormData({
+                ...formData,
+                ['location']: val
+              })
+            }
+          />
         </div>
         <div className="mb-4 flex items-start justify-between">
           <label
