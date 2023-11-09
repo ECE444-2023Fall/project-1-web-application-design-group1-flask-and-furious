@@ -104,42 +104,45 @@ export default function Home() {
   };
 
   const updateEvent = async (formData: formData) => {
-    try {
-      const data = new FormData();
-      if (selectedFile) {
-        data.append('file', selectedFile);
-      }
-      data.append('title', formData.title);
-      data.append('description', formData.description);
-      data.append('location', formData.location);
-      data.append('startTime', formData.startTime);
-      data.append('endTime', formData.endTime);
-      data.append('date', formData.date);
-      data.append('frequency', formData.frequency);
-      data.append('tags', JSON.stringify(formData.tags));
-
-      if (formData.eventId !== -1) {
-        data.append('eventId', formData.eventId.toString());
-      }
-      await apiUpdateEvent((await session).data.session, data);
-      setFormData({
-        eventId: -1,
-        title: '',
-        description: '',
-        location: '',
-        startTime: '',
-        endTime: '',
-        date: '',
-        frequency: '',
-        file: null,
-        tags: []
-      });
-
-      getEvents();
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating event: ', error);
+    const data = new FormData();
+    if (selectedFile) {
+      data.append('file', selectedFile);
     }
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('location', formData.location);
+    data.append('startTime', formData.startTime);
+    data.append('endTime', formData.endTime);
+    data.append('date', formData.date);
+    data.append('frequency', formData.frequency);
+    data.append('tags', JSON.stringify(formData.tags));
+
+    if (formData.eventId !== -1) {
+      data.append('eventId', formData.eventId.toString());
+    }
+    await apiUpdateEvent((await session).data.session, data)
+      .then(() => {
+        onCloseDrawer();
+        setFormData({
+          eventId: -1,
+          title: '',
+          description: '',
+          location: '',
+          startTime: '',
+          endTime: '',
+          date: '',
+          frequency: '',
+          file: null,
+          tags: []
+        });
+        getEvents();
+        setPopupMessage('Event Updated Successfully');
+        setPopupType('success');
+      })
+      .catch(() => {
+        setPopupMessage('Event Update Failed');
+        setPopupType('error');
+      });
     setSelectedFile(null);
   };
 
