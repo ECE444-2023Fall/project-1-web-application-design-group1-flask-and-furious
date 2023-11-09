@@ -129,6 +129,19 @@ export default function Home() {
     data.append('frequency', formData.frequency);
     data.append('tags', JSON.stringify(formData.tags));
 
+    if (
+      !formData.title ||
+      !formData.startTime ||
+      !formData.endTime ||
+      !formData.date
+    ) {
+      setPopupMessage(
+        'Event Update Error: Title, Start Time, End Time, and Date are required'
+      );
+      setPopupType('error');
+      return;
+    }
+
     if (formData.eventId !== -1) {
       data.append('eventId', formData.eventId.toString());
     }
