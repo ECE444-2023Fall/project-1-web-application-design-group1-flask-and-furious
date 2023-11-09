@@ -43,7 +43,7 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents }: Props) => {
             }
           }}
         >
-          {RSVPed ? <h1>Cancel </h1> : <h1>RSVP</h1>}
+          {RSVPed ? <h1>Cancel RSVP</h1> : <h1>RSVP</h1>}
         </button>
       </div>
     </div>

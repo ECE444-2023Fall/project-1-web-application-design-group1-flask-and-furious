@@ -69,7 +69,7 @@ export const apiGetRSVPEvents = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.access_token}`
+      Authentication: `Bearer ${session?.access_token}`
     }
   };
   fetch('/api/rsvp?' + new URLSearchParams(params), requestOptions)
@@ -90,7 +90,7 @@ export const apiUpdateRSVPEvents = async (
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.access_token}`
+      Authentication: `Bearer ${session?.access_token}`
     }
   };
   await fetch('/api/rsvp?' + new URLSearchParams(params), requestOptions);

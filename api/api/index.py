@@ -217,7 +217,7 @@ class RSVP (Resource):
     @rsvp_api.param("userUuid", "The uuid of the user to filter by")
     def get(self):
         try:
-            token = request.headers.get("Authorization").split()[1]
+            token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
 
             # Apply Filters
@@ -238,7 +238,7 @@ class RSVP (Resource):
     def put(self):
         try:
             print("test")
-            token = request.headers.get("Authorization").split()[1]
+            token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
             print("test 1")
             uuid = user.user.id
