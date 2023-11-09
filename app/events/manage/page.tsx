@@ -309,29 +309,42 @@ export default function Home() {
             />
           </div>
           {!loading ? (
-            <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
-              {events
-                .sort(
-                  (a, b) =>
-                    new Date(a.Date).getTime() - new Date(b.Date).getTime()
-                )
-                .map((event) => (
-                  <EventCard
-                    key={event.id}
-                    eventId={event.id}
-                    eventName={event.Title}
-                    eventDescription={event.Description}
-                    eventLocation={event.Location}
-                    eventDate={event.Date}
-                    eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                      event.EndTime
-                    )}`}
-                    eventTags={event.Tags}
-                    eventImage={`${event.image_url}?v=${new Date().getTime()}`}
-                    action={editEvent}
-                  />
-                ))}
-            </div>
+            events.length > 0 ? (
+              <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
+                {events
+                  .sort(
+                    (a, b) =>
+                      new Date(a.Date).getTime() - new Date(b.Date).getTime()
+                  )
+                  .map((event) => (
+                    <EventCard
+                      key={event.id}
+                      eventId={event.id}
+                      eventName={event.Title}
+                      eventDescription={event.Description}
+                      eventLocation={event.Location}
+                      eventDate={event.Date}
+                      eventTime={`${formatTime(event.StartTime)} - ${formatTime(
+                        event.EndTime
+                      )}`}
+                      eventTags={event.Tags}
+                      eventImage={`${
+                        event.image_url
+                      }?v=${new Date().getTime()}`}
+                      action={editEvent}
+                    />
+                  ))}
+              </div>
+            ) : (
+              <div className="mb-32 flex h-full w-full items-center justify-center p-4">
+                <div className="text-sm text-gray-700 md:text-lg lg:text-xl">
+                  <p>You haven&apos;t created any events yet.</p>
+                  <p>
+                    Click the &quot;Create Event&quot; button to get started!
+                  </p>
+                </div>
+              </div>
+            )
           ) : (
             <div className="grid h-full w-full place-content-center">
               <svg
