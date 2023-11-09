@@ -1,4 +1,5 @@
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { SearchBox } from '@mapbox/search-js-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Tags from './Tags';
@@ -237,14 +238,20 @@ export default function EventForm(props: formProps) {
           >
             Location:
           </label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            className="w-2/3 rounded border border-gray-300 p-2"
-          />
+          <form>
+            <SearchBox
+              accessToken={
+                'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
+              }
+              value={formData.location}
+              onChange={(val) =>
+                setFormData({
+                  ...formData,
+                  ['location']: val
+                })
+              }
+            />
+          </form>
         </div>
         <div className="mb-4 flex items-start justify-between">
           <label
