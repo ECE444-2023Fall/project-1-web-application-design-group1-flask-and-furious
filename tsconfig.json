@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "react": ["./node_modules/@types/react"]
     }
   },
   "include": [
@@ -28,6 +29,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".lintstagedrc.js",
-    "__tests__/**/*.tsx"  ],
+    "__tests__/**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }
