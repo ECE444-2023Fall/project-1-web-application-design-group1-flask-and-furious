@@ -1,3 +1,4 @@
+import { XCircleIcon } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction } from 'react';
 
 interface PopupProps {
@@ -23,7 +24,7 @@ export default function Popup(props: PopupProps) {
         <div className="flex justify-between">
           <span>{props.message}</span>
           <button onClick={closePopup} className="focus:outline-none">
-            X
+            <XCircleIcon className="ml-2 h-7 w-7" aria-hidden="true" />
           </button>
         </div>
       </div>
