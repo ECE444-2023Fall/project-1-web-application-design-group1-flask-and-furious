@@ -22,9 +22,11 @@ export default function Page() {
 
   const getRSVPEvents = async () => {
     const awaitedSession = (await session).data.session;
-    apiGetRSVPEvents(awaitedSession, setRSVPEvents, {
-      userUuid: await userUuidFromSession(awaitedSession, supabase)
-    });
+    if (awaitedSession) {
+      apiGetRSVPEvents(awaitedSession, setRSVPEvents, {
+        userUuid: await userUuidFromSession(awaitedSession, supabase)
+      });
+    }
   };
 
   useEffect(() => {
