@@ -139,6 +139,10 @@ export default function EventForm(props: formProps) {
     }
   };
 
+  // const handleLocation = (e: SearchBoxRetrieveResponse) => {
+  //   console.log(e.attribution);
+  // };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     //console.log(formData);
@@ -238,11 +242,15 @@ export default function EventForm(props: formProps) {
           >
             Location:
           </label>
-          <form>
+          <>
             <SearchBox
               accessToken={
                 'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
               }
+              options={{
+                language: 'en',
+                country: 'CA'
+              }}
               value={formData.location}
               onChange={(val) =>
                 setFormData({
@@ -250,8 +258,9 @@ export default function EventForm(props: formProps) {
                   ['location']: val
                 })
               }
+              // onRetrieve={handleLocation}
             />
-          </form>
+          </>
         </div>
         <div className="mb-4 flex items-start justify-between">
           <label
