@@ -11,6 +11,9 @@ dependencies:
   '@heroicons/react':
     specifier: ^2.0.18
     version: 2.0.18(react@18.2.0)
+  '@mapbox/search-js-core':
+    specifier: 1.0.0-beta.18
+    version: 1.0.0-beta.18
   '@mapbox/search-js-react':
     specifier: 1.0.0-beta.18
     version: 1.0.0-beta.18(mapbox-gl@3.0.0-beta.1)(react-dom@18.2.0)(react@18.2.0)
