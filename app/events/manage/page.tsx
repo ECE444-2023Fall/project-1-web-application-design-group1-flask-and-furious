@@ -64,6 +64,9 @@ export default function Home() {
     const awaitedSession = (await session).data.session;
     await apiGetEvents(awaitedSession, setEvents, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
+    }).catch(() => {
+      setPopupMessage('Failed to get events');
+      setPopupType('error');
     });
     setLoading(false);
   };
