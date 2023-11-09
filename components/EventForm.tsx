@@ -16,7 +16,6 @@ export interface formData {
 }
 
 export interface formProps {
-  onClose: () => void;
   Post: (formData: formData) => void;
   initialFormData: formData;
   Update: (formData: formData) => void;
@@ -118,7 +117,6 @@ export default function EventForm(props: formProps) {
           props.Update(formData);
         }
       }
-      props.onClose();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error while calling the backend:', error);
