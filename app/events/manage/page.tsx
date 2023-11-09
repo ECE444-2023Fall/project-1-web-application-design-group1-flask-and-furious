@@ -78,6 +78,18 @@ export default function Home() {
     data.append('date', formData.date);
     data.append('frequency', formData.frequency);
     data.append('tags', JSON.stringify(formData.tags));
+    if (
+      !formData.title ||
+      !formData.startTime ||
+      !formData.endTime ||
+      !formData.date
+    ) {
+      setPopupMessage(
+        'Event Creation Error: Title, Start Time, End Time, and Date are required'
+      );
+      setPopupType('error');
+      return;
+    }
     await apiCreateEvent((await session).data.session, data)
       .then(() => {
         onCloseDrawer();
