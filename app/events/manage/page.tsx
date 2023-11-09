@@ -135,6 +135,7 @@ export default function Home() {
           file: null,
           tags: []
         });
+        setSelectedFile(null);
         getEvents();
         setPopupMessage('Event Updated Successfully');
         setPopupType('success');
@@ -143,30 +144,33 @@ export default function Home() {
         setPopupMessage('Event Update Failed');
         setPopupType('error');
       });
-    setSelectedFile(null);
   };
 
   const deleteEvent = async (formData: formData) => {
-    try {
-      await apiDeleteEvent((await session).data.session, formData);
-      setFormData({
-        eventId: -1,
-        title: '',
-        description: '',
-        location: '',
-        startTime: '',
-        endTime: '',
-        date: '',
-        frequency: '',
-        file: null,
-        tags: []
+    await apiDeleteEvent((await session).data.session, formData)
+      .then(() => {
+        onCloseDrawer();
+        setFormData({
+          eventId: -1,
+          title: '',
+          description: '',
+          location: '',
+          startTime: '',
+          endTime: '',
+          date: '',
+          frequency: '',
+          file: null,
+          tags: []
+        });
+        setSelectedFile(null);
+        getEvents();
+        setPopupMessage('Event Deleted Successfully');
+        setPopupType('success');
+      })
+      .catch(() => {
+        setPopupMessage('Event Deletion Failed');
+        setPopupType('error');
       });
-      setSelectedFile(null);
-      getEvents();
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating event: ', error);
-    }
   };
 
   const editEvent = (id: number) => {
