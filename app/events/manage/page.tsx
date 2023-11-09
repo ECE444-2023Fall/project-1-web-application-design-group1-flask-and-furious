@@ -2,6 +2,7 @@
 import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
+import Popup from '@/components/Popup';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -32,6 +33,8 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [imageURL, setImageURL] = useState<string | null>(null);
+  const [popupMessage, setPopupMessage] = useState<string>('');
+  const [popupType, setPopupType] = useState<'error' | 'success'>('success');
   const [changeFormData, setFormData] = useState<formData>({
     eventId: -1,
     title: '',
@@ -75,20 +78,29 @@ export default function Home() {
     data.append('date', formData.date);
     data.append('frequency', formData.frequency);
     data.append('tags', JSON.stringify(formData.tags));
-    await apiCreateEvent((await session).data.session, data);
-    setFormData({
-      eventId: -1,
-      title: '',
-      description: '',
-      location: '',
-      startTime: '',
-      endTime: '',
-      date: '',
-      frequency: '',
-      file: null,
-      tags: []
-    });
-    getEvents();
+    await apiCreateEvent((await session).data.session, data)
+      .then(() => {
+        onCloseDrawer();
+        setFormData({
+          eventId: -1,
+          title: '',
+          description: '',
+          location: '',
+          startTime: '',
+          endTime: '',
+          date: '',
+          frequency: '',
+          file: null,
+          tags: []
+        });
+        getEvents();
+        setPopupMessage('Event Created Successfully');
+        setPopupType('success');
+      })
+      .catch(() => {
+        setPopupMessage('Event Creation Failed');
+        setPopupType('error');
+      });
   };
 
   const updateEvent = async (formData: formData) => {
@@ -207,7 +219,6 @@ export default function Home() {
         backgroundImage={imageURL}
       >
         <EventForm
-          onClose={onCloseDrawer}
           Post={createEvent}
           initialFormData={changeFormData}
           Update={updateEvent}
@@ -252,6 +263,13 @@ export default function Home() {
           </div>
         </div>
         <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
+          <div className="flex w-full justify-center">
+            <Popup
+              message={popupMessage}
+              type={popupType}
+              setMessage={setPopupMessage}
+            />
+          </div>
           <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
             {events
               .sort(
