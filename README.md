@@ -101,3 +101,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 - App deployment is setup using [Vercel](https://vercel.com/home)
 - On merge to main your changes will be automatically deployed to https://club-hub.vercel.app
+
+## Test Suite
+
+This project uses [Pytest](https://docs.pytest.org/en/6.2.x/) for testing the backend and [jest](https://jestjs.io/) for testing the frontend. To run the test suite, run the following command:
+
+```bash
+pnpm test
+```
+
+You will need to have `TEST_EMAIL` and `TEST_PASSWORD` set in your `.env` file to run the tests. These are the credentials for a test user that is used for authorizating testing of the backend.
