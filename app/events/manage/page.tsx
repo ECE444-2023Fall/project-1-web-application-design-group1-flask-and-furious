@@ -63,17 +63,17 @@ export default function Home() {
     await apiGetEvents(awaitedSession, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setEvents(JSON.parse(data)['data']);
-    })
+      .then((res) => res.json())
+      .then((data) => {
+        setEvents(JSON.parse(data)['data']);
+      })
       .catch(() => {
-      toast({
-        variant: 'destructive',
-        title: 'Failed to get events',
-        description: 'Something went wrong. Please try again later'
+        toast({
+          variant: 'destructive',
+          title: 'Failed to get events',
+          description: 'Something went wrong. Please try again later'
+        });
       });
-    });
     setLoading(false);
   };
 
