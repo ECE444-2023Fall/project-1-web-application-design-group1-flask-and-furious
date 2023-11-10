@@ -4,7 +4,6 @@ import { EventData, formData } from './types';
 
 export const apiGetEvents = async (
   session: Session | null,
-  setEvents: Dispatch<SetStateAction<EventData[]>>,
   params: {
     userUuid?: string;
   }
@@ -15,11 +14,7 @@ export const apiGetEvents = async (
       'Content-Type': 'application/json',
       Authentication: `Bearer ${session?.access_token}`
     }
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      setEvents(JSON.parse(data)['data']);
-    });
+  });
 
 export const apiCreateEvent = async (
   session: Session | null,
