@@ -64,6 +64,9 @@ export default function Home() {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
     })
       .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get events');
+        }
         const data = await res.json();
         setEvents(JSON.parse(data)['data']);
       })
@@ -104,7 +107,10 @@ export default function Home() {
       return;
     }
     await apiCreateEvent((await session).data.session, data)
-      .then(() => {
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to create event');
+        }
         onCloseDrawer();
         setFormData({
           eventId: -1,
@@ -164,7 +170,10 @@ export default function Home() {
       data.append('eventId', formData.eventId.toString());
     }
     await apiUpdateEvent((await session).data.session, data)
-      .then(() => {
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to update event');
+        }
         onCloseDrawer();
         setFormData({
           eventId: -1,
@@ -195,7 +204,10 @@ export default function Home() {
 
   const deleteEvent = async (formData: formData) => {
     await apiDeleteEvent((await session).data.session, formData)
-      .then(() => {
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to delete event');
+        }
         onCloseDrawer();
         setFormData({
           eventId: -1,

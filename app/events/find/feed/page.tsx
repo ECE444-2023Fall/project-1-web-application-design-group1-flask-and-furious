@@ -18,6 +18,9 @@ export default function Page() {
     setLoading(true);
     await apiGetEvents((await session).data.session, {})
       .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get events');
+        }
         const data = await res.json();
         setEvents(JSON.parse(data)['data']);
       })
