@@ -1,6 +1,9 @@
 'use client';
 import EventCard from '@/components/EventCard';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import {
+  Session,
+  createClientComponentClient
+} from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { apiGetEvents, apiGetRSVPEvents } from '../../api';
 import { formatTime, userUuidFromSession } from '../../helpers';
@@ -12,6 +15,9 @@ export default function Page() {
 
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sessionData, setSessionData] = useState<Session | undefined>(
+    undefined
+  ); // [TODO] - remove this line and the line below [TODO
   const [RSVPevents, setRSVPEvents] = useState<number[]>([]);
 
   const getEvents = async () => {
@@ -32,6 +38,13 @@ export default function Page() {
   useEffect(() => {
     getEvents();
     getRSVPEvents();
+
+    async function fetchSession() {
+      const sessionResult = (await session)?.data.session; // Replace with your actual session fetching function
+      setSessionData(sessionResult || undefined);
+    }
+
+    fetchSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,7 +68,7 @@ export default function Page() {
               renderRSVP={true}
               setRSVPEvents={setRSVPEvents}
               RSVPEvents={RSVPevents}
-              session={session}
+              session={sessionData}
             />
           ))}
         </div>

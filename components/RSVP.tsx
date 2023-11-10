@@ -1,33 +1,13 @@
-import { AuthError, Session } from '@supabase/gotrue-js';
+import { Session } from '@supabase/gotrue-js';
 import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 import { apiUpdateRSVPEvents } from '../app/events/api';
-
-type SessionData =
-  | {
-      data: {
-        session: Session;
-      };
-      error: null;
-    }
-  | {
-      data: {
-        session: null;
-      };
-      error: AuthError;
-    }
-  | {
-      data: {
-        session: null;
-      };
-      error: null;
-    };
 
 type Props = {
   eventId: number;
   setRSVPEvents: React.Dispatch<SetStateAction<number[]>>;
   RSVPEvents: number[];
-  session: Promise<SessionData>;
+  session: Session;
 };
 
 const RSVP = ({ eventId, setRSVPEvents, RSVPEvents, session }: Props) => {
@@ -46,14 +26,14 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents, session }: Props) => {
               : 'bg-violet-500 hover:bg-violet-400'
           }`}
           onClick={async () => {
-            if ((await session).data.session) {
+            if (session) {
               setRSVPEvents((prevEvents) =>
                 RSVPed
                   ? RSVPEvents.filter((id) => id !== eventId)
                   : [...prevEvents, eventId]
               );
-              apiUpdateRSVPEvents((await session).data.session, {
-                userUuid: (await session).data.session?.user.id,
+              apiUpdateRSVPEvents(session, {
+                userUuid: session?.user.id,
                 eventId: String(eventId)
               });
             } else {
