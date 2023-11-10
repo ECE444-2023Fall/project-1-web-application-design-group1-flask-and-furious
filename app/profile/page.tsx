@@ -3,6 +3,7 @@
 import PersonalInfo from '@/components/PersonalInfo';
 import PersonalTags from '@/components/PersonalTags';
 import ProfilePhoto from '@/components/ProfilePhoto';
+import { toast } from '@/components/ui/use-toast';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -55,6 +56,12 @@ export default function Profile() {
     const awaitedSession = (await session).data.session;
     apiGetProfile(awaitedSession, setProfile, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
+    }).catch(() => {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to get profile',
+        description: 'Something went wrong. Please try again later'
+      });
     });
   }, [router, session, supabase]);
 
@@ -84,13 +91,20 @@ export default function Profile() {
   };
 
   const updateProfile = async (formData: ProfileData) => {
-    try {
-      await apiUpdateProfile((await session).data.session, formData);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating profile:', error);
-    }
-    getProfile();
+    await apiUpdateProfile((await session).data.session, formData)
+      .then(() => {
+        getProfile();
+        toast({
+          title: 'Profile Updated Successfully'
+        });
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Profile Update Failed',
+          description: 'Something went wrong. Please try again later'
+        });
+      });
   };
 
   const onSaveClick = async () => {
@@ -126,20 +140,21 @@ export default function Profile() {
       setUploadMessage(
         'Your profile picture will be updated in a few minutes.'
       );
-
-      try {
-        await apiUpdateProfilePicture(
-          (await session).data.session,
-          file,
-          profile.profileId
-        );
-
-        setTimeout(() => setUploadMessage(''), 3000);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error uploading profile picture:', error);
-        setUploadMessage('Failed to upload picture.');
-      }
+      await apiUpdateProfilePicture(
+        (await session).data.session,
+        file,
+        profile.profileId
+      )
+        .then(() => {
+          setTimeout(() => setUploadMessage(''), 3000);
+        })
+        .catch(() => {
+          toast({
+            variant: 'destructive',
+            title: 'Profile Picture Update Failed',
+            description: 'Something went wrong. Please try again later'
+          });
+        });
     }
   };
 
@@ -192,7 +207,8 @@ export default function Profile() {
                   Help us guide you in the right direction!
                 </p>
                 <p className="ml-4 mt-2 basis-1/6 text-2xl font-semibold text-violet-600">
-                  Add your preferences below:
+                  Add your preferences below (Ctrl + Click to Select Multiple
+                  Tags):
                 </p>
                 <PersonalTags
                   edit={profileTagsEdit}

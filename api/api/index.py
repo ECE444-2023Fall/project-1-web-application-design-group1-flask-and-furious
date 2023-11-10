@@ -228,10 +228,8 @@ class Profile(Resource):
             data = table.execute().model_dump_json()
             return data
         except Exception as e:
-            print("error: ", e)
-            return {
-                "message": "Server Error: Authentication token not found or invalid"
-            }
+            print("Error: ", e)
+            return e, 500
 
     def put(self):
         try:
@@ -255,9 +253,7 @@ class Profile(Resource):
             return "Done"
         except Exception as e:
             print("Update Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the update"
-            }
+            return e, 500
 
 
 @profile_api.route("/picture")
@@ -281,10 +277,8 @@ class ProfilePicture(Resource):
             else:
                 return {"message": "No profileId provided"}, 400
         except Exception as e:
-            print("Update Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the update"
-            }
+            print("Error:", e)
+            return e, 500
 
     def put(self):
         try:
@@ -322,9 +316,7 @@ class ProfilePicture(Resource):
             return {"message": "Profile picture uploaded successfully"}, 200
         except Exception as e:
             print("Update Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the update"
-            }
+            return e, 500
 
 
 api.add_namespace(event_api)
