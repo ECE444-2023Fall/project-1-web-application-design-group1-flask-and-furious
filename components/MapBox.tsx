@@ -4,6 +4,8 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import EventCard from './EventCard';
+// import { createClient } from '@supabase/supabase-js';
+// import { configDotenv } from 'dotenv';
 
 // this is where all of our map logic is going to live
 // adding the empty dependency array ensures that the map
@@ -68,6 +70,14 @@ function MapBox() {
     });
 
     // Adding markers for the events
+    // configDotenv();
+    // const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.toString();
+    // const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.toString();
+    // if (url !== undefined && key !== undefined) {
+    //   const supabase = createClient(url, key);
+    //   const data = supabase.from('Events').select('Latitude, Longitude');
+    //   console.log(data);
+    // }
     /* eslint-disable @typescript-eslint/no-unused-vars */
     for (let i = 0; i < event_location.length; i++) {
       const eventCardHtml = renderToStaticMarkup(
