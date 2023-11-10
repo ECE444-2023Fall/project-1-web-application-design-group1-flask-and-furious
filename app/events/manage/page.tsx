@@ -62,7 +62,12 @@ export default function Home() {
     const awaitedSession = (await session).data.session;
     await apiGetEvents(awaitedSession, setEvents, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
-    }).catch(() => {
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setEvents(JSON.parse(data)['data']);
+    })
+      .catch(() => {
       toast({
         variant: 'destructive',
         title: 'Failed to get events',
