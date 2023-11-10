@@ -113,7 +113,7 @@ export default function EventCard(props: EventCardProps) {
               props.setRSVPEvents as React.Dispatch<SetStateAction<number[]>>
             }
             RSVPEvents={props.RSVPEvents as number[]}
-            session={props.session}
+            session={props.session as Promise<SessionData>}
           />
         )}
       </div>
