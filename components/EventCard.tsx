@@ -29,7 +29,7 @@ export default function EventCard(props: EventCardProps) {
       }}
     >
       <img
-        className="h-48 w-full rounded-t-lg object-cover"
+        className="aspect-video h-48 w-full rounded-t-lg object-cover"
         src={props.eventImage || defaultImage}
         alt={props.eventName}
         onError={(e) => {
