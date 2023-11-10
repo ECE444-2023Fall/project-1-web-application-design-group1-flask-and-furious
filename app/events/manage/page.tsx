@@ -60,7 +60,7 @@ export default function Home() {
 
     setLoading(true);
     const awaitedSession = (await session).data.session;
-    await apiGetEvents(awaitedSession, setEvents, {
+    await apiGetEvents(awaitedSession, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
     })
     .then((res) => res.json())
