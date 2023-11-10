@@ -262,7 +262,7 @@ export default function EventForm(props: formProps) {
           <button
             onClick={() => setIsDelete(false)}
             type="submit"
-            className="rounded-md bg-violet-700 px-3 py-1 text-white"
+            className="rounded-md bg-primary px-3 py-1 text-white hover:bg-violet-500"
           >
             Save
           </button>
