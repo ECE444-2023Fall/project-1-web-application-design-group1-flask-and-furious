@@ -226,7 +226,7 @@ class Profile(Resource):
             if user_uuid:
                 table = table.eq("id", user_uuid)
             data = table.execute().model_dump_json()
-            return data
+            return data, 200
         except Exception as e:
             print("Error: ", e)
             return e, 500
@@ -250,7 +250,7 @@ class Profile(Resource):
             }
 
             supabase.table("Profiles").update(data_to_update).eq("id", uuid).execute()
-            return "Done"
+            return "Done", 200
         except Exception as e:
             print("Update Error:", e)
             return e, 500
@@ -273,7 +273,7 @@ class ProfilePicture(Resource):
                     .execute()
                 )
 
-                return image_req.model_dump_json()
+                return image_req.model_dump_json(), 200
             else:
                 return {"message": "No profileId provided"}, 400
         except Exception as e:

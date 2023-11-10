@@ -8,7 +8,7 @@ type Props = {
 const ProfilePhoto = ({ url, onFileUpload }: Props) => {
   return (
     <>
-      <div className="relative flex h-80 w-80 items-center justify-center overflow-clip rounded-full border-8 border-violet-600 bg-white">
+      <div className="relative flex h-80 w-80 items-center justify-center overflow-clip rounded-full border-8 border-primary bg-white">
         {url ? (
           <Image src={url} fill objectFit="cover" alt="Profile Picture" />
         ) : (
@@ -45,7 +45,7 @@ const ProfilePhoto = ({ url, onFileUpload }: Props) => {
           name="uploadedProfilePhoto"
           id="uploadedProfilePhoto"
           onChange={onFileUpload}
-          className="mx-16 mt-4 hidden file:mr-4 file:rounded-full file:border-0 file:bg-violet-600 file:px-4 file:py-2 file:text-center file:font-semibold file:text-white hover:file:bg-violet-900"
+          className="mx-16 mt-4 hidden file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-center file:font-semibold file:text-white hover:file:bg-violet-900"
         />
       </label>
     </>

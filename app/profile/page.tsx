@@ -31,7 +31,6 @@ export default function Profile() {
   const [tags, setTags] = useState<ProfileData['tags']>(null);
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [uploadMessage, setUploadMessage] = useState('');
 
   const [tagOptions, setTagOptions] = useState<string[]>([]);
 
@@ -59,7 +58,7 @@ export default function Profile() {
     }).catch(() => {
       toast({
         variant: 'destructive',
-        title: 'Failed to get profile',
+        title: 'Failed to Get Profile',
         description: 'Something went wrong. Please try again later'
       });
     });
@@ -91,20 +90,22 @@ export default function Profile() {
   };
 
   const updateProfile = async (formData: ProfileData) => {
-    await apiUpdateProfile((await session).data.session, formData)
-      .then(() => {
-        getProfile();
-        toast({
-          title: 'Profile Updated Successfully'
-        });
-      })
-      .catch(() => {
-        toast({
-          variant: 'destructive',
-          title: 'Profile Update Failed',
-          description: 'Something went wrong. Please try again later'
-        });
-      });
+    await apiUpdateProfile((await session).data.session, formData).then(
+      (response) => {
+        if (response.ok) {
+          getProfile();
+          toast({
+            title: 'Profile Updated Successfully'
+          });
+        } else {
+          toast({
+            variant: 'destructive',
+            title: 'Profile Update Failed',
+            description: 'Something went wrong. Please try again later'
+          });
+        }
+      }
+    );
   };
 
   const onSaveClick = async () => {
@@ -137,24 +138,25 @@ export default function Profile() {
   const onFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.includes('image') && profile) {
-      setUploadMessage(
-        'Your profile picture will be updated in a few minutes.'
-      );
       await apiUpdateProfilePicture(
         (await session).data.session,
         file,
         profile.profileId
-      )
-        .then(() => {
-          setTimeout(() => setUploadMessage(''), 3000);
-        })
-        .catch(() => {
+      ).then((response) => {
+        if (response.ok) {
+          toast({
+            title: 'Profile Picture Updated Successfully',
+            description:
+              'Your profile picture will be updated in a few minutes.'
+          });
+        } else {
           toast({
             variant: 'destructive',
             title: 'Profile Picture Update Failed',
             description: 'Something went wrong. Please try again later'
           });
-        });
+        }
+      });
     }
   };
 
@@ -174,15 +176,10 @@ export default function Profile() {
                 url={profile.pictureUrl}
                 onFileUpload={onFileUpload}
               />
-              {uploadMessage && (
-                <div className="mt-4 rounded-md bg-violet-600 p-2 text-center text-white">
-                  {uploadMessage}
-                </div>
-              )}
             </div>
             <div className="flex basis-3/4 flex-col">
-              <div className="mt-4 flex h-60 flex-col rounded-lg border-2 border-violet-600 bg-white">
-                <p className="ml-4 mt-2 basis-1/4 text-3xl font-semibold text-violet-600">
+              <div className="mt-4 flex h-60 flex-col rounded-lg border-2 border-primary bg-white">
+                <p className="ml-4 mt-2 basis-1/4 text-3xl font-semibold text-primary">
                   Personal Information
                 </p>
                 <PersonalInfo
@@ -202,11 +199,11 @@ export default function Profile() {
                   onEditClick={onEditClick}
                 />
               </div>
-              <div className="mt-8 flex h-60 flex-col rounded-lg border-2 border-violet-600 bg-white">
-                <p className="ml-4 mt-2 basis-1/6 text-3xl font-semibold text-violet-600">
+              <div className="mt-8 flex h-60 flex-col rounded-lg border-2 border-primary bg-white">
+                <p className="ml-4 mt-2 basis-1/6 text-3xl font-semibold text-primary">
                   Help us guide you in the right direction!
                 </p>
-                <p className="ml-4 mt-2 basis-1/6 text-2xl font-semibold text-violet-600">
+                <p className="ml-4 mt-2 basis-1/6 text-2xl font-semibold text-primary">
                   Add your preferences below (Ctrl + Click to Select Multiple
                   Tags):
                 </p>

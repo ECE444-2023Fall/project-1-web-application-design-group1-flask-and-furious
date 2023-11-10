@@ -70,13 +70,13 @@ const PersonalTags = ({
         {edit ? (
           <>
             <button
-              className="mr-2 rounded bg-purple-700 px-4 py-2 text-white hover:bg-purple-900"
+              className="mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-purple-900"
               onClick={onSaveClick}
             >
               Save
             </button>
             <button
-              className="mr-2 rounded bg-purple-700 px-4 py-2 text-white hover:bg-purple-900"
+              className="mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-purple-900"
               onClick={() => setProfileEdit(false)}
             >
               Cancel
@@ -84,7 +84,7 @@ const PersonalTags = ({
           </>
         ) : (
           <button
-            className=" mr-2 rounded bg-purple-700 px-4 py-2 text-white hover:bg-purple-900"
+            className=" mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-purple-900"
             onClick={onEditClick}
           >
             Edit
