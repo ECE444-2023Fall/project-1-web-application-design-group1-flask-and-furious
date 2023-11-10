@@ -19,15 +19,21 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@radix-ui/react-toast": "^1.1.5",
     "@supabase/auth-helpers-nextjs": "^0.8.1",
     "@supabase/gotrue-js": "^2.55.0",
     "@supabase/supabase-js": "^2.37.0",
     "@types/mapbox-gl": "^2.7.15",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "concurrently": "^8.2.1",
+    "lucide-react": "^0.292.0",
     "mapbox-gl": "3.0.0-beta.1",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
