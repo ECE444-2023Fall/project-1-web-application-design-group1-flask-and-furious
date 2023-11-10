@@ -268,16 +268,13 @@ export default function EventForm(props: formProps) {
               'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
             }
             options={{
+              navigation_profile: 'walking',
+              origin: { lon: -79.3832, lat: 43.6532 }, //Location of Sandford Fleming Building
+              proximity: { lon: -79.3832, lat: 43.6532 },
               language: 'en',
               country: 'CA'
             }}
             value={formData.location}
-            onChange={(val) =>
-              setFormData({
-                ...formData,
-                ['location']: val
-              })
-            }
             onRetrieve={handleLocation}
           />
         </div>
