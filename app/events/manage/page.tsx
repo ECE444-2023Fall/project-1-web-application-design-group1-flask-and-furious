@@ -2,7 +2,7 @@
 import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
 import EventForm from '@/components/EventForm';
-import Popup from '@/components/Popup';
+import { toast } from '@/components/ui/use-toast';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -33,8 +33,6 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const [popupMessage, setPopupMessage] = useState<string>('');
-  const [popupType, setPopupType] = useState<'error' | 'success'>('success');
   const [loading, setLoading] = useState<boolean>(true);
   const [changeFormData, setFormData] = useState<formData>({
     eventId: -1,
@@ -65,8 +63,11 @@ export default function Home() {
     await apiGetEvents(awaitedSession, setEvents, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
     }).catch(() => {
-      setPopupMessage('Failed to get events');
-      setPopupType('error');
+      toast({
+        variant: 'destructive',
+        title: 'Failed to get events',
+        description: 'Something went wrong. Please try again later'
+      });
     });
     setLoading(false);
   };
@@ -90,10 +91,11 @@ export default function Home() {
       !formData.endTime ||
       !formData.date
     ) {
-      setPopupMessage(
-        'Event Creation Error: Title, Start Time, End Time, and Date are required'
-      );
-      setPopupType('error');
+      toast({
+        variant: 'destructive',
+        title: 'Event Creation Failed',
+        description: 'Title, Start Time, End Time, and Date are required'
+      });
       return;
     }
     await apiCreateEvent((await session).data.session, data)
@@ -112,12 +114,16 @@ export default function Home() {
           tags: []
         });
         getEvents();
-        setPopupMessage('Event Created Successfully');
-        setPopupType('success');
+        toast({
+          title: 'Event Created Successfully'
+        });
       })
       .catch(() => {
-        setPopupMessage('Event Creation Failed');
-        setPopupType('error');
+        toast({
+          variant: 'destructive',
+          title: 'Event Creation Failed',
+          description: 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -141,10 +147,11 @@ export default function Home() {
       !formData.endTime ||
       !formData.date
     ) {
-      setPopupMessage(
-        'Event Update Error: Title, Start Time, End Time, and Date are required'
-      );
-      setPopupType('error');
+      toast({
+        variant: 'destructive',
+        title: 'Event Update Failed',
+        description: 'Title, Start Time, End Time, and Date are required'
+      });
       return;
     }
 
@@ -168,12 +175,16 @@ export default function Home() {
         });
         setSelectedFile(null);
         getEvents();
-        setPopupMessage('Event Updated Successfully');
-        setPopupType('success');
+        toast({
+          title: 'Event Updated Successfully'
+        });
       })
       .catch(() => {
-        setPopupMessage('Event Update Failed');
-        setPopupType('error');
+        toast({
+          variant: 'destructive',
+          title: 'Event Update Failed',
+          description: 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -195,12 +206,16 @@ export default function Home() {
         });
         setSelectedFile(null);
         getEvents();
-        setPopupMessage('Event Deleted Successfully');
-        setPopupType('success');
+        toast({
+          title: 'Event Deleted Successfully'
+        });
       })
       .catch(() => {
-        setPopupMessage('Event Deletion Failed');
-        setPopupType('error');
+        toast({
+          variant: 'destructive',
+          title: 'Event Deletion Failed',
+          description: 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -301,13 +316,6 @@ export default function Home() {
           </div>
         </div>
         <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
-          <div className="flex w-full justify-center">
-            <Popup
-              message={popupMessage}
-              type={popupType}
-              setMessage={setPopupMessage}
-            />
-          </div>
           {!loading ? (
             events.length > 0 ? (
               <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">

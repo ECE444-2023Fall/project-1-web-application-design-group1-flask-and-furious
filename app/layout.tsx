@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+import { Toaster } from '@/components/ui/toaster';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -41,6 +42,7 @@ export default async function RootLayout({
       <body className={`${inter.className} flex h-screen flex-col`}>
         <Navbar session={session} />
         <main className="flex-1 text-black">{children}</main>
+        <Toaster />
       </body>
     </html>
   );
