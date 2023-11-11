@@ -1,10 +1,8 @@
 import { Session } from '@supabase/gotrue-js';
-import { Dispatch, SetStateAction } from 'react';
 import { ProfileData } from './types';
 
 export const apiGetProfile = async (
   session: Session | null,
-  setProfile: Dispatch<SetStateAction<ProfileData | null>>,
   params: {
     userUuid?: string;
   }
@@ -15,13 +13,7 @@ export const apiGetProfile = async (
       'Content-Type': 'application/json',
       Authentication: `Bearer ${session?.access_token}`
     }
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      const { id, ...profile } = JSON.parse(data)['data'][0];
-      profile.profileId = id;
-      setProfile(profile);
-    });
+  });
 };
 
 export const apiUpdateProfile = async (

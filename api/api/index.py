@@ -45,7 +45,6 @@ class Event(Resource):
     )
     @event_api.param("userUuid", "The uuid of the user to filter by")
     def get(self):
-        print("headers: ", request.headers)
         try:
             table = supabase.table("Events").select("*")
 
@@ -246,7 +245,7 @@ class Profile(Resource):
                 "city": data["city"],
                 "university": data["university"],
                 "program": data["program"],
-                "tags": data["tags"]
+                "tags": data["tags"],
             }
 
             supabase.table("Profiles").update(data_to_update).eq("id", uuid).execute()

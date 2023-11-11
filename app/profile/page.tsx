@@ -53,15 +53,25 @@ export default function Profile() {
     }
 
     const awaitedSession = (await session).data.session;
-    apiGetProfile(awaitedSession, setProfile, {
+    apiGetProfile(awaitedSession, {
       userUuid: await userUuidFromSession(awaitedSession, supabase)
-    }).catch(() => {
-      toast({
-        variant: 'destructive',
-        title: 'Failed to Get Profile',
-        description: 'Something went wrong. Please try again later'
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get profile');
+        }
+        const resp = await res.json();
+        const { id, ...profile } = JSON.parse(resp)['data'][0];
+        profile.profileId = id;
+        setProfile(profile);
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Failed to Get Profile',
+          description: 'Something went wrong. Please try again later'
+        });
       });
-    });
   }, [router, session, supabase]);
 
   useEffect(() => {
