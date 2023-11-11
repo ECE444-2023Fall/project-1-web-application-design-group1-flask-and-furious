@@ -11,6 +11,8 @@ export interface EventData {
   Tags: string[];
   Date: string;
   image_url: string;
+  Latitude: number;
+  Longitude: number;
 }
 
 export interface formData {

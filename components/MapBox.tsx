@@ -1,18 +1,34 @@
 'use client';
+import { apiGetEvents } from '@/app/events/api';
 import { EventData } from '@/app/events/types';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import mapboxgl from 'mapbox-gl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import EventCard from './EventCard';
-// import { createClient } from '@supabase/supabase-js';
-// import { configDotenv } from 'dotenv';
 
 // this is where all of our map logic is going to live
 // adding the empty dependency array ensures that the map
 // is only created once
-
-function MapBox() {
+/* eslint-disable @typescript-eslint/no-unused-vars */
+export default function MapBox() {
   const mapContainer = useRef(null);
+
+  const supabase = createClientComponentClient();
+  const session = supabase.auth.getSession();
+
+  const [events, setEvents] = useState<EventData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const getEvents = async () => {
+    setLoading(true);
+    await apiGetEvents((await session).data.session, setEvents, {});
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
 
   useEffect(() => {
     // create the map and configure it
@@ -26,27 +42,6 @@ function MapBox() {
       zoom: 14,
       pitch: 60
     });
-
-    const event_location: [number, number][] = [
-      [-79.39486600749379, 43.66027265761257],
-      [-79.3959892, 43.659543],
-      [-79.3894661, 43.6671491]
-    ]; // Three example locations for the events
-
-    const event_details: EventData = {
-      id: 12,
-      Owner: '123',
-      Location: 'bahen',
-      Frequency: 'once',
-      created_at: '2021-10-31T23:59:59.999Z',
-      Title: 'test',
-      Description: "it's gonna be so fun",
-      Date: 'Nov 6, 2023',
-      StartTime: '4 to 6 pm',
-      EndTime: 'bahen',
-      Tags: ['fun', 'eng', 'alcoholic drinks'],
-      image_url: ''
-    };
 
     map.on('load', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,29 +65,35 @@ function MapBox() {
     });
 
     // Adding markers for the events
-    // configDotenv();
-    // const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.toString();
-    // const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.toString();
-    // if (url !== undefined && key !== undefined) {
-    //   const supabase = createClient(url, key);
-    //   const data = supabase.from('Events').select('Latitude, Longitude');
-    //   console.log(data);
-    // }
-    /* eslint-disable @typescript-eslint/no-unused-vars */
-    for (let i = 0; i < event_location.length; i++) {
-      const eventCardHtml = renderToStaticMarkup(
-        <EventCard eventData={event_details} />
-      );
-      const popup = new mapboxgl.Popup({ offset: 25 }) // Adjust the offset as needed
-        .setHTML(eventCardHtml);
-      const marker = new mapboxgl.Marker()
-        .setLngLat(event_location[i])
-        .addTo(map)
-        .setPopup(popup);
-    }
+    for (let event = 0; event < events.length; event++) {
+      const event_details = {
+        eventId: events.at(event)?.id || -1,
+        eventName: events.at(event)?.Title || 'Unknown',
+        eventDescription: events.at(event)?.Description || 'Not given',
+        eventDate: events.at(event)?.Date || 'Unknown',
+        eventTime:
+          events.at(event)?.StartTime + ' - ' + events.at(event)?.EndTime ||
+          'Unknown',
+        eventLocation: events.at(event)?.Location || 'Unknown',
+        eventTags: events.at(event)?.Tags || [],
+        eventImage: events.at(event)?.image_url || ''
+      };
+      const lat = events.at(event)?.Latitude;
+      const lon = events.at(event)?.Longitude;
 
-    /* eslint-enable @typescript-eslint/no-unused-vars */
-  }, []);
+      if (lat !== undefined && lon !== undefined && lat + lon !== -2) {
+        const eventCardHtml = renderToStaticMarkup(
+          <EventCard {...event_details} />
+        );
+        const popup = new mapboxgl.Popup({ offset: 10 }) // Adjust the offset as needed
+          .setHTML(eventCardHtml);
+        const marker = new mapboxgl.Marker()
+          .setLngLat([lon, lat])
+          .addTo(map)
+          .setPopup(popup);
+      }
+    }
+  }, [events]);
 
   return (
     <div
@@ -103,5 +104,4 @@ function MapBox() {
     />
   );
 }
-
-export default MapBox;
+/* eslint-enable @typescript-eslint/no-unused-vars */
