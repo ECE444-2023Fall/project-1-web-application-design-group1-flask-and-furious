@@ -86,12 +86,11 @@ export const apiUpdateRSVPEvents = async (
     eventId?: string;
   }
 ) => {
-  const requestOptions = {
+  return fetch('/api/rsvp?' + new URLSearchParams(params), {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authentication: `Bearer ${session?.access_token}`
     }
-  };
-  await fetch('/api/rsvp?' + new URLSearchParams(params), requestOptions);
+  });
 };

@@ -2,6 +2,7 @@ import { Session } from '@supabase/gotrue-js';
 import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 import { apiUpdateRSVPEvents } from '../app/events/api';
+import { toast } from './ui/use-toast';
 
 type Props = {
   eventId: number;
@@ -27,14 +28,26 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents, session }: Props) => {
           }`}
           onClick={async () => {
             if (session) {
-              setRSVPEvents((prevEvents) =>
-                RSVPed
-                  ? RSVPEvents.filter((id) => id !== eventId)
-                  : [...prevEvents, eventId]
-              );
               apiUpdateRSVPEvents(session, {
                 userUuid: session?.user.id,
                 eventId: String(eventId)
+              }).then((response) => {
+                if (response.ok) {
+                  setRSVPEvents((prevEvents) =>
+                    RSVPed
+                      ? RSVPEvents.filter((id) => id !== eventId)
+                      : [...prevEvents, eventId]
+                  );
+                  toast({
+                    title: RSVPed ? 'RSVP Cancelled' : "Successfully RSVP'd"
+                  });
+                } else {
+                  toast({
+                    variant: 'destructive',
+                    title: RSVPed ? 'RSVP Cancellation Failed' : 'RSVP Failed',
+                    description: 'Something went wrong. Please try again.'
+                  });
+                }
               });
             } else {
               router.push('/login');

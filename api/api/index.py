@@ -228,10 +228,8 @@ class RSVP (Resource):
             # print("table_query:", table_query)
             return table_query.model_dump_json(), 200
         except Exception as e:
-            print("error: ", e)
-            return {
-                "message": "Server Error: Authentication token not found or invalid"
-            }
+            print("Error: ", e)
+            return e, 500
 
     @rsvp_api.param("userUuid", "The uuid of the user to filter by")
     @rsvp_api.param("eventId", "The id of the event")
@@ -275,7 +273,7 @@ class RSVP (Resource):
 
         except Exception as e:
             print("Update Error:", e)
-            return "Error"
+            return e, 500
 
 
 profile_api = Namespace("profiles", description="profile related operations")
