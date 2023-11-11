@@ -122,6 +122,7 @@ class Event(Resource):
                     file_options={"content-type": file.content_type},
                 )
                 file.close()
+            return "Event Created Successfully", 200
 
         except Exception as e:
             print("Error:", e)
@@ -178,8 +179,8 @@ class Event(Resource):
                     file_options={"content-type": file.content_type},
                 )
                 file.close()
+            return "Event Updated Successfully", 200
 
-            return 200
         except Exception as e:
             print("Update Error:", e)
             return e, 500
@@ -204,7 +205,8 @@ class Event(Resource):
             filename = secure_filename(f"event-{event_id}")
             # Delete the image from the Images bucket
             supabase.storage.from_("Images").remove([filename])
-            return "Deleted Successfully"
+            return "Event Deleted Successfully", 200
+
         except Exception as e:
             print("Delete Error:", e)
             return e, 500

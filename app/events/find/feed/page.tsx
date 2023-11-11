@@ -1,5 +1,6 @@
 'use client';
 import EventCard from '@/components/EventCard';
+import { toast } from '@/components/ui/use-toast';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { apiGetEvents } from '../../api';
@@ -15,7 +16,21 @@ export default function Page() {
 
   const getEvents = async () => {
     setLoading(true);
-    await apiGetEvents((await session).data.session, setEvents, {});
+    await apiGetEvents((await session).data.session, {})
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get events');
+        }
+        const data = await res.json();
+        setEvents(JSON.parse(data)['data']);
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Failed to get events',
+          description: 'Something went wrong. Please try again later'
+        });
+      });
     setLoading(false);
   };
 
