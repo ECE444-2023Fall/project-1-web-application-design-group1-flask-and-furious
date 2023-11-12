@@ -1,8 +1,8 @@
 'use client';
 
 import PersonalInfo from '@/components/PersonalInfo';
-import PersonalTags from '@/components/PersonalTags';
 import ProfilePhoto from '@/components/ProfilePhoto';
+import Tags from '@/components/Tags';
 import { toast } from '@/components/ui/use-toast';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -21,26 +21,26 @@ export default function Profile() {
   const router = useRouter();
 
   const [profileEdit, setProfileEdit] = useState(false);
-  const [profileTagsEdit, setProfileTagsEdit] = useState(false);
 
   const [age, setAge] = useState<ProfileData['age']>(null);
   const [gender, setGender] = useState<ProfileData['gender']>(null);
   const [city, setCity] = useState<ProfileData['city']>(null);
   const [university, setUniversity] = useState<ProfileData['university']>(null);
   const [program, setProgram] = useState<ProfileData['program']>(null);
-  const [tags, setTags] = useState<ProfileData['tags']>(null);
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
 
-  const [tagOptions, setTagOptions] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const getTags = async () => {
       const { data } = await supabase.from('Tags').select();
 
       if (data) {
-        const tagList = data.map((item) => item.tag);
-        setTagOptions(tagList);
+        const sortedTags = data.sort((a, b) => a.tag.localeCompare(b.tag));
+        setSelectedTags(
+          Object.fromEntries(sortedTags.map((tag) => [tag.tag, false]))
+        );
       }
     };
     getTags();
@@ -83,7 +83,10 @@ export default function Profile() {
     setCity(profile.city);
     setUniversity(profile.university);
     setProgram(profile.program);
-    setTags(profile.tags);
+
+    (profile.tags as string[]).forEach((tag) => {
+      setSelectedTags((prev) => ({ ...prev, [tag]: true }));
+    });
   }, [profile]);
 
   useEffect(() => {
@@ -93,10 +96,6 @@ export default function Profile() {
 
   const onEditClick = () => {
     setProfileEdit(true);
-  };
-
-  const onTagsEditClick = () => {
-    setProfileTagsEdit(true);
   };
 
   const updateProfile = async (formData: ProfileData) => {
@@ -124,6 +123,8 @@ export default function Profile() {
         throw new Error('Profile is null');
       }
 
+      const tags = Object.keys(selectedTags).filter((tag) => selectedTags[tag]);
+
       const updatedProfile = {
         ...profile,
         age: age,
@@ -137,7 +138,6 @@ export default function Profile() {
       await setProfile(updatedProfile);
       await updateProfile(updatedProfile);
       setProfileEdit(false);
-      setProfileTagsEdit(false);
       getProfile();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -217,15 +217,21 @@ export default function Profile() {
                   Add your preferences below (Ctrl + Click to Select Multiple
                   Tags):
                 </p>
-                <PersonalTags
-                  edit={profileTagsEdit}
-                  setEdit={setProfileTagsEdit}
-                  tags={tags}
-                  setTags={setTags}
-                  onSaveClick={onSaveClick}
-                  onEditClick={onTagsEditClick}
-                  tagOptions={tagOptions}
-                />
+                <div className="pl-4 pr-1">
+                  <Tags
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                  />
+                </div>
+
+                <div className="mb-2 flex flex-grow basis-1/4 items-end justify-end rounded-b-lg">
+                  <button
+                    className="mr-2 rounded bg-purple-700 px-4 py-2 text-white hover:bg-purple-900"
+                    onClick={onSaveClick}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           </div>
