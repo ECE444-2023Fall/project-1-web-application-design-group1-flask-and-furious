@@ -78,36 +78,22 @@ export default function MapBox() {
     const markerRadius = 10;
     const linearOffset = 25;
 
-    // Adding markers for the events
-    for (let event = 0; event < events.length; event++) {
-      const event_details = {
-        eventId: events.at(event)?.id || -1,
-        eventName: events.at(event)?.Title || 'Unknown',
-        eventDescription: events.at(event)?.Description || 'Not given',
-        eventDate: events.at(event)?.Date || 'Unknown',
-        eventTime:
-          events.at(event)?.StartTime + ' - ' + events.at(event)?.EndTime ||
-          'Unknown',
-        eventLocation: events.at(event)?.Location || 'Unknown',
-        eventTags: events.at(event)?.Tags || []
-      };
-      const lat = events.at(event)?.Latitude;
-      const lon = events.at(event)?.Longitude;
-      const link =
-        events.at(event)?.image_url + '?v=' + new Date().getTime().toString() ||
-        '';
-      let event_image = '';
-      const check = checkLink(link).then((result) => {
-        if (result) {
-          event_image = link;
-        } else {
-          event_image =
-            'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
-        }
-
-        if (lat !== undefined && lon !== undefined && lat + lon !== -2) {
+    events.forEach((event) => {
+      if (
+        event.Latitude !== undefined &&
+        event.Longitude !== undefined &&
+        event.Latitude + event.Longitude !== -2
+      ) {
+        let event_image = '';
+        const check = checkLink(event.image_url).then((result) => {
+          if (result) {
+            event_image = event.image_url;
+          } else {
+            event_image =
+              'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
+          }
           const eventCardHtml = renderToStaticMarkup(
-            <EventCard eventImage={event_image} {...event_details} />
+            <EventCard eventData={{ ...event, image_url: event_image }} />
           );
           const popup = new mapboxgl.Popup({
             offset: {
@@ -130,13 +116,13 @@ export default function MapBox() {
             .setMaxWidth('500x')
             .setHTML(eventCardHtml);
 
-          const marker = new mapboxgl.Marker()
-            .setLngLat([lon, lat])
+          new mapboxgl.Marker()
+            .setLngLat([event.Longitude, event.Latitude])
             .addTo(map)
             .setPopup(popup);
-        }
-      });
-    }
+        });
+      }
+    });
   }, [events]);
 
   return (
