@@ -51,6 +51,7 @@ jest.mock('mapbox-gl', () => ({
 describe('MapBox', () => {
   const mockedMapboxglMap = mapboxgl.Map;
   const mockedMapboxglMarker = mapboxgl.Marker;
+  const mockedMapboxglPopup = mapboxgl.Popup;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -87,5 +88,20 @@ describe('MapBox', () => {
     });
 
     expect(mockedMapboxglMarker).toHaveBeenCalled();
+    expect(mockedMapboxglMarker).toHaveBeenCalledWith(
+      expect.objectContaining({
+        setLngLat: [-79.394718, 43.659885],
+        setPopup: mockedMapboxglPopup
+      })
+    );
+  });
+
+  //Ardavan-Alaei-Fard
+  it('checks the event details', () => {
+    act(() => {
+      render(<MapBox />);
+    });
+
+    expect(mockedMapboxglPopup).toHaveBeenCalled();
   });
 });

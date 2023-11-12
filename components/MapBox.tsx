@@ -76,7 +76,10 @@ export default function MapBox() {
           'Unknown',
         eventLocation: events.at(event)?.Location || 'Unknown',
         eventTags: events.at(event)?.Tags || [],
-        eventImage: events.at(event)?.image_url || ''
+        eventImage:
+          events.at(event)?.image_url +
+            '?v=' +
+            new Date().getTime().toString() || ''
       };
       const lat = events.at(event)?.Latitude;
       const lon = events.at(event)?.Longitude;
