@@ -33,7 +33,7 @@ export default function Register() {
         <p className=""> Already have an account? </p>
         <Link
           href="/login"
-          className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md rounded-md px-2 font-bold text-purple-700 no-underline"
+          className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md rounded-md px-2 font-bold text-primary no-underline"
         >
           Login
         </Link>

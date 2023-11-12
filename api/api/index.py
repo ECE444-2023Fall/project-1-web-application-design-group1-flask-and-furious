@@ -45,7 +45,6 @@ class Event(Resource):
     )
     @event_api.param("userUuid", "The uuid of the user to filter by")
     def get(self):
-        print("headers: ", request.headers)
         try:
             table = supabase.table("Events").select("*")
 
@@ -292,12 +291,10 @@ class Profile(Resource):
             if user_uuid:
                 table = table.eq("id", user_uuid)
             data = table.execute().model_dump_json()
-            return data
+            return data, 200
         except Exception as e:
-            print("error: ", e)
-            return {
-                "message": "Server Error: Authentication token not found or invalid"
-            }
+            print("Error: ", e)
+            return e, 500
 
     def put(self):
         try:
@@ -314,16 +311,14 @@ class Profile(Resource):
                 "city": data["city"],
                 "university": data["university"],
                 "program": data["program"],
-                "tags": data["tags"]
+                "tags": data["tags"],
             }
 
             supabase.table("Profiles").update(data_to_update).eq("id", uuid).execute()
-            return "Done"
+            return "Done", 200
         except Exception as e:
             print("Update Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the update"
-            }
+            return e, 500
 
 
 @profile_api.route("/picture")
@@ -343,14 +338,12 @@ class ProfilePicture(Resource):
                     .execute()
                 )
 
-                return image_req.model_dump_json()
+                return image_req.model_dump_json(), 200
             else:
                 return {"message": "No profileId provided"}, 400
         except Exception as e:
-            print("Update Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the update"
-            }
+            print("Error:", e)
+            return e, 500
 
     def put(self):
         try:
@@ -388,9 +381,7 @@ class ProfilePicture(Resource):
             return {"message": "Profile picture uploaded successfully"}, 200
         except Exception as e:
             print("Update Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the update"
-            }
+            return e, 500
 
 
 api.add_namespace(event_api)
