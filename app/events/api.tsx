@@ -1,5 +1,4 @@
 import { Session } from '@supabase/gotrue-js';
-import { Dispatch, SetStateAction } from 'react';
 import { formData } from './types';
 
 export const apiGetEvents = async (
@@ -55,23 +54,17 @@ export const apiDeleteEvent = async (
 
 export const apiGetRSVPEvents = async (
   session: Session | null,
-  setRSVPEvents: Dispatch<SetStateAction<number[]>>,
   params: {
     userUuid?: string;
   }
 ) => {
-  const requestOptions = {
+  return fetch('/api/rsvp?' + new URLSearchParams(params), {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       Authentication: `Bearer ${session?.access_token}`
     }
-  };
-  fetch('/api/rsvp?' + new URLSearchParams(params), requestOptions)
-    .then((res) => res.json())
-    .then((data) => {
-      setRSVPEvents(JSON.parse(data)['data'][0]['events']);
-    });
+  });
 };
 
 export const apiUpdateRSVPEvents = async (

@@ -1,10 +1,10 @@
 'use client';
 import EventCard from '@/components/EventCard';
+import { toast } from '@/components/ui/use-toast';
 import {
   Session,
   createClientComponentClient
 } from '@supabase/auth-helpers-nextjs';
-import { toast } from '@/components/ui/use-toast';
 import { useEffect, useState } from 'react';
 import { apiGetEvents, apiGetRSVPEvents } from '../../api';
 import { formatTime, userUuidFromSession } from '../../helpers';
@@ -44,9 +44,23 @@ export default function Page() {
   const getRSVPEvents = async () => {
     const awaitedSession = (await session).data.session;
     if (awaitedSession) {
-      apiGetRSVPEvents(awaitedSession, setRSVPEvents, {
+      apiGetRSVPEvents(awaitedSession, {
         userUuid: await userUuidFromSession(awaitedSession, supabase)
-      });
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            throw new Error('Failed to get RSVP events');
+          }
+          const data = await res.json();
+          setRSVPEvents(JSON.parse(data)['data'][0]['events']);
+        })
+        .catch(() => {
+          toast({
+            variant: 'destructive',
+            title: "Failed to get RSVP'd events",
+            description: 'Something went wrong. Please try again later'
+          });
+        });
     }
   };
 
