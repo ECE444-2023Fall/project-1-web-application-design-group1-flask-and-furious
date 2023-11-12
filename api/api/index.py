@@ -74,9 +74,7 @@ class Event(Resource):
             return table_query.model_dump_json(), 200
         except Exception as e:
             print("error: ", e)
-            return {
-                "message": "Server Error: Authentication token not found or invalid"
-            }
+            return e, 500
 
     def post(self):
         try:
@@ -124,12 +122,11 @@ class Event(Resource):
                     file_options={"content-type": file.content_type},
                 )
                 file.close()
+            return "Event Created Successfully", 200
 
         except Exception as e:
             print("Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the data"
-            }
+            return e, 500
 
     def put(self):
         try:
@@ -182,11 +179,11 @@ class Event(Resource):
                     file_options={"content-type": file.content_type},
                 )
                 file.close()
+            return "Event Updated Successfully", 200
 
-            return 200
         except Exception as e:
             print("Update Error:", e)
-            return "Error"
+            return e, 500
 
     def delete(self):
         try:
@@ -208,12 +205,11 @@ class Event(Resource):
             filename = secure_filename(f"event-{event_id}")
             # Delete the image from the Images bucket
             supabase.storage.from_("Images").remove([filename])
-            return "Deleted Successfully"
+            return "Event Deleted Successfully", 200
+
         except Exception as e:
             print("Delete Error:", e)
-            return {
-                "message": "Server Error: Something went wrong while processing the delete"
-            }
+            return e, 500
 
 
 profile_api = Namespace("profiles", description="profile related operations")
