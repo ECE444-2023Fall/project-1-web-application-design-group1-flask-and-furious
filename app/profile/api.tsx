@@ -6,21 +6,20 @@ export const apiGetProfile = async (
   params: {
     userUuid?: string;
   }
-) => {
-  return fetch('/api/profiles?' + new URLSearchParams(params), {
+) =>
+  fetch('/api/profiles?' + new URLSearchParams(params), {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       Authentication: `Bearer ${session?.access_token}`
     }
   });
-};
 
 export const apiUpdateProfile = async (
   session: Session | null,
   profileData: ProfileData
-) => {
-  return fetch('/api/profiles', {
+) =>
+  fetch('/api/profiles', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -28,7 +27,6 @@ export const apiUpdateProfile = async (
     },
     body: JSON.stringify(profileData)
   });
-};
 
 export const apiUpdateProfilePicture = async (
   session: Session | null,
