@@ -1,8 +1,10 @@
 'use client';
 import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
+import EventModal from '@/components/EventModal';
 import Filters from '@/components/Filters';
 import { toast } from '@/components/ui/use-toast';
+import { useDisclosure } from '@nextui-org/react';
 import {
   Session,
   createClientComponentClient
@@ -18,6 +20,9 @@ export default function Page() {
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [modelEvent, setModelEvent] = useState<EventData>({} as EventData);
   const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
   const [events, setEvents] = useState<EventData[]>([]);
   const [rsvpCounts, setRSVPCounts] = useState<Record<number, number>>({});
@@ -131,6 +136,11 @@ export default function Page() {
     getTags();
   }, []);
 
+  const openModal = (event: EventData) => {
+    setModelEvent(event);
+    onOpen();
+  };
+
   return (
     <div className="flex max-h-[calc(100vh-7rem)] flex-row">
       <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
@@ -169,8 +179,15 @@ export default function Page() {
                 RSVPEvents={RSVPevents}
                 rsvpCount={rsvpCounts[event.id]}
                 session={sessionData}
+                action={() => openModal(event)}
               />
             ))}
+
+          <EventModal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            event={modelEvent}
+          />
         </div>
       ) : (
         <svg
