@@ -28,61 +28,68 @@ export default function EventCard(props: EventCardProps) {
   const defaultImage =
     'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
   return (
-    <div
-      className="max-h-sm flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100"
-      onClick={() => {
-        if (typeof props.action === 'function') {
-          props.action(props.eventId);
-        }
-      }}
-    >
-      <div className="relative">
-        <img
-          className="aspect-video h-48 w-full rounded-t-lg object-cover"
-          src={props.eventImage || defaultImage}
-          alt={props.eventName}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = defaultImage;
-          }}
-        />
-        <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
-          RSVPs: {props.rsvpCount || 0}
+    <div className="max-h-sm flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100">
+      <div
+        onClick={() => {
+          if (typeof props.action === 'function') {
+            props.action(props.eventId);
+          }
+        }}
+      >
+        <div className="relative">
+          <img
+            className="aspect-video h-48 w-full rounded-t-lg object-cover"
+            src={props.eventImage || defaultImage}
+            alt={props.eventName}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = defaultImage;
+            }}
+          />
+          <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
+            RSVPs: {props.rsvpCount || 0}
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-row items-center justify-between p-2">
-        <h5 className="text-lg font-bold text-gray-900 ">{props.eventName}</h5>
-        <div className="flex flex-row-reverse gap-1">
-          <CalendarDaysIcon
-            className="h-5 w-5 stroke-1 text-black"
-            aria-hidden="true"
-          />
-          <p className="text-sm font-normal text-gray-700">{props.eventDate}</p>
+        <div className="flex flex-row items-center justify-between p-2">
+          <h5 className="text-lg font-bold text-gray-900 ">
+            {props.eventName}
+          </h5>
+          <div className="flex flex-row-reverse gap-1">
+            <CalendarDaysIcon
+              className="h-5 w-5 stroke-1 text-black"
+              aria-hidden="true"
+            />
+            <p className="text-sm font-normal text-gray-700">
+              {props.eventDate}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row items-center justify-between p-2">
-        <div className="flex flex-row gap-1">
-          <MapPinIcon
-            className="h-5 w-5 stroke-1 text-black"
-            aria-hidden="true"
-          />
-          <p className="text-sm font-normal text-gray-700">
-            {props.eventLocation}
-          </p>
+        <div className="flex flex-row items-center justify-between p-2">
+          <div className="flex flex-row gap-1">
+            <MapPinIcon
+              className="h-5 w-5 stroke-1 text-black"
+              aria-hidden="true"
+            />
+            <p className="text-sm font-normal text-gray-700">
+              {props.eventLocation}
+            </p>
+          </div>
+          <div className="flex flex-row-reverse gap-1">
+            <ClockIcon
+              className="h-5 w-5 stroke-1 text-black"
+              aria-hidden="true"
+            />
+            <p className="text-sm font-normal text-gray-700">
+              {props.eventTime}
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row-reverse gap-1">
-          <ClockIcon
-            className="h-5 w-5 stroke-1 text-black"
-            aria-hidden="true"
-          />
-          <p className="text-sm font-normal text-gray-700">{props.eventTime}</p>
-        </div>
-      </div>
 
-      <p className="p-2 text-sm font-normal text-gray-700">
-        {props.eventDescription}
-      </p>
+        <p className="p-2 text-sm font-normal text-gray-700">
+          {props.eventDescription}
+        </p>
+      </div>
 
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row gap-1 p-2">
