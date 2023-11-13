@@ -92,6 +92,9 @@ export default function Page() {
   };
 
   useEffect(() => {
+    const getEvents = async () => {
+      apiGetEvents((await session).data.session, setEvents, {});
+    };
     getEvents();
     getEventRsvpCounts();
     getRSVPEvents();
