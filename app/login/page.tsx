@@ -7,7 +7,7 @@ export default function Login() {
     <div className="mx-auto flex w-full flex-1 flex-col gap-2 px-8 sm:max-w-md">
       <Link
         href="/"
-        className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md top-18 group absolute left-2 flex items-center rounded-md px-4 py-2 no-underline"
+        className="bg-btn-background hover:bg-btn-background-hover text-md top-18 group absolute left-2 flex items-center rounded-md px-4 py-2 text-foreground no-underline"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@ export default function Login() {
         <p className=""> Don&apos;t have an account? </p>
         <Link
           href="/register"
-          className="text-foreground bg-btn-background hover:bg-btn-background-hover text-md rounded-md px-2 font-bold text-primary no-underline"
+          className="bg-btn-background hover:bg-btn-background-hover text-md rounded-md px-2 font-bold text-foreground text-primary no-underline"
         >
           Register
         </Link>
