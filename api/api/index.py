@@ -3,7 +3,7 @@ import os
 from tempfile import gettempdir
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Namespace, Resource
 from supabase import Client, create_client
@@ -140,10 +140,8 @@ class Event(Resource):
             owner = eventdata["data"][0]["Owner"]
 
             if owner != uuid:
-                return (
-                    jsonify({"message": "Unauthorized: You cannot update this event"}),
-                    401,
-                )
+                return "Unauthorized: You cannot update this event", 401,
+
             tags = request.form.get("tags")
             if tags:
                 try:
@@ -197,7 +195,8 @@ class Event(Resource):
             eventdata = json.loads(event.model_dump_json())
             owner = eventdata["data"][0]["Owner"]
             if owner != uuid:
-                return {"message": "Unauthorized: You cannot delete this event"}, 401
+                return "Unauthorized: You cannot delete this event", 401
+
             # perform delete
             supabase.table("Events").delete().eq("id", data["eventId"]).execute()
             # delete associated image:
