@@ -84,9 +84,11 @@ export default function Profile() {
     setUniversity(profile.university);
     setProgram(profile.program);
 
-    (profile.tags as string[]).forEach((tag) => {
-      setSelectedTags((prev) => ({ ...prev, [tag]: true }));
-    });
+    if (profile.tags) {
+      (profile.tags as string[]).forEach((tag) => {
+        setSelectedTags((prev) => ({ ...prev, [tag]: true }));
+      });
+    }
   }, [profile]);
 
   useEffect(() => {
