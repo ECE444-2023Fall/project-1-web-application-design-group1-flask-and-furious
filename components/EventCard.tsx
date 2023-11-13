@@ -93,12 +93,19 @@ export default function EventCard(props: EventCardProps) {
       </div>
 
       <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row gap-1 p-2">
-          {props.eventTags.map((tag, id) => (
+        <div className="flex flex-row flex-wrap gap-1 p-2">
+          {props.eventTags.slice(0, 3).map((tag, id) => (
             <div key={id} className="rounded-full bg-gray-200 px-2">
               <p className="text-sm font-normal text-gray-700">{tag}</p>
             </div>
           ))}
+          {props.eventTags.length > 3 && (
+            <div className="rounded-full bg-gray-200 px-2">
+              <p className="text-sm font-normal text-gray-700">
+                {props.eventTags.length} More...
+              </p>
+            </div>
+          )}
         </div>
         {props.viewer && (
           <RSVP
