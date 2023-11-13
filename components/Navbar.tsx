@@ -101,7 +101,6 @@ export default function Navigationbar({ session }: Props) {
                 as="button"
                 className="transition-transform"
                 color="secondary"
-                name="Jason Hughes"
                 size="sm"
                 src={
                   pictureUrl
