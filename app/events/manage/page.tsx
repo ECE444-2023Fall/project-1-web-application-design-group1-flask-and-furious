@@ -301,7 +301,7 @@ export default function Home() {
           isDrawerOpen ? 'w-2/3 ' : 'w-full'
         }`}
       >
-        <div className="flex h-9 w-full  items-center bg-slate-50 p-3">
+        <div className="flex h-9 w-full items-center bg-slate-50 p-3">
           <div
             className="flex cursor-pointer items-center"
             onClick={() => {

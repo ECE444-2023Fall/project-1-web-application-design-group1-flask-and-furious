@@ -124,7 +124,7 @@ export default function EventForm(props: formProps) {
   };
 
   return (
-    <div className="flex-grow items-center bg-slate-50">
+    <div className="flex-grow items-center">
       <form onSubmit={handleSubmit} className="flex w-full flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <label
