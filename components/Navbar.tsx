@@ -44,7 +44,7 @@ export default function Navigationbar({ session }: Props) {
   }, []);
 
   return (
-    <Navbar>
+    <Navbar maxWidth="full">
       <NavbarBrand>
         <Link href="/">
           <div className="flex h-full flex-col items-center justify-center bg-violet-50">
