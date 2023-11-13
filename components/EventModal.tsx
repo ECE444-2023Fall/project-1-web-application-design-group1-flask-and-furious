@@ -83,6 +83,14 @@ export default function EventModal(props: EventModalProps) {
               <p className="p-2 text-sm font-normal text-gray-700">
                 {event.Description}
               </p>
+
+              <div className="flex flex-row flex-wrap gap-1 p-2">
+                {event.Tags.map((tag, id) => (
+                  <div key={id} className="rounded-full bg-gray-200 px-2">
+                    <p className="text-sm font-normal text-gray-700">{tag}</p>
+                  </div>
+                ))}
+              </div>
             </ModalBody>
             <ModalFooter className="-mr-2">
               <Button
