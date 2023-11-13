@@ -173,7 +173,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="m-4 flex h-screen flex-col">
+    <div className="m-4 flex h-auto flex-col">
       {profile ? (
         <>
           <div className="mb-4 flex h-24 items-center justify-center">
