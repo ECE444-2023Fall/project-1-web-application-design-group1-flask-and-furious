@@ -46,7 +46,7 @@ export default function EventCard(props: EventCardProps) {
             target.src = defaultImage;
           }}
         />
-        {props.viewer == false && (
+        {(props.rsvpCount || 0) > 0 && (
           <div className="absolute right-2 top-2 rounded-full bg-primary p-2 text-white">
             RSVPs: {props.rsvpCount || 0}
           </div>
