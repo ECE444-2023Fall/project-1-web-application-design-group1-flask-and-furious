@@ -211,7 +211,7 @@ export default function Profile() {
                   onEditClick={onEditClick}
                 />
               </div>
-              <div className="mt-8 flex h-60 flex-col rounded-lg border-2 border-primary bg-white">
+              <div className="mt-8 flex flex-col rounded-lg border-2 border-primary bg-white">
                 <p className="ml-4 mt-2 basis-1/6 text-3xl font-semibold text-primary">
                   Help us guide you in the right direction!
                 </p>
