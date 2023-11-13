@@ -11,7 +11,7 @@ const FindEventsNavBar = () => {
           'flex flex-auto items-center justify-center shadow ' +
           (usePathname() === '/events/find/feed'
             ? 'bg-slate-200'
-            : 'bg-slate-50 hover:opacity-50')
+            : 'bg-slate-50 hover:bg-slate-200')
         }
       >
         Feed
@@ -22,7 +22,7 @@ const FindEventsNavBar = () => {
           'flex flex-auto items-center justify-center shadow ' +
           (usePathname() === '/events/find/map'
             ? 'bg-slate-200'
-            : 'bg-slate-50 hover:opacity-50')
+            : 'bg-slate-50 hover:bg-slate-200')
         }
       >
         Map
