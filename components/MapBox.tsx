@@ -11,6 +11,16 @@ import EventCard from './EventCard';
 // adding the empty dependency array ensures that the map
 // is only created once
 /* eslint-disable @typescript-eslint/no-unused-vars */
+async function checkLink(url: string): Promise<boolean> {
+  const response = await fetch(url);
+  // Check if the response status is in the range 200-299
+  if (response.ok) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export default function MapBox() {
   const mapContainer = useRef(null);
 
@@ -64,6 +74,10 @@ export default function MapBox() {
       });
     });
 
+    const markerHeight = 50;
+    const markerRadius = 10;
+    const linearOffset = 25;
+
     // Adding markers for the events
     for (let event = 0; event < events.length; event++) {
       const event_details = {
@@ -75,26 +89,53 @@ export default function MapBox() {
           events.at(event)?.StartTime + ' - ' + events.at(event)?.EndTime ||
           'Unknown',
         eventLocation: events.at(event)?.Location || 'Unknown',
-        eventTags: events.at(event)?.Tags || [],
-        eventImage:
-          events.at(event)?.image_url +
-            '?v=' +
-            new Date().getTime().toString() || ''
+        eventTags: events.at(event)?.Tags || []
       };
       const lat = events.at(event)?.Latitude;
       const lon = events.at(event)?.Longitude;
+      const link =
+        events.at(event)?.image_url + '?v=' + new Date().getTime().toString() ||
+        '';
+      let event_image = '';
+      const check = checkLink(link).then((result) => {
+        if (result) {
+          event_image = link;
+        } else {
+          event_image =
+            'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
+        }
 
-      if (lat !== undefined && lon !== undefined && lat + lon !== -2) {
-        const eventCardHtml = renderToStaticMarkup(
-          <EventCard {...event_details} />
-        );
-        const popup = new mapboxgl.Popup({ offset: 10 }) // Adjust the offset as needed
-          .setHTML(eventCardHtml);
-        const marker = new mapboxgl.Marker()
-          .setLngLat([lon, lat])
-          .addTo(map)
-          .setPopup(popup);
-      }
+        if (lat !== undefined && lon !== undefined && lat + lon !== -2) {
+          const eventCardHtml = renderToStaticMarkup(
+            <EventCard eventImage={event_image} {...event_details} />
+          );
+          const popup = new mapboxgl.Popup({
+            offset: {
+              top: [0, 0],
+              'top-left': [0, 0],
+              'top-right': [0, 0],
+              bottom: [0, -markerHeight],
+              'bottom-left': [
+                linearOffset,
+                (markerHeight - markerRadius + linearOffset) * -2
+              ],
+              'bottom-right': [
+                -linearOffset,
+                (markerHeight - markerRadius + linearOffset) * -2
+              ],
+              left: [markerRadius, (markerHeight - markerRadius) * -2],
+              right: [-markerRadius, (markerHeight - markerRadius) * -2]
+            }
+          }) // Adjust the offset as needed
+            .setMaxWidth('500x')
+            .setHTML(eventCardHtml);
+
+          const marker = new mapboxgl.Marker()
+            .setLngLat([lon, lat])
+            .addTo(map)
+            .setPopup(popup);
+        }
+      });
     }
   }, [events]);
 
