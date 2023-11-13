@@ -220,10 +220,12 @@ class RSVP(Resource):
         try:
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
+            table = supabase.table('RSVP').select('*')
 
             # Apply Filters
             user_uuid = user.user.id
-            table = supabase.table('RSVP').select('*').eq('profileId', user_uuid)
+            if user_uuid:
+                table = table.eq('profileId', user_uuid)
 
             table_query = table.execute()
             # print("table_query:", table_query)
