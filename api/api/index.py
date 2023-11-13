@@ -212,6 +212,26 @@ class Event(Resource):
 
 rsvp_api = Namespace("rsvp", description="rsvp related operations")
 
+@rsvp_api.route("/count")
+class RSVPCount(Resource):
+    @rsvp_api.doc(description="Retrieve RSVP Counts Grouped by event.")
+    def get(self):
+        try:
+            rsvps = supabase.table('RSVP').select('*').execute()
+            rsvp_counts = {}
+
+            for entry in rsvps.data:
+                for event_id in entry["events"]:
+                    if event_id in rsvp_counts:
+                        rsvp_counts[event_id] += 1
+                    else:
+                        rsvp_counts[event_id] = 1
+
+            return rsvp_counts, 200
+        except Exception as e:
+            print("Error: ", e)
+            return e, 500
+
 @rsvp_api.route("/")
 class RSVP(Resource):
     @rsvp_api.doc(description="Retrieve RSVPs. Optionally filtered by Query Parameters.")
