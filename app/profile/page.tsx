@@ -226,9 +226,9 @@ export default function Profile() {
                   />
                 </div>
 
-                <div className="mb-2 flex flex-grow basis-1/4 items-end justify-end rounded-b-lg">
+                <div className="mb-2 flex flex-grow basis-1/4 items-end justify-end rounded-b-lg pt-4">
                   <button
-                    className="mr-2 rounded bg-purple-700 px-4 py-2 text-white hover:bg-purple-900"
+                    className="mr-2 rounded bg-purple-700 px-4 py-2 pt-2 text-white hover:bg-purple-900"
                     onClick={onSaveClick}
                   >
                     Save
