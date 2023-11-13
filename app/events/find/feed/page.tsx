@@ -1,5 +1,7 @@
 'use client';
+import Drawer from '@/components/Drawer';
 import EventCard from '@/components/EventCard';
+import Filters from '@/components/Filters';
 import { toast } from '@/components/ui/use-toast';
 import {
   Session,
@@ -10,17 +12,23 @@ import { apiGetEvents, apiGetRSVPCounts, apiGetRSVPEvents } from '../../api';
 import { formatTime, userUuidFromSession } from '../../helpers';
 import { EventData } from '../../types';
 
+export type FilteredEventData = EventData & { hidden: boolean };
+
 export default function Page() {
   const supabase = createClientComponentClient();
   const session = supabase.auth.getSession();
 
+  const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
   const [events, setEvents] = useState<EventData[]>([]);
   const [rsvpCounts, setRSVPCounts] = useState<Record<number, number>>({});
+  const [filteredEvents, setFilteredEvents] = useState<FilteredEventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [sessionData, setSessionData] = useState<Session | undefined>(
     undefined
   ); // [TODO] - remove this line and the line below [TODO
   const [RSVPevents, setRSVPEvents] = useState<number[]>([]);
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
 
   const getEvents = async () => {
     setLoading(true);
@@ -84,6 +92,9 @@ export default function Page() {
   };
 
   useEffect(() => {
+    const getEvents = async () => {
+      apiGetEvents((await session).data.session, setEvents, {});
+    };
     getEvents();
     getEventRsvpCounts();
     getRSVPEvents();
@@ -97,8 +108,41 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setFilteredEvents(
+      events.map((event) => ({
+        ...event,
+        hidden: false
+      }))
+    );
+  }, [events]);
+
+  useEffect(() => {
+    const getTags = async () => {
+      const { data } = await supabase.from('Tags').select();
+
+      //Convert data from {0: {id: 1, tag: 'tag1'}, 1: {id: 2, tag: 'tag2'}} to {tag1: false, tag2: false}
+
+      if (data) {
+        const sortedTags = data.sort((a, b) => a.tag.localeCompare(b.tag));
+        setTagOptions(
+          Object.fromEntries(sortedTags.map((tag) => [tag.tag, false]))
+        );
+      }
+    };
+
+    getTags();
+  }, []);
+
   return (
-    <div className="flex h-[calc(100vh-64px-64px)] w-full flex-col items-center overflow-y-auto">
+    <div className="flex flex-row">
+      <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
+        <Filters
+          setEvents={setFilteredEvents}
+          tags={tagOptions}
+          setTags={setTagOptions}
+        />
+      </Drawer>
       {!loading ? (
         <div className="grid grid-cols-3 gap-4 p-4">
           {events.map((event) => (
@@ -114,7 +158,7 @@ export default function Page() {
               )}`}
               eventTags={event.Tags}
               eventImage={`${event.image_url}?v=${new Date().getTime()}`}
-              viewer={true}
+              viewer
               setRSVPEvents={setRSVPEvents}
               RSVPEvents={RSVPevents}
               session={sessionData}

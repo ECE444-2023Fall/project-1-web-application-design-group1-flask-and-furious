@@ -13,7 +13,7 @@ const Tags = ({ selectedTags, setSelectedTags }: Props) => {
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-3 text-2xl font-bold">
+        <h2 className="flex items-center gap-3 text-xl font-bold">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

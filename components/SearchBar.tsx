@@ -1,41 +1,72 @@
 'use client';
-import React, { useState } from 'react';
+import { FilteredEventData } from '@/app/events/find/feed/page';
+import React from 'react';
 
 type Props = {
-  search: string;
+  setEvents: React.Dispatch<React.SetStateAction<FilteredEventData[]>>;
+  events: FilteredEventData[];
 };
 
-const SearchBar: React.FC<Props> = ({ search }: Props) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const isMatch = search.toLowerCase().includes(searchQuery.toLowerCase());
+const SearchBar: React.FC<Props> = ({ events, setEvents }: Props) => {
+  // const [searchQuery, setSearchQuery] = useState('');
+  // const [displayedEvents, setDisplayedEvents] = useState<EventData[]>([]);
 
-  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+  const handleSearchInput = (
+    inputEvent: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const searchValue = inputEvent.target.value;
+
+    if (searchValue === '') {
+      //Set all events hidden value to false so theyre all displayed
+      setEvents(
+        events.map((event) => ({
+          ...event,
+          hidden: false
+        }))
+      );
+    } else {
+      // Find all events that contain the search term in their title and set their hidden value to false and all others to true
+      setEvents(
+        events.map((event) => ({
+          ...event,
+          hidden: !event.Title.toLowerCase().includes(searchValue.toLowerCase())
+        }))
+      );
+    }
   };
 
   return (
-    <div
-      className="search-container"
-      style={{ width: '400px', border: '3px solid purple' }}
-    >
+    <div className="search-container">
       <input
         type="text"
         id="search-input"
         placeholder="Find an event by name..."
-        value={searchQuery}
+        // value={searchQuery}
         onChange={handleSearchInput}
-        style={{
-          width: '100%',
-          height: '40px',
-          fontSize: '16px',
-          color: 'purple',
-          fontWeight: 'bold',
-          padding: '0 10px'
-        }}
+        className="m-1 h-10 w-full rounded-md border-2 border-solid border-primary p-2 font-bold"
+        // style={{
+        //   width: '100%',
+        //   height: '40px',
+        //   fontSize: '16px',
+        //   color: 'purple',
+        //   fontWeight: 'bold',
+        //   padding: '0 10px'
+        // }}
       />
-      <ul id="search-results">
-        {isMatch ? <li>{search}</li> : <li>No results found.</li>}
-      </ul>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+        />
+      </svg>
     </div>
   );
 };

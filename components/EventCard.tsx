@@ -29,7 +29,7 @@ export default function EventCard(props: EventCardProps) {
     'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
   return (
     <div
-      className="flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100"
+      className="max-h-sm flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100"
       onClick={() => {
         if (typeof props.action === 'function') {
           props.action(props.eventId);

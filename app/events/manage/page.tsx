@@ -301,25 +301,21 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-full flex-row">
-      <Drawer
-        isOpen={isDrawerOpen}
-        style={isDrawerOpen ? '' : '-translate-x-full'}
-        onClose={onCloseDrawer}
-        onFileSelect={handleFileChange}
-        backgroundImage={imageURL}
-      >
+    <main className="flex max-h-[calc(100vh-64px)] flex-row">
+      <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
         <EventForm
           Post={createEvent}
           initialFormData={changeFormData}
           Update={updateEvent}
           isNewEvent={isNewEvent}
           Delete={deleteEvent}
+          onFileSelect={handleFileChange}
+          backgroundImage={imageURL}
         />
       </Drawer>
       <div
-        className={`transform-transition absolute right-0 h-[calc(100vh-64px)] duration-500 ${
-          isDrawerOpen ? 'w-2/3 ' : 'w-full'
+        className={`absolute h-[calc(100vh-64px)] w-full duration-500 ${
+          isDrawerOpen ? 'left-1/3' : 'left-[32px]'
         }`}
       >
         <div className="flex h-9 w-full items-center bg-slate-50 p-3">
@@ -356,7 +352,11 @@ export default function Home() {
         <div className="flex h-[calc(100vh-64px-36px)] flex-col items-center overflow-y-auto">
           {!loading ? (
             events.length > 0 ? (
-              <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
+              <div
+                className={`absolute grid max-h-full overflow-y-auto duration-500 ${
+                  isDrawerOpen ? 'grid-cols-4' : 'grid-cols-5'
+                } gap-4 p-4`}
+              >
                 {events
                   .sort(
                     (a, b) =>

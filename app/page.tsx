@@ -1,4 +1,4 @@
-export default async function Home() {
+export default function Home() {
   return (
     <div className="flex h-full w-screen flex-col items-center justify-center bg-violet-50">
       <div className="group relative">

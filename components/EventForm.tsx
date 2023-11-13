@@ -1,7 +1,10 @@
+import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Tags from './Tags';
 
+const defaultImage =
+  'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
 export interface formData {
   eventId: number;
   title: string;
@@ -21,13 +24,17 @@ export interface formProps {
   Update: (formData: formData) => void;
   isNewEvent: boolean;
   Delete: (formData: formData) => void;
+  onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  backgroundImage: string | null;
 }
 
 export default function EventForm(props: formProps) {
-  const [isDelete, setIsDelete] = useState<boolean>(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClientComponentClient();
-  const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
 
+  const [isDelete, setIsDelete] = useState<boolean>(true);
+  const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
+  const [backgroundImage, setBackgroundImage] = useState(defaultImage);
   const [formData, setFormData] = useState<formData>({
     eventId: -1,
     title: '',
@@ -69,6 +76,17 @@ export default function EventForm(props: formProps) {
   useEffect(() => {
     setFormData(props.initialFormData);
   }, [props.initialFormData]);
+
+  useEffect(() => {
+    if (props.backgroundImage) {
+      const img = new Image();
+      img.src = props.backgroundImage.startsWith('blob:')
+        ? props.backgroundImage
+        : `${props.backgroundImage}?time=${Date.now()}`;
+      img.onload = () => setBackgroundImage(img.src);
+      img.onerror = () => setBackgroundImage(defaultImage);
+    }
+  }, [props.backgroundImage]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -123,8 +141,47 @@ export default function EventForm(props: formProps) {
     }
   };
 
+  const handlePhotoIconClick = () => {
+    fileInputRef.current?.click();
+    // eslint-disable-next-line no-console
+    console.log('Icon Clicked');
+  };
+
   return (
-    <div className="flex-grow items-center">
+    <div className="flex-grow items-center bg-slate-50">
+      <div
+        className="flex h-64 items-start justify-between bg-purple-300 p-3"
+        style={{
+          backgroundImage: `url('${backgroundImage}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="relative inline-flex items-center justify-center">
+          <div className="absolute h-9 w-9 rounded-full bg-white bg-opacity-50"></div>
+          <PhotoIcon
+            className="z-10 h-7 w-7 cursor-pointer stroke-1 text-black"
+            aria-hidden="true"
+            onClick={handlePhotoIconClick}
+          />
+        </div>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={props.onFileSelect}
+          style={{ display: 'none' }} // Hide the input element
+          accept="image/*" // Accept only images
+        />
+        <div className="relative inline-flex items-center justify-center">
+          <div className="absolute h-9 w-9 rounded-full bg-white bg-opacity-50"></div>
+          <XMarkIcon
+            className="z-10 h-7 w-7 cursor-pointer stroke-1 text-black"
+            aria-hidden="true"
+            onClick={props.onClose}
+          />
+        </div>
+      </div>
       <form onSubmit={handleSubmit} className="flex w-full flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <label
@@ -258,7 +315,7 @@ export default function EventForm(props: formProps) {
             </button>
           </div>
         )}
-        <div className="absolute bottom-3 right-3">
+        <div className="self-end">
           <button
             onClick={() => setIsDelete(false)}
             type="submit"

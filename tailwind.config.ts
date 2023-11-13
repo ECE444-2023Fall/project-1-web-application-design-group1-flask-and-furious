@@ -1,3 +1,4 @@
+import { nextui } from '@nextui-org/react';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -5,7 +6,8 @@ const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}'
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
     extend: {
@@ -52,6 +54,38 @@ const config: Config = {
       }
     ]
   },
-  plugins: [require('daisyui')]
+  plugins: [
+    nextui({
+      addCommonColors: true,
+      defaultTheme: 'light', // default theme from the themes object
+      themes: {
+        light: {
+          colors: {
+            background: '#FFFFFF', // or DEFAULT
+            foreground: '#11181C', // or 50 to 900 DEFAULT
+            primary: {
+              //... 50 to 900
+              foreground: '#FFFFFF',
+              DEFAULT: '#7C3AED'
+            }
+            // ... rest of the colors
+          }
+        },
+        dark: {
+          colors: {
+            background: '#000000', // or DEFAULT
+            foreground: '#ECEDEE', // or 50 to 900 DEFAULT
+            primary: {
+              //... 50 to 900
+              foreground: '#FFFFFF',
+              DEFAULT: '#7C3AED'
+            }
+          }
+          // ... rest of the colors
+        }
+      }
+    }),
+    require('daisyui')
+  ]
 };
 export default config;
