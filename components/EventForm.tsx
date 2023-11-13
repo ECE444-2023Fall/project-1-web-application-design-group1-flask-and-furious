@@ -148,9 +148,9 @@ export default function EventForm(props: formProps) {
   };
 
   return (
-    <div className="flex-grow items-center bg-slate-50">
+    <div className="flex flex-grow flex-col items-center bg-slate-50">
       <div
-        className="flex h-64 items-start justify-between bg-purple-300 p-3"
+        className="flex h-64 w-full items-start justify-between bg-purple-300 p-3"
         style={{
           backgroundImage: `url('${backgroundImage}')`,
           backgroundSize: 'cover',
@@ -182,7 +182,7 @@ export default function EventForm(props: formProps) {
           />
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="flex w-full flex-col p-6">
+      <form onSubmit={handleSubmit} className="flex flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="title"
@@ -304,8 +304,8 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <Tags selectedTags={tagOptions} setSelectedTags={setTagOptions} />
         </div>
-        {props.initialFormData.eventId >= 0 && (
-          <div className="absolute bottom-3 left-3">
+        <div className="mt-auto flex justify-between">
+          {props.initialFormData.eventId >= 0 && (
             <button
               onClick={() => setIsDelete(true)}
               type="submit"
@@ -313,13 +313,12 @@ export default function EventForm(props: formProps) {
             >
               Delete
             </button>
-          </div>
-        )}
-        <div className="self-end">
+          )}
+
           <button
             onClick={() => setIsDelete(false)}
             type="submit"
-            className="rounded-md bg-primary px-3 py-1 text-white hover:bg-violet-500"
+            className=" rounded-md bg-primary px-3 py-1 text-white hover:bg-violet-500"
           >
             Save
           </button>

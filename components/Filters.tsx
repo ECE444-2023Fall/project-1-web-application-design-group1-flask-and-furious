@@ -5,26 +5,33 @@ import Tags from './Tags';
 
 type Props = {
   setEvents: React.Dispatch<React.SetStateAction<FilteredEventData[]>>;
+  rsvpEvents: number[];
   tags: Record<string, boolean>;
   setTags: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 };
 
 //Going to need to set a hidden flag for the events that are filtered out
-const Filters = ({ setEvents, tags, setTags }: Props) => {
+const Filters = ({ setEvents, rsvpEvents, tags, setTags }: Props) => {
   const [searchValue, setSearchValue] = React.useState<string>('');
   const [rsvp, setRSVP] = React.useState(false);
   const [dateSlider, setDateSlider] = React.useState<number[]>([0, 366]);
   const [timeSlider, setTimeSlider] = React.useState<number[]>([0, 24]);
   const [durationSlider, setDurationSlider] = React.useState(24);
 
-  const searchFilter = useCallback((event: FilteredEventData) => {
-    return event.Title.toLowerCase().includes(searchValue.toLowerCase());
-  }, []);
+  const searchFilter = useCallback(
+    (event: FilteredEventData) => {
+      return event.Title.toLowerCase().includes(searchValue.toLowerCase());
+    },
+    [searchValue]
+  );
 
-  //TODO: get users rsvp'd events and filter by that
-  // const rsvpFilter = useCallback((event: FilteredEventData) => {
-  //   return !rsvp || event.RSVP;
-  // }, []);
+  const rsvpFilter = useCallback(
+    (event: FilteredEventData) => {
+      //Check if the event id is in the rsvpEvents array
+      return rsvp ? rsvpEvents.includes(event.id) : true;
+    },
+    [rsvp, rsvpEvents]
+  );
 
   const dateFilter = useCallback(
     (event: FilteredEventData) => {
@@ -90,6 +97,7 @@ const Filters = ({ setEvents, tags, setTags }: Props) => {
         ...event,
         hidden:
           !searchFilter(event) ||
+          !rsvpFilter(event) ||
           !dateFilter(event) ||
           !timeFilter(event) ||
           !durationFilter(event) ||
@@ -107,7 +115,8 @@ const Filters = ({ setEvents, tags, setTags }: Props) => {
     dateFilter,
     timeFilter,
     durationFilter,
-    tagsFilter
+    tagsFilter,
+    rsvpFilter
   ]);
 
   return (
