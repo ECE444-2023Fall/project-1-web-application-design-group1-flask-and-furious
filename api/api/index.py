@@ -251,7 +251,7 @@ class RSVP(Resource):
             owner = eventdata['data'][0]['Owner']
 
             if owner == uuid:
-                return jsonify({"message": "Unauthorized: You cannot RSVP to your own event"}), 401
+                return "You cannot RSVP to your own event", 401
 
             # Perform update
             rsvpevents = supabase.table('RSVP').select('events').eq('profileId', uuid).execute()
