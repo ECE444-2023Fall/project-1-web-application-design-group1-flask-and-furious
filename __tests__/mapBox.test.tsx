@@ -2,6 +2,34 @@ import MapBox from '@/components/MapBox';
 import { act, render } from '@testing-library/react';
 import mapboxgl from 'mapbox-gl';
 
+jest.mock('@supabase/auth-helpers-nextjs', () => ({
+  createClientComponentClient: () => ({
+    auth: {
+      getSession: jest.fn(async () => ({
+        data: {
+          session: {
+            user: {
+              id: 'user-123',
+              email: 'user@example.com'
+            },
+            accessToken: 'mock_access_token'
+          }
+        },
+        error: null
+      }))
+    },
+    from: () => ({
+      select: jest.fn(async () => ({
+        data: [
+          { id: 1, tag: 'tag1' },
+          { id: 2, tag: 'tag2' }
+        ],
+        error: null
+      }))
+    })
+  })
+}));
+
 // Mock the Mapbox library
 jest.mock('mapbox-gl', () => ({
   Map: jest.fn(() => ({

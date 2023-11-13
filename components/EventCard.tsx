@@ -3,6 +3,9 @@ import {
   ClockIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
+import { Session } from '@supabase/gotrue-js';
+import { SetStateAction } from 'react';
+import RSVP from './RSVP';
 
 export interface EventCardProps {
   eventId: number;
@@ -14,6 +17,10 @@ export interface EventCardProps {
   eventTags: string[];
   eventImage: string;
   action?: (id: number) => void;
+  renderRSVP?: boolean;
+  setRSVPEvents?: React.Dispatch<React.SetStateAction<number[]>>;
+  RSVPEvents?: number[];
+  session?: Session;
 }
 
 export default function EventCard(props: EventCardProps) {
@@ -71,12 +78,24 @@ export default function EventCard(props: EventCardProps) {
         {props.eventDescription}
       </p>
 
-      <div className="flex flex-row gap-1 p-2">
-        {props.eventTags.map((tag, id) => (
-          <div key={id} className="rounded-full bg-gray-200 px-2">
-            <p className="text-sm font-normal text-gray-700">{tag}</p>
-          </div>
-        ))}
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row gap-1 p-2">
+          {props.eventTags.map((tag, id) => (
+            <div key={id} className="rounded-full bg-gray-200 px-2">
+              <p className="text-sm font-normal text-gray-700">{tag}</p>
+            </div>
+          ))}
+        </div>
+        {props.renderRSVP && (
+          <RSVP
+            eventId={props.eventId}
+            setRSVPEvents={
+              props.setRSVPEvents as React.Dispatch<SetStateAction<number[]>>
+            }
+            RSVPEvents={props.RSVPEvents as number[]}
+            session={props.session as Session}
+          />
+        )}
       </div>
     </div>
   );
