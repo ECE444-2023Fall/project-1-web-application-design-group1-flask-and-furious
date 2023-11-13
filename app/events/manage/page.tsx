@@ -357,6 +357,7 @@ export default function Home() {
                         event.image_url
                       }?v=${new Date().getTime()}`}
                       action={editEvent}
+                      viewer={false}
                     />
                   ))}
               </div>

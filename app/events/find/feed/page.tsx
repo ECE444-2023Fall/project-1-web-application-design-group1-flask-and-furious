@@ -94,7 +94,7 @@ export default function Page() {
               )}`}
               eventTags={event.Tags}
               eventImage={`${event.image_url}?v=${new Date().getTime()}`}
-              renderRSVP={true}
+              viewer={true}
               setRSVPEvents={setRSVPEvents}
               RSVPEvents={RSVPevents}
               session={sessionData}

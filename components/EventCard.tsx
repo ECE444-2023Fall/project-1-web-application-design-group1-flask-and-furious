@@ -17,7 +17,7 @@ export interface EventCardProps {
   eventTags: string[];
   eventImage: string;
   action?: (id: number) => void;
-  renderRSVP?: boolean;
+  viewer?: boolean;
   setRSVPEvents?: React.Dispatch<React.SetStateAction<number[]>>;
   RSVPEvents?: number[];
   session?: Session;
@@ -86,7 +86,7 @@ export default function EventCard(props: EventCardProps) {
             </div>
           ))}
         </div>
-        {props.renderRSVP && (
+        {props.viewer && (
           <RSVP
             eventId={props.eventId}
             setRSVPEvents={
