@@ -92,9 +92,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const getEvents = async () => {
-      apiGetEvents((await session).data.session, setEvents, {});
-    };
     getEvents();
     getEventRsvpCounts();
     getRSVPEvents();
@@ -135,9 +132,9 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex max-h-[calc(100vh-8rem-2px)] flex-row">
+    <div className="flex max-h-[calc(100vh-7rem)] flex-row">
       <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-        <div className="h-[calc(100vh-4rem-4rem-2px)]">
+        <div className="h-[calc(100vh-4rem-3rem)]">
           <Filters
             setEvents={setFilteredEvents}
             rsvpEvents={RSVPevents}
@@ -148,10 +145,8 @@ export default function Page() {
       </Drawer>
       {!loading ? (
         <div
-          className={`absolute grid h-[calc(100vh-8rem-2px)] overflow-y-auto duration-500 ${
-            isDrawerOpen
-              ? 'left-1/3 w-2/3 grid-cols-4'
-              : 'left-10 w-[calc(100%-2.5rem)] grid-cols-5 '
+          className={`absolute grid max-h-[calc(100vh-7rem)] overflow-y-auto duration-500 ${
+            isDrawerOpen ? 'left-1/3 w-2/3 grid-cols-4' : 'left-10 grid-cols-5 '
           } gap-4 p-4`}
         >
           {filteredEvents
