@@ -140,8 +140,8 @@ export default function Navigationbar({ session }: Props) {
       </NavbarContent>
 
 
-      {session ?
-        <NavbarContent as="div" justify="end">
+      <NavbarContent as="div" justify="end">
+        {session ?
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar
@@ -174,29 +174,29 @@ export default function Navigationbar({ session }: Props) {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-        </NavbarContent>
-      :
-        <div className="m-2 flex items-center justify-center">
-          <Link
-            href="/login"
-            className={
-              'rounded-l-xl border bg-violet-600 px-4 py-1 text-white transition hover:bg-violet-500 ' +
-              (pathname === '/login' ? 'bg-violet-500' : '')
-            }
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/register"
-            className={
-              'rounded-r-xl border bg-neutral-50 px-4 py-1 transition hover:bg-neutral-200 ' +
-              (pathname === '/register' ? 'bg-neutral-200' : '')
-            }
-          >
-            Sign Up
-          </Link>
-        </div>
-      }
+        :
+          <div className="m-2 flex items-center justify-center">
+            <Link
+              href="/login"
+              className={
+                'rounded-l-xl border bg-violet-600 px-4 py-1 text-white transition hover:bg-violet-500 ' +
+                (pathname === '/login' ? 'bg-violet-500' : '')
+              }
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className={
+                'rounded-r-xl border bg-neutral-50 px-4 py-1 transition hover:bg-neutral-200 ' +
+                (pathname === '/register' ? 'bg-neutral-200' : '')
+              }
+            >
+              Sign Up
+            </Link>
+          </div>
+        }
+      </NavbarContent>
     </Navbar>
   );
 }
