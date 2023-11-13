@@ -3,7 +3,7 @@ import os
 from tempfile import gettempdir
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Namespace, Resource
 from supabase import Client, create_client
@@ -140,10 +140,8 @@ class Event(Resource):
             owner = eventdata["data"][0]["Owner"]
 
             if owner != uuid:
-                return (
-                    jsonify({"message": "Unauthorized: You cannot update this event"}),
-                    401,
-                )
+                return "Unauthorized: You cannot update this event", 401,
+
             tags = request.form.get("tags")
             if tags:
                 try:
@@ -197,7 +195,8 @@ class Event(Resource):
             eventdata = json.loads(event.model_dump_json())
             owner = eventdata["data"][0]["Owner"]
             if owner != uuid:
-                return {"message": "Unauthorized: You cannot delete this event"}, 401
+                return "Unauthorized: You cannot delete this event", 401
+
             # perform delete
             supabase.table("Events").delete().eq("id", data["eventId"]).execute()
             # delete associated image:
@@ -212,18 +211,40 @@ class Event(Resource):
 
 rsvp_api = Namespace("rsvp", description="rsvp related operations")
 
+@rsvp_api.route("/count")
+class RSVPCount(Resource):
+    @rsvp_api.doc(description="Retrieve RSVP Counts Grouped by event.")
+    def get(self):
+        try:
+            rsvps = supabase.table('RSVP').select('*').execute()
+            rsvp_counts = {}
+
+            for entry in rsvps.data:
+                for event_id in entry["events"]:
+                    if event_id in rsvp_counts:
+                        rsvp_counts[event_id] += 1
+                    else:
+                        rsvp_counts[event_id] = 1
+
+            return rsvp_counts, 200
+        except Exception as e:
+            print("Error: ", e)
+            return e, 500
+
 @rsvp_api.route("/")
-class RSVP (Resource):
+class RSVP(Resource):
     @rsvp_api.doc(description="Retrieve RSVPs. Optionally filtered by Query Parameters.")
     @rsvp_api.param("userUuid", "The uuid of the user to filter by")
     def get(self):
         try:
             token = request.headers.get("Authentication").split()[1]
             user = supabase.auth.get_user(token)
+            table = supabase.table('RSVP').select('*')
 
             # Apply Filters
             user_uuid = user.user.id
-            table = supabase.table('RSVP').select('*').eq('profileId', user_uuid)
+            if user_uuid:
+                table = table.eq('profileId', user_uuid)
 
             table_query = table.execute()
             # print("table_query:", table_query)
@@ -249,7 +270,7 @@ class RSVP (Resource):
             owner = eventdata['data'][0]['Owner']
 
             if owner == uuid:
-                return jsonify({"message": "Unauthorized: You cannot RSVP to your own event"}), 401
+                return "You cannot RSVP to your own event", 401
 
             # Perform update
             rsvpevents = supabase.table('RSVP').select('events').eq('profileId', uuid).execute()

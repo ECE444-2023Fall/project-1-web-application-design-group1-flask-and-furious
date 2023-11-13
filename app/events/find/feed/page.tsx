@@ -6,7 +6,7 @@ import {
   createClientComponentClient
 } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
-import { apiGetEvents, apiGetRSVPEvents } from '../../api';
+import { apiGetEvents, apiGetRSVPCounts, apiGetRSVPEvents } from '../../api';
 import { formatTime, userUuidFromSession } from '../../helpers';
 import { EventData } from '../../types';
 
@@ -15,6 +15,7 @@ export default function Page() {
   const session = supabase.auth.getSession();
 
   const [events, setEvents] = useState<EventData[]>([]);
+  const [rsvpCounts, setRSVPCounts] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [sessionData, setSessionData] = useState<Session | undefined>(
     undefined
@@ -64,8 +65,27 @@ export default function Page() {
     }
   };
 
+  const getEventRsvpCounts = async () => {
+    await apiGetRSVPCounts((await session).data.session)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get RSVP events');
+        }
+        const data = await res.json();
+        setRSVPCounts(data);
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Failed to Retrieve RSVP Counts',
+          description: 'Something went wrong. Please try again later'
+        });
+      });
+  };
+
   useEffect(() => {
     getEvents();
+    getEventRsvpCounts();
     getRSVPEvents();
 
     async function fetchSession() {
@@ -94,10 +114,11 @@ export default function Page() {
               )}`}
               eventTags={event.Tags}
               eventImage={`${event.image_url}?v=${new Date().getTime()}`}
-              renderRSVP={true}
+              viewer={true}
               setRSVPEvents={setRSVPEvents}
               RSVPEvents={RSVPevents}
               session={sessionData}
+              rsvpCount={rsvpCounts[event.id]}
             />
           ))}
         </div>

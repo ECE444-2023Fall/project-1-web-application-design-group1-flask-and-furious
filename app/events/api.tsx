@@ -82,3 +82,12 @@ export const apiUpdateRSVPEvents = async (
     }
   });
 };
+
+export const apiGetRSVPCounts = async (session: Session | null) =>
+  fetch('/api/rsvp/count', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authentication: `Bearer ${session?.access_token}`
+    }
+  });

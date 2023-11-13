@@ -17,7 +17,8 @@ export interface EventCardProps {
   eventTags: string[];
   eventImage: string;
   action?: (id: number) => void;
-  renderRSVP?: boolean;
+  viewer?: boolean;
+  rsvpCount?: number;
   setRSVPEvents?: React.Dispatch<React.SetStateAction<number[]>>;
   RSVPEvents?: number[];
   session?: Session;
@@ -35,15 +36,20 @@ export default function EventCard(props: EventCardProps) {
         }
       }}
     >
-      <img
-        className="aspect-video h-48 w-full rounded-t-lg object-cover"
-        src={props.eventImage || defaultImage}
-        alt={props.eventName}
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = defaultImage;
-        }}
-      />
+      <div className="relative">
+        <img
+          className="aspect-video h-48 w-full rounded-t-lg object-cover"
+          src={props.eventImage || defaultImage}
+          alt={props.eventName}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = defaultImage;
+          }}
+        />
+        <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
+          RSVPs: {props.rsvpCount || 0}
+        </div>
+      </div>
 
       <div className="flex flex-row items-center justify-between p-2">
         <h5 className="text-lg font-bold text-gray-900 ">{props.eventName}</h5>
@@ -86,7 +92,7 @@ export default function EventCard(props: EventCardProps) {
             </div>
           ))}
         </div>
-        {props.renderRSVP && (
+        {props.viewer && (
           <RSVP
             eventId={props.eventId}
             setRSVPEvents={
