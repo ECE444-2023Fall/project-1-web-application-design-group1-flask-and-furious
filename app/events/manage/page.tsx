@@ -11,6 +11,7 @@ import {
   apiCreateEvent,
   apiDeleteEvent,
   apiGetEvents,
+  apiGetRSVPCounts,
   apiUpdateEvent
 } from '../api';
 import { formatTime, userUuidFromSession } from '../helpers';
@@ -33,6 +34,7 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState<boolean>(true);
   const [events, setEvents] = useState<EventData[]>([]);
   const [imageURL, setImageURL] = useState<string | null>(null);
+  const [rsvpCounts, setRSVPCounts] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [changeFormData, setFormData] = useState<formData>({
     eventId: -1,
@@ -257,8 +259,27 @@ export default function Home() {
     onOpenDrawer();
   };
 
+  const getEventRsvp = async () => {
+    await apiGetRSVPCounts((await session).data.session)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get RSVP events');
+        }
+        const data = await res.json();
+        setRSVPCounts(data);
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Failed to Retrieve RSVP Counts',
+          description: 'Something went wrong. Please try again later'
+        });
+      });
+  };
+
   useEffect(() => {
     getEvents();
+    getEventRsvp();
     setImageURL(defaultImage);
   }, []);
 
@@ -357,6 +378,7 @@ export default function Home() {
                         event.image_url
                       }?v=${new Date().getTime()}`}
                       action={editEvent}
+                      rsvpCount={rsvpCounts[event.id]}
                       viewer={false}
                     />
                   ))}
