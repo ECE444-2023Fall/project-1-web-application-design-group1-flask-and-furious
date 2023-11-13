@@ -213,7 +213,7 @@ class Event(Resource):
 rsvp_api = Namespace("rsvp", description="rsvp related operations")
 
 @rsvp_api.route("/")
-class RSVP (Resource):
+class RSVP(Resource):
     @rsvp_api.doc(description="Retrieve RSVPs. Optionally filtered by Query Parameters.")
     @rsvp_api.param("userUuid", "The uuid of the user to filter by")
     def get(self):
