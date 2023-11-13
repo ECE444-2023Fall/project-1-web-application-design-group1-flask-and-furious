@@ -1,10 +1,13 @@
 'use client';
 import EventCard from '@/components/EventCard';
 import { toast } from '@/components/ui/use-toast';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import {
+  Session,
+  createClientComponentClient
+} from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
-import { apiGetEvents } from '../../api';
-import { formatTime } from '../../helpers';
+import { apiGetEvents, apiGetRSVPEvents } from '../../api';
+import { formatTime, userUuidFromSession } from '../../helpers';
 import { EventData } from '../../types';
 
 export default function Page() {
@@ -13,6 +16,10 @@ export default function Page() {
 
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sessionData, setSessionData] = useState<Session | undefined>(
+    undefined
+  ); // [TODO] - remove this line and the line below [TODO
+  const [RSVPevents, setRSVPEvents] = useState<number[]>([]);
 
   const getEvents = async () => {
     setLoading(true);
@@ -34,8 +41,40 @@ export default function Page() {
     setLoading(false);
   };
 
+  const getRSVPEvents = async () => {
+    const awaitedSession = (await session).data.session;
+    if (awaitedSession) {
+      apiGetRSVPEvents(awaitedSession, {
+        userUuid: await userUuidFromSession(awaitedSession, supabase)
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            throw new Error('Failed to get RSVP events');
+          }
+          const data = await res.json();
+          setRSVPEvents(JSON.parse(data)['data'][0]['events']);
+        })
+        .catch(() => {
+          toast({
+            variant: 'destructive',
+            title: "Failed to get RSVP'd events",
+            description: 'Something went wrong. Please try again later'
+          });
+        });
+    }
+  };
+
   useEffect(() => {
     getEvents();
+    getRSVPEvents();
+
+    async function fetchSession() {
+      const sessionResult = (await session)?.data.session; // Replace with your actual session fetching function
+      setSessionData(sessionResult || undefined);
+    }
+
+    fetchSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -55,6 +94,10 @@ export default function Page() {
               )}`}
               eventTags={event.Tags}
               eventImage={`${event.image_url}?v=${new Date().getTime()}`}
+              renderRSVP={true}
+              setRSVPEvents={setRSVPEvents}
+              RSVPEvents={RSVPevents}
+              session={sessionData}
             />
           ))}
         </div>

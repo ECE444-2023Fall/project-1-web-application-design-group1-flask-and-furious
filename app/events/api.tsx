@@ -51,3 +51,34 @@ export const apiDeleteEvent = async (
     },
     body: JSON.stringify(formData)
   });
+
+export const apiGetRSVPEvents = async (
+  session: Session | null,
+  params: {
+    userUuid?: string;
+  }
+) => {
+  return fetch('/api/rsvp?' + new URLSearchParams(params), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authentication: `Bearer ${session?.access_token}`
+    }
+  });
+};
+
+export const apiUpdateRSVPEvents = async (
+  session: Session | null,
+  params: {
+    userUuid?: string;
+    eventId?: string;
+  }
+) => {
+  return fetch('/api/rsvp?' + new URLSearchParams(params), {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authentication: `Bearer ${session?.access_token}`
+    }
+  });
+};
