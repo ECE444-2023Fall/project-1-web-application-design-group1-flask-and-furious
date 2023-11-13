@@ -1,8 +1,8 @@
 'use client';
 
 import PersonalInfo from '@/components/PersonalInfo';
-import PersonalTags from '@/components/PersonalTags';
 import ProfilePhoto from '@/components/ProfilePhoto';
+import Tags from '@/components/Tags';
 import { toast } from '@/components/ui/use-toast';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -21,26 +21,26 @@ export default function Profile() {
   const router = useRouter();
 
   const [profileEdit, setProfileEdit] = useState(false);
-  const [profileTagsEdit, setProfileTagsEdit] = useState(false);
 
   const [age, setAge] = useState<ProfileData['age']>(null);
   const [gender, setGender] = useState<ProfileData['gender']>(null);
   const [city, setCity] = useState<ProfileData['city']>(null);
   const [university, setUniversity] = useState<ProfileData['university']>(null);
   const [program, setProgram] = useState<ProfileData['program']>(null);
-  const [tags, setTags] = useState<ProfileData['tags']>(null);
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
 
-  const [tagOptions, setTagOptions] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const getTags = async () => {
       const { data } = await supabase.from('Tags').select();
 
       if (data) {
-        const tagList = data.map((item) => item.tag);
-        setTagOptions(tagList);
+        const sortedTags = data.sort((a, b) => a.tag.localeCompare(b.tag));
+        setSelectedTags(
+          Object.fromEntries(sortedTags.map((tag) => [tag.tag, false]))
+        );
       }
     };
     getTags();
@@ -83,7 +83,12 @@ export default function Profile() {
     setCity(profile.city);
     setUniversity(profile.university);
     setProgram(profile.program);
-    setTags(profile.tags);
+
+    if (profile.tags) {
+      (profile.tags as string[]).forEach((tag) => {
+        setSelectedTags((prev) => ({ ...prev, [tag]: true }));
+      });
+    }
   }, [profile]);
 
   useEffect(() => {
@@ -93,10 +98,6 @@ export default function Profile() {
 
   const onEditClick = () => {
     setProfileEdit(true);
-  };
-
-  const onTagsEditClick = () => {
-    setProfileTagsEdit(true);
   };
 
   const updateProfile = async (formData: ProfileData) => {
@@ -124,6 +125,8 @@ export default function Profile() {
         throw new Error('Profile is null');
       }
 
+      const tags = Object.keys(selectedTags).filter((tag) => selectedTags[tag]);
+
       const updatedProfile = {
         ...profile,
         age: age,
@@ -137,7 +140,6 @@ export default function Profile() {
       await setProfile(updatedProfile);
       await updateProfile(updatedProfile);
       setProfileEdit(false);
-      setProfileTagsEdit(false);
       getProfile();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -209,7 +211,7 @@ export default function Profile() {
                   onEditClick={onEditClick}
                 />
               </div>
-              <div className="mt-8 flex h-60 flex-col rounded-lg border-2 border-primary bg-white">
+              <div className="mt-8 flex flex-col rounded-lg border-2 border-primary bg-white">
                 <p className="ml-4 mt-2 basis-1/6 text-3xl font-semibold text-primary">
                   Help us guide you in the right direction!
                 </p>
@@ -217,21 +219,44 @@ export default function Profile() {
                   Add your preferences below (Ctrl + Click to Select Multiple
                   Tags):
                 </p>
-                <PersonalTags
-                  edit={profileTagsEdit}
-                  setEdit={setProfileTagsEdit}
-                  tags={tags}
-                  setTags={setTags}
-                  onSaveClick={onSaveClick}
-                  onEditClick={onTagsEditClick}
-                  tagOptions={tagOptions}
-                />
+                <div className="pl-4 pr-1">
+                  <Tags
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                  />
+                </div>
+
+                <div className="mb-2 flex flex-grow basis-1/4 items-end justify-end rounded-b-lg pt-4">
+                  <button
+                    className="mr-2 rounded bg-purple-700 px-4 py-2 pt-2 text-white hover:bg-purple-900"
+                    onClick={onSaveClick}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </>
       ) : (
-        <p>Loading...</p>
+        <div className="grid h-full w-full place-content-center">
+          <svg
+            aria-hidden="true"
+            className="inline h-20 w-20 animate-spin fill-purple-600 text-white"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+        </div>
       )}
     </div>
   );
