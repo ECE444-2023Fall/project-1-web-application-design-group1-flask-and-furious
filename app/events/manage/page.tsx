@@ -321,7 +321,7 @@ export default function Home() {
           isDrawerOpen ? 'left-1/3 w-2/3' : 'left-[2rem] w-[calc(100%-2rem)]'
         }`}
       >
-        <div className={`flex h-9 items-center bg-slate-50 p-3`}>
+        <div className="flex h-9 items-center bg-slate-50 p-3">
           <div
             className="flex cursor-pointer items-center"
             onClick={() => {

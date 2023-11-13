@@ -132,9 +132,9 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex max-h-[calc(100vh-7rem)] flex-row">
+    <div className="flex max-h-[calc(100vh-8rem-2px)] flex-row">
       <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-        <div className="h-[calc(100vh-4rem-3rem)]">
+        <div className="h-[calc(100vh-4rem-4rem-2px)]">
           <Filters
             setEvents={setFilteredEvents}
             rsvpEvents={RSVPevents}
@@ -144,27 +144,34 @@ export default function Page() {
         </div>
       </Drawer>
       {!loading ? (
-        <div className="grid grid-cols-3 gap-4 p-4">
-          {events.map((event) => (
-            <EventCard
-              key={event.id}
-              eventId={event.id}
-              eventName={event.Title}
-              eventDescription={event.Description}
-              eventLocation={event.Location}
-              eventDate={event.Date}
-              eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                event.EndTime
-              )}`}
-              eventTags={event.Tags}
-              eventImage={`${event.image_url}?v=${new Date().getTime()}`}
-              viewer
-              setRSVPEvents={setRSVPEvents}
-              RSVPEvents={RSVPevents}
-              session={sessionData}
-              rsvpCount={rsvpCounts[event.id]}
-            />
-          ))}
+        <div
+          className={`absolute grid overflow-y-auto duration-500 ${
+            isDrawerOpen
+              ? 'left-1/3 w-2/3 grid-cols-4'
+              : 'left-10 w-[calc(100%-2.5rem)] grid-cols-5 '
+          } gap-4 p-4`}
+        >
+          {filteredEvents
+            .filter((e) => e.hidden == false)
+            .map((event) => (
+              <EventCard
+                key={event.id}
+                eventId={event.id}
+                eventName={event.Title}
+                eventDescription={event.Description}
+                eventLocation={event.Location}
+                eventDate={event.Date}
+                eventTime={`${formatTime(event.StartTime)} - ${formatTime(
+                  event.EndTime
+                )}`}
+                eventTags={event.Tags}
+                eventImage={`${event.image_url}?v=${new Date().getTime()}`}
+                viewer
+                setRSVPEvents={setRSVPEvents}
+                RSVPEvents={RSVPevents}
+                session={sessionData}
+              />
+            ))}
         </div>
       ) : (
         <svg

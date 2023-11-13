@@ -120,7 +120,7 @@ const Filters = ({ setEvents, rsvpEvents, tags, setTags }: Props) => {
   ]);
 
   return (
-    <div className="mt-2 flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-6 pt-2">
       {/* TODO: add rest of search and filter components */}
       {/* <SearchBar events={events} setEvents={setEvents} /> */}
       <h2 className="ml-4 self-start text-2xl font-bold">Search and Filters</h2>
