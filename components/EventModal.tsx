@@ -19,7 +19,7 @@ export default function EventModal(props: EventModalProps) {
   const onOpenChange = props.onOpenChange;
 
   return (
-    <Modal backdrop="transparent" isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
