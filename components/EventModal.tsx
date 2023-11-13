@@ -39,7 +39,6 @@ export default function EventModal(props: EventModalProps) {
             <Image
               width={450}
               height={200}
-              className="rounded-t-lg"
               src={event.image_url}
               fallbackSrc="https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image"
             />
