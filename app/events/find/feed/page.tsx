@@ -145,7 +145,7 @@ export default function Page() {
       </Drawer>
       {!loading ? (
         <div
-          className={`absolute grid overflow-y-auto duration-500 ${
+          className={`absolute grid h-[calc(100vh-8rem-2px)] overflow-y-auto duration-500 ${
             isDrawerOpen
               ? 'left-1/3 w-2/3 grid-cols-4'
               : 'left-10 w-[calc(100%-2.5rem)] grid-cols-5 '
@@ -169,6 +169,7 @@ export default function Page() {
                 viewer
                 setRSVPEvents={setRSVPEvents}
                 RSVPEvents={RSVPevents}
+                rsvpCount={rsvpCounts[event.id]}
                 session={sessionData}
               />
             ))}
