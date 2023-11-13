@@ -41,6 +41,8 @@ export default function Home() {
     title: '',
     description: '',
     location: '',
+    latitude: -1,
+    longitude: -1,
     startTime: '',
     endTime: '',
     date: '',
@@ -89,7 +91,7 @@ export default function Home() {
     }
     data.append('title', formData.title);
     data.append('description', formData.description);
-    data.append('location', formData.location);
+    data.append('location', formData.location || '');
     data.append('startTime', formData.startTime);
     data.append('endTime', formData.endTime);
     data.append('date', formData.date);
@@ -119,6 +121,8 @@ export default function Home() {
           title: '',
           description: '',
           location: '',
+          latitude: -1,
+          longitude: -1,
           startTime: '',
           endTime: '',
           date: '',
@@ -147,7 +151,7 @@ export default function Home() {
     }
     data.append('title', formData.title);
     data.append('description', formData.description);
-    data.append('location', formData.location);
+    data.append('location', formData.location || '');
     data.append('startTime', formData.startTime);
     data.append('endTime', formData.endTime);
     data.append('date', formData.date);
@@ -182,6 +186,8 @@ export default function Home() {
           title: '',
           description: '',
           location: '',
+          latitude: -1,
+          longitude: -1,
           startTime: '',
           endTime: '',
           date: '',
@@ -216,6 +222,8 @@ export default function Home() {
           title: '',
           description: '',
           location: '',
+          latitude: -1,
+          longitude: -1,
           startTime: '',
           endTime: '',
           date: '',
@@ -247,6 +255,8 @@ export default function Home() {
         title: selectedEvent.Title,
         description: selectedEvent.Description,
         location: selectedEvent.Location,
+        latitude: selectedEvent.Latitude,
+        longitude: selectedEvent.Longitude,
         startTime: selectedEvent.StartTime,
         endTime: selectedEvent.EndTime,
         date: selectedEvent.Date,
@@ -332,6 +342,8 @@ export default function Home() {
                 title: '',
                 description: '',
                 location: '',
+                latitude: -1,
+                longitude: -1,
                 startTime: '',
                 endTime: '',
                 date: '',
