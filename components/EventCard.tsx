@@ -46,11 +46,9 @@ export default function EventCard(props: EventCardProps) {
             target.src = defaultImage;
           }}
         />
-        {(props.rsvpCount || 0) > 0 && (
-          <div className="absolute right-2 top-2 rounded-full bg-primary p-2 text-white">
-            RSVPs: {props.rsvpCount || 0}
-          </div>
-        )}
+        <div className="absolute right-2 top-2 rounded-full bg-primary p-2 text-white">
+          RSVPs: {props.rsvpCount || 0}
+        </div>
       </div>
 
       <div className="flex flex-row items-center justify-between p-2">
