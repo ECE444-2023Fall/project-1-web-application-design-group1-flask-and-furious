@@ -23,6 +23,7 @@ export interface formProps {
   initialFormData: formData;
   Update: (formData: formData) => void;
   isNewEvent: boolean;
+  onClose: () => void;
   Delete: (formData: formData) => void;
   onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
   backgroundImage: string | null;

@@ -305,6 +305,7 @@ export default function Home() {
       <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
         <div className="h-[calc(100vh-4rem)]">
           <EventForm
+            onClose={onCloseDrawer}
             Post={createEvent}
             initialFormData={changeFormData}
             Update={updateEvent}
