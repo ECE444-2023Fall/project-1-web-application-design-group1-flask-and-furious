@@ -11,8 +11,9 @@ export default async function Home() {
             </span>
           </h1>
           <h3 className="scroll-m-20 text-3xl font-semibold tracking-tight">
-            Whats <span className="underline underline-offset-1">Litty</span> in
-            Your <span className="underline underline-offset-1">City</span>?
+            What&apos;s{' '}
+            <span className="underline underline-offset-1">Litty</span> in Your{' '}
+            <span className="underline underline-offset-1">City</span>?
           </h3>
         </div>
       </div>
