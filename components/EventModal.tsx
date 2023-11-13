@@ -13,11 +13,17 @@ import {
   ModalContent,
   ModalFooter
 } from '@nextui-org/react';
+import { Session } from '@supabase/gotrue-js';
+import { SetStateAction } from 'react';
+import RSVP from './RSVP';
 
 export interface EventModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   event: EventData;
+  RSVPEvents: number[];
+  setRSVPEvents?: React.Dispatch<React.SetStateAction<number[]>>;
+  session?: Session;
 }
 
 export default function EventModal(props: EventModalProps) {
@@ -79,13 +85,25 @@ export default function EventModal(props: EventModalProps) {
                 {event.Description}
               </p>
             </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+            <ModalFooter className="-mr-2">
+              <Button
+                className="btn mt-2"
+                color="danger"
+                variant="light"
+                onPress={onClose}
+              >
                 Close
               </Button>
-              <Button color="primary" onPress={onClose}>
-                Action
-              </Button>
+              <RSVP
+                eventId={event.id}
+                setRSVPEvents={
+                  props.setRSVPEvents as React.Dispatch<
+                    SetStateAction<number[]>
+                  >
+                }
+                RSVPEvents={props.RSVPEvents as number[]}
+                session={props.session as Session}
+              />
             </ModalFooter>
           </>
         )}

@@ -187,6 +187,9 @@ export default function Page() {
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             event={modelEvent}
+            RSVPEvents={RSVPevents}
+            session={sessionData}
+            setRSVPEvents={setRSVPEvents}
           />
         </div>
       ) : (
