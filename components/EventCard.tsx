@@ -91,7 +91,8 @@ export default function EventCard(props: EventCardProps) {
         </div>
 
         <p className="p-2 text-sm font-normal text-gray-700">
-          {props.eventData.Description}
+          {props.eventData.Description.substring(0, 160) +
+            (props.eventData.Description.length > 160 ? '...' : '')}
         </p>
       </div>
 
