@@ -117,6 +117,7 @@ export default function EventModal(props: EventModalProps) {
                 Close
               </Button>
               <RSVP
+                ownerUuid={event.Owner}
                 eventId={event.id}
                 setRSVPEvents={
                   props.setRSVPEvents as React.Dispatch<
