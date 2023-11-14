@@ -114,7 +114,7 @@ export default function Navigationbar({ session }: Props) {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{session.user.email}</p>
               </DropdownItem>
-              <DropdownItem href="profile">Profile</DropdownItem>
+              <DropdownItem href="/profile">Profile</DropdownItem>
               <DropdownItem color="danger">
                 <form action="/auth/sign-out" method="post">
                   <button type="submit" className="flex w-full">
