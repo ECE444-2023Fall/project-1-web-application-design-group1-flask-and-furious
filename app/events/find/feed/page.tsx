@@ -23,6 +23,7 @@ export default function Page() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [modelEvent, setModelEvent] = useState<EventData>({} as EventData);
+  const [modelRsvpCount, setModelRsvpCount] = useState<number>(0);
   const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
   const [events, setEvents] = useState<EventData[]>([]);
   const [rsvpCounts, setRSVPCounts] = useState<Record<number, number>>({});
@@ -138,6 +139,7 @@ export default function Page() {
 
   const openModal = (event: EventData) => {
     setModelEvent(event);
+    setModelRsvpCount(rsvpCounts[event.id]);
     onOpen();
   };
 
@@ -192,6 +194,7 @@ export default function Page() {
             RSVPEvents={RSVPevents}
             session={sessionData}
             setRSVPEvents={setRSVPEvents}
+            rsvpCount={modelRsvpCount}
           />
         </div>
       ) : (

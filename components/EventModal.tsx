@@ -24,6 +24,7 @@ export interface EventModalProps {
   RSVPEvents: number[];
   setRSVPEvents?: React.Dispatch<React.SetStateAction<number[]>>;
   session?: Session;
+  rsvpCount?: number;
 }
 
 export default function EventModal(props: EventModalProps) {
@@ -36,12 +37,18 @@ export default function EventModal(props: EventModalProps) {
       <ModalContent>
         {(onClose) => (
           <>
-            <Image
-              width={450}
-              height={200}
-              src={event.image_url}
-              fallbackSrc="https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image"
-            />
+            <div className="relative">
+              <Image
+                width={450}
+                height={200}
+                src={event.image_url}
+                fallbackSrc="https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image"
+                className="z-0"
+              />
+              <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
+                RSVPs: {props.rsvpCount || 0}
+              </div>
+            </div>
             <ModalBody>
               <div className="flex flex-row items-center justify-between">
                 <h5 className="text-lg font-bold text-gray-900 ">
