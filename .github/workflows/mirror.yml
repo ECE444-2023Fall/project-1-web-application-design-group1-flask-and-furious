@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  mirror:
+  mirror-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,5 +15,27 @@ jobs:
         with:
           target_repo_url:
             git@github.com:chasemcdo/ECE444-app-deployment.git
+          ssh_private_key:
+            ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Pushes .vercelignore
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GH_API_KEY }}
+        with:
+          source_file: 'deployment_files/.vercelignore'
+          destination_repo: 'chasemcdo/ECE444-app-deployment'
+          user_email: 'chasemcdougall@hotmail.com'
+          user_name: 'chasemcdo'
+
+  mirror-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            git@github.com:chasemcdo/ECE444-backend-deployment.git
           ssh_private_key:
             ${{ secrets.SSH_PRIVATE_KEY }}
