@@ -9,7 +9,7 @@ import {
 } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { apiGetEvents, apiGetRSVPCounts, apiGetRSVPEvents } from '../../api';
-import { formatTime, userUuidFromSession } from '../../helpers';
+import { userUuidFromSession } from '../../helpers';
 import { EventData } from '../../types';
 
 export type FilteredEventData = EventData & { hidden: boolean };
@@ -156,16 +156,7 @@ export default function Page() {
             .map((event) => (
               <EventCard
                 key={event.id}
-                eventId={event.id}
-                eventName={event.Title}
-                eventDescription={event.Description}
-                eventLocation={event.Location}
-                eventDate={event.Date}
-                eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                  event.EndTime
-                )}`}
-                eventTags={event.Tags}
-                eventImage={`${event.image_url}?v=${new Date().getTime()}`}
+                eventData={event}
                 viewer
                 setRSVPEvents={setRSVPEvents}
                 RSVPEvents={RSVPevents}

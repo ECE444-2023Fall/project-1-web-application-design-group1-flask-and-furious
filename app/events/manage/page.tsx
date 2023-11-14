@@ -14,7 +14,7 @@ import {
   apiGetRSVPCounts,
   apiUpdateEvent
 } from '../api';
-import { formatTime, userUuidFromSession } from '../helpers';
+import { userUuidFromSession } from '../helpers';
 import { EventData, formData } from '../types';
 
 export interface EventCardProps {
@@ -364,16 +364,7 @@ export default function Home() {
                 .map((event) => (
                   <EventCard
                     key={event.id}
-                    eventId={event.id}
-                    eventName={event.Title}
-                    eventDescription={event.Description}
-                    eventLocation={event.Location}
-                    eventDate={event.Date}
-                    eventTime={`${formatTime(event.StartTime)} - ${formatTime(
-                      event.EndTime
-                    )}`}
-                    eventTags={event.Tags}
-                    eventImage={`${event.image_url}?v=${new Date().getTime()}`}
+                    eventData={event}
                     action={editEvent}
                     rsvpCount={rsvpCounts[event.id]}
                     viewer={false}

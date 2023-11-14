@@ -1,3 +1,5 @@
+import { formatTime } from '@/app/events/helpers';
+import { EventData } from '@/app/events/types';
 import {
   CalendarDaysIcon,
   ClockIcon,
@@ -5,18 +7,12 @@ import {
 } from '@heroicons/react/24/outline';
 import { Chip } from '@nextui-org/react';
 import { Session } from '@supabase/gotrue-js';
-import { SetStateAction } from 'react';
+import Image from 'next/image';
+import { SetStateAction, useState } from 'react';
 import RSVP from './RSVP';
 
 export interface EventCardProps {
-  eventId: number;
-  eventName: string;
-  eventDescription: string;
-  eventDate: string;
-  eventTime: string;
-  eventLocation: string;
-  eventTags: string[];
-  eventImage: string;
+  eventData: EventData;
   action?: (id: number) => void;
   viewer?: boolean;
   rsvpCount?: number;
@@ -25,26 +21,29 @@ export interface EventCardProps {
   session?: Session;
 }
 
+const defaultImage =
+  'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
+
 export default function EventCard(props: EventCardProps) {
-  const defaultImage =
-    'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
+  const [imgError, setImgError] = useState<boolean>(false);
   return (
     <div
       className="max-h-sm flex max-w-sm flex-col gap-1 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100"
       onClick={() => {
         if (typeof props.action === 'function') {
-          props.action(props.eventId);
+          props.action(props.eventData.id);
         }
       }}
     >
       <div className="relative">
-        <img
+        <Image
           className="aspect-video h-48 w-full rounded-t-lg object-cover"
-          src={props.eventImage || defaultImage}
-          alt={props.eventName}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = defaultImage;
+          height={192}
+          width={384}
+          src={imgError ? defaultImage : props.eventData?.image_url}
+          alt={props.eventData?.Title}
+          onError={() => {
+            setImgError(true);
           }}
         />
         <Chip
@@ -58,13 +57,17 @@ export default function EventCard(props: EventCardProps) {
       </div>
 
       <div className="flex flex-row items-center justify-between p-2">
-        <h5 className="text-lg font-bold text-gray-900 ">{props.eventName}</h5>
+        <h5 className="text-lg font-bold text-gray-900 ">
+          {props.eventData.Title}
+        </h5>
         <div className="flex flex-row-reverse gap-1">
           <CalendarDaysIcon
             className="h-5 w-5 stroke-1 text-black"
             aria-hidden="true"
           />
-          <p className="text-sm font-normal text-gray-700">{props.eventDate}</p>
+          <p className="text-sm font-normal text-gray-700">
+            {props.eventData.Date}
+          </p>
         </div>
       </div>
       <div className="flex flex-row items-center justify-between p-2">
@@ -74,7 +77,7 @@ export default function EventCard(props: EventCardProps) {
             aria-hidden="true"
           />
           <p className="text-sm font-normal text-gray-700">
-            {props.eventLocation}
+            {props.eventData.Location}
           </p>
         </div>
         <div className="flex flex-row-reverse gap-1">
@@ -82,17 +85,19 @@ export default function EventCard(props: EventCardProps) {
             className="h-5 w-5 stroke-1 text-black"
             aria-hidden="true"
           />
-          <p className="text-sm font-normal text-gray-700">{props.eventTime}</p>
+          <p className="text-sm font-normal text-gray-700">{`${formatTime(
+            props.eventData.StartTime
+          )} - ${formatTime(props.eventData.EndTime)}`}</p>
         </div>
       </div>
 
       <p className="p-2 text-sm font-normal text-gray-700">
-        {props.eventDescription}
+        {props.eventData.Description}
       </p>
 
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row gap-1 p-2">
-          {props.eventTags.map((tag, id) => (
+          {props.eventData.Tags.map((tag, id) => (
             <div key={id} className="rounded-full bg-gray-200 px-2">
               <p className="text-sm font-normal text-gray-700">{tag}</p>
             </div>
@@ -100,7 +105,8 @@ export default function EventCard(props: EventCardProps) {
         </div>
         {props.viewer && (
           <RSVP
-            eventId={props.eventId}
+            ownerUuid={props.eventData.Owner}
+            eventId={props.eventData.id}
             setRSVPEvents={
               props.setRSVPEvents as React.Dispatch<SetStateAction<number[]>>
             }
