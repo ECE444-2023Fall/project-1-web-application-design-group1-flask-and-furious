@@ -2,7 +2,7 @@ name: Mirror Repo for Deployment
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "fix-deployment" ]
 
 jobs:
   mirror-frontend:
