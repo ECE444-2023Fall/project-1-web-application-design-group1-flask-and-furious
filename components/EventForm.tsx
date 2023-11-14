@@ -157,10 +157,6 @@ export default function EventForm(props: formProps) {
       ['latitude']: lat,
       ['longitude']: lon
     });
-    // console.log(lat);
-    // console.log(lon);
-    // console.log(name);
-    // console.log(e.features);
   };
 
   const handleSubmit = async (e: FormEvent) => {
