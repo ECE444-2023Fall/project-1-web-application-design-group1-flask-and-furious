@@ -258,7 +258,7 @@ const Filters = ({ setEvents, rsvpEvents, tags, setTags }: Props) => {
         }}
         minValue={1}
         maxValue={366}
-        defaultValue={[14, 103]}
+        defaultValue={[1, 366]}
         className="max-w-md"
       />
       <Slider
@@ -306,7 +306,7 @@ const Filters = ({ setEvents, rsvpEvents, tags, setTags }: Props) => {
         }}
         minValue={0}
         maxValue={24}
-        defaultValue={[14, 23]}
+        defaultValue={[0, 24]}
         className="max-w-md"
       />
       <Slider
@@ -346,7 +346,7 @@ const Filters = ({ setEvents, rsvpEvents, tags, setTags }: Props) => {
         step={0.5}
         minValue={0.5}
         maxValue={24}
-        defaultValue={14}
+        defaultValue={24}
         className="max-w-md"
       />
       {/* <Duration sliderValue={sliderValue} setSliderValue={setSliderValue} /> */}

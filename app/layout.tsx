@@ -38,12 +38,15 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <Providers>
-        <body className={`${inter.className} flex h-screen flex-col`}>
-          <Navbar session={session} />
-          <main className="flex-1 text-black">{children}</main>{' '}
-        </body>
-      </Providers>
+
+      <body className={`${inter.className}`}>
+        <Providers>
+          <div className="flex h-screen flex-col">
+            <Navbar session={session} />
+            <main className="flex-1 text-black">{children}</main>
+          </div>
+        </Providers>
+      </body>
     </html>
   );
 }

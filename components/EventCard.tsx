@@ -3,6 +3,7 @@ import {
   ClockIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
+import { Chip } from '@nextui-org/react';
 import { Session } from '@supabase/gotrue-js';
 import { SetStateAction } from 'react';
 import RSVP from './RSVP';
@@ -49,6 +50,14 @@ export default function EventCard(props: EventCardProps) {
           <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
             RSVPs: {props.rsvpCount || 0}
           </div>
+          <Chip
+            className="absolute right-2 top-2"
+            color="primary"
+            variant="faded"
+            size="lg"
+          >
+            <span className="font-semibold">RSVPs: {props.rsvpCount || 0}</span>
+          </Chip>
         </div>
 
         <div className="flex flex-row items-center justify-between p-2">
