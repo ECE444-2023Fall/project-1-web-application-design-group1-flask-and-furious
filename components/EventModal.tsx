@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {
   Button,
+  Chip,
   Image,
   Modal,
   ModalBody,
@@ -45,9 +46,16 @@ export default function EventModal(props: EventModalProps) {
                 fallbackSrc="https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image"
                 className="z-0"
               />
-              <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
-                RSVPs: {props.rsvpCount || 0}
-              </div>
+              <Chip
+                className="absolute right-2 top-2"
+                color="primary"
+                variant="faded"
+                size="lg"
+              >
+                <span className="font-semibold">
+                  RSVPs: {props.rsvpCount || 0}
+                </span>
+              </Chip>
             </div>
             <ModalBody>
               <div className="flex flex-row items-center justify-between">

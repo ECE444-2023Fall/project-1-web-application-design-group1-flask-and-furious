@@ -47,9 +47,6 @@ export default function EventCard(props: EventCardProps) {
               target.src = defaultImage;
             }}
           />
-          <div className="absolute right-2 top-2 rounded-full border border-black bg-primary p-2 text-white shadow">
-            RSVPs: {props.rsvpCount || 0}
-          </div>
           <Chip
             className="absolute right-2 top-2"
             color="primary"
