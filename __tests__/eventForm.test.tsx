@@ -43,7 +43,11 @@ describe('EventForm', () => {
     isNewEvent: false,
     Delete: function (): void {
       throw new Error('Function not implemented.');
-    }
+    },
+    onFileSelect: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    backgroundImage: null
   };
 
   it('Render form with the appropriate initialFormData', async () => {

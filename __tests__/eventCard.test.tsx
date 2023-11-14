@@ -33,13 +33,21 @@ jest.mock('@supabase/auth-helpers-nextjs', () => ({
 describe('EventCard', () => {
   it('Renders Event Name', async () => {
     const props: EventCardProps = {
-      eventName: 'Awesome Concert',
-      eventDescription:
-        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-      eventLocation: 'Galbraith 202',
-      eventDate: '29/10/2023',
-      eventTime: '8-10 pm',
-      eventTags: ['Programming', 'Music', 'Dance']
+      eventData: {
+        id: 1,
+        created_at: '2021-10-28T00:00:00.000000Z',
+        Owner: '14325',
+        image_url: 'https://picsum.photos/200/300',
+        Title: 'Awesome Concert',
+        Description:
+          'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+        Location: 'Galbraith 202',
+        StartTime: '8-10 pm',
+        EndTime: '8-10 pm',
+        Date: '29/10/2023',
+        Frequency: 'Weekly',
+        Tags: ['Programming', 'Music', 'Dance']
+      }
     };
 
     render(<EventCard {...props} />);

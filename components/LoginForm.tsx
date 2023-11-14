@@ -1,7 +1,7 @@
 export default function LoginForm() {
   return (
     <form
-      className="text-foreground flex w-full flex-col gap-2"
+      className="flex w-full flex-col gap-2 text-foreground"
       action="/auth/sign-in"
       method="post"
     >

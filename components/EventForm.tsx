@@ -1,7 +1,10 @@
+import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Tags from './Tags';
 
+const defaultImage =
+  'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
 export interface formData {
   eventId: number;
   title: string;
@@ -20,14 +23,19 @@ export interface formProps {
   initialFormData: formData;
   Update: (formData: formData) => void;
   isNewEvent: boolean;
+  onClose: () => void;
   Delete: (formData: formData) => void;
+  onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  backgroundImage: string | null;
 }
 
 export default function EventForm(props: formProps) {
-  const [isDelete, setIsDelete] = useState<boolean>(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClientComponentClient();
-  const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
 
+  const [isDelete, setIsDelete] = useState<boolean>(true);
+  const [tagOptions, setTagOptions] = useState<Record<string, boolean>>({});
+  const [backgroundImage, setBackgroundImage] = useState(defaultImage);
   const [formData, setFormData] = useState<formData>({
     eventId: -1,
     title: '',
@@ -68,7 +76,33 @@ export default function EventForm(props: formProps) {
 
   useEffect(() => {
     setFormData(props.initialFormData);
-  }, [props.initialFormData]);
+    // set the tags event has to true in the tag options
+    // BUT if the event is new, set all tags to false(gets rid of previous state)
+    setTagOptions((prevState) => {
+      if (props.isNewEvent) {
+        return Object.fromEntries(
+          Object.keys(prevState).map((tag) => [tag, false])
+        );
+      } else {
+        const newTagOptions = { ...prevState };
+        props.initialFormData.tags.forEach((tag) => {
+          newTagOptions[tag] = true;
+        });
+        return newTagOptions;
+      }
+    });
+  }, [props.initialFormData, props.isNewEvent]);
+
+  useEffect(() => {
+    if (props.backgroundImage) {
+      const img = new Image();
+      img.src = props.backgroundImage.startsWith('blob:')
+        ? props.backgroundImage
+        : `${props.backgroundImage}?time=${Date.now()}`;
+      img.onload = () => setBackgroundImage(img.src);
+      img.onerror = () => setBackgroundImage(defaultImage);
+    }
+  }, [props.backgroundImage]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -123,13 +157,52 @@ export default function EventForm(props: formProps) {
     }
   };
 
+  const handlePhotoIconClick = () => {
+    fileInputRef.current?.click();
+    // eslint-disable-next-line no-console
+    console.log('Icon Clicked');
+  };
+
   return (
-    <div className="flex-grow items-center">
+    <div className="flex flex-grow flex-col items-center bg-slate-50">
+      <div
+        className="flex h-64 w-full items-start justify-between bg-purple-300 p-3"
+        style={{
+          backgroundImage: `url('${backgroundImage}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="relative inline-flex items-center justify-center">
+          <div className="absolute h-9 w-9 rounded-full bg-white bg-opacity-50"></div>
+          <PhotoIcon
+            className="z-10 h-7 w-7 cursor-pointer stroke-1 text-black"
+            aria-hidden="true"
+            onClick={handlePhotoIconClick}
+          />
+        </div>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={props.onFileSelect}
+          style={{ display: 'none' }} // Hide the input element
+          accept="image/*" // Accept only images
+        />
+        <div className="relative inline-flex items-center justify-center">
+          <div className="absolute h-9 w-9 rounded-full bg-white bg-opacity-50"></div>
+          <XMarkIcon
+            className="z-10 h-7 w-7 cursor-pointer stroke-1 text-black"
+            aria-hidden="true"
+            onClick={props.onClose}
+          />
+        </div>
+      </div>
       <form onSubmit={handleSubmit} className="flex w-full flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="title"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Title:
           </label>
@@ -145,7 +218,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="description"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Description:
           </label>
@@ -160,7 +233,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="location"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Location:
           </label>
@@ -176,7 +249,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="startTime"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Start Time:
           </label>
@@ -192,7 +265,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="endTime"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             End Time:
           </label>
@@ -206,10 +279,7 @@ export default function EventForm(props: formProps) {
           />
         </div>
         <div className="mb-4 flex items-start justify-between">
-          <label
-            htmlFor="date"
-            className="mr-2 text-lg font-bold text-violet-700"
-          >
+          <label htmlFor="date" className="mr-2 text-lg font-bold text-primary">
             Date:
           </label>
           <input
@@ -224,7 +294,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="frequency"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Frequency:
           </label>
@@ -247,22 +317,27 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <Tags selectedTags={tagOptions} setSelectedTags={setTagOptions} />
         </div>
-        {props.initialFormData.eventId >= 0 && (
-          <div className="absolute bottom-3 left-3">
+        <div
+          className={`mt-auto flex ${
+            props.initialFormData.eventId >= 0
+              ? 'justify-between'
+              : 'justify-end'
+          }`}
+        >
+          {props.initialFormData.eventId >= 0 && (
             <button
               onClick={() => setIsDelete(true)}
               type="submit"
-              className="rounded-md bg-red-500 px-3 py-1 text-white"
+              className="rounded-md bg-red-500 px-3 py-1 text-white hover:bg-red-500/80"
             >
               Delete
             </button>
-          </div>
-        )}
-        <div className="absolute bottom-3 right-3">
+          )}
+
           <button
             onClick={() => setIsDelete(false)}
             type="submit"
-            className="rounded-md bg-primary px-3 py-1 text-white hover:bg-violet-500"
+            className="rounded-md bg-primary px-3 py-1 text-white hover:bg-primary/80"
           >
             Save
           </button>

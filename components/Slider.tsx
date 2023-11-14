@@ -2,25 +2,26 @@
 import React from 'react';
 
 type Props = {
-  value: number;
-  setValue: React.Dispatch<React.SetStateAction<number>>;
+  value: { [key: number]: string };
+  setValue: React.Dispatch<React.SetStateAction<{ [key: number]: string }>>;
   list: Array<string>;
 };
 
 const Slider = ({ value, setValue, list }: Props) => {
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const index = Number(e.target.value);
-    setValue(index);
+    setValue({ [Number(e.target.value)]: list[Number(e.target.value)] });
   };
 
   return (
-    <div className="m-8 text-black">
-      <p className="text-center italic">{list[value]}</p>
+    <div className="mx-7 text-black">
+      <p className="text-center italic">
+        {value[Number(Object.keys(value)[0])]}
+      </p>
       <input
         type="range"
         min={0}
         max={list.length - 1}
-        value={value}
+        value={Object.keys(value)[0]}
         onChange={handleSliderChange}
         className="range range-primary range-xs"
         step={1}

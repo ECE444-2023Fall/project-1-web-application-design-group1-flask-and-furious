@@ -1,75 +1,59 @@
 'use client';
-import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useEffect, useRef, useState } from 'react';
+
+import React from 'react';
 
 export interface DrawerProps {
   isOpen: boolean;
-  style: string;
-  onClose: () => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
-  onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  backgroundImage: string | null;
 }
 
-export default function Drawer(props: DrawerProps) {
-  const defaultImage =
-    'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
-  const [backgroundImage, setBackgroundImage] = useState(defaultImage);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const handlePhotoIconClick = () => {
-    fileInputRef.current?.click();
-    // eslint-disable-next-line no-console
-    console.log('Icon Clicked');
-  };
-  useEffect(() => {
-    if (props.backgroundImage) {
-      const img = new Image();
-      img.src = props.backgroundImage.startsWith('blob:')
-        ? props.backgroundImage
-        : `${props.backgroundImage}?time=${Date.now()}`;
-      img.onload = () => setBackgroundImage(img.src);
-      img.onerror = () => setBackgroundImage(defaultImage);
-    }
-  }, [props.backgroundImage]);
+export default function Drawer({ isOpen, setIsOpen, children }: DrawerProps) {
   return (
     <div
-      className={`transform-transition absolute left-0 flex h-[calc(100vh-64px)] w-1/3 flex-col bg-slate-50 duration-500 ${props.style}`}
+      className={`absolute left-0 flex w-1/3 bg-slate-50 duration-500 ${
+        isOpen ? '' : '-translate-x-[calc(100%-2rem)]'
+      }`}
     >
-      <div
-        className="flex h-64 items-start justify-between bg-purple-300 p-3"
-        style={{
-          backgroundImage: `url('${backgroundImage}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
+      <div className="flex-grow">{children}</div>
+      <button
+        className="w-8 hover:bg-gray-100"
+        onClick={() => setIsOpen((prev) => !prev)}
       >
-        <div className="relative inline-flex items-center justify-center">
-          <div className="absolute h-9 w-9 rounded-full bg-white bg-opacity-50"></div>
-          <PhotoIcon
-            className="z-10 h-7 w-7 cursor-pointer stroke-1 text-black"
-            aria-hidden="true"
-            onClick={handlePhotoIconClick}
-          />
+        <div className="flex justify-center">
+          {isOpen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          )}
         </div>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={props.onFileSelect}
-          style={{ display: 'none' }} // Hide the input element
-          accept="image/*" // Accept only images
-        />
-        <div className="relative inline-flex items-center justify-center">
-          <div className="absolute h-9 w-9 rounded-full bg-white bg-opacity-50"></div>
-          <XMarkIcon
-            className="z-10 h-7 w-7 cursor-pointer stroke-1 text-black"
-            aria-hidden="true"
-            onClick={props.onClose}
-          />
-        </div>
-      </div>
-      {props.children}
+      </button>
     </div>
   );
 }

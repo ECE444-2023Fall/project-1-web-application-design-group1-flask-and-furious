@@ -1,11 +1,11 @@
 import Navbar from '@/components/Navbar';
-import { Toaster } from '@/components/ui/toaster';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 import './globals.css';
+import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,7 +30,6 @@ export default async function RootLayout({
   const {
     data: { session }
   } = await supabase.auth.getSession();
-
   return (
     <html lang="en">
       <head>
@@ -39,10 +38,14 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${inter.className} flex h-screen flex-col`}>
-        <Navbar session={session} />
-        <main className="flex-1 text-black">{children}</main>
-        <Toaster />
+
+      <body className={`${inter.className}`}>
+        <Providers>
+          <div className="flex h-screen flex-col">
+            <Navbar session={session} />
+            <main className="flex-1 text-black">{children}</main>
+          </div>
+        </Providers>
       </body>
     </html>
   );
