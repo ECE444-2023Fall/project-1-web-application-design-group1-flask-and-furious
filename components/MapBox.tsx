@@ -12,7 +12,7 @@ import {
   createClientComponentClient
 } from '@supabase/auth-helpers-nextjs';
 import mapboxgl from 'mapbox-gl';
-import { createRef, useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import EventCard from './EventCard';
 import EventModal from './EventModal';
@@ -164,23 +164,25 @@ export default function MapBox() {
           event.Longitude !== undefined &&
           event.Latitude + event.Longitude !== -2
         ) {
-          const ref = createRef();
-          ref.current = document.createElement('div');
-          createRoot(ref.current).render(
+          // const ref = createRef<HTMLDivElement | null>();
+          const el = document.createElement('div');
+          createRoot(el).render(
             <EventCard
               key={event.id}
               eventData={event}
               viewer
               action={() => openModal(event)}
               RSVPEvents={RSVPevents}
-              setRSVPEvents={setRSVPEvents}
+              setRSVPEvents={
+                setRSVPEvents as React.Dispatch<SetStateAction<number[]>>
+              }
               rsvpCount={rsvpCounts[event.id]}
               session={sessionData}
             />
           );
           const popup = new mapboxgl.Popup() // Adjust the offset as needed
             .setMaxWidth('500x')
-            .setDOMContent(ref.current);
+            .setDOMContent(el);
           new mapboxgl.Marker({
             color: '#7C3AED'
           })

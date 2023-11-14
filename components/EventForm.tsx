@@ -264,9 +264,7 @@ export default function EventForm(props: formProps) {
           </label>
 
           <SearchBox
-            accessToken={
-              'pk.eyJ1IjoicmFjZWZuIiwiYSI6ImNsbm5pY241ZTA1b3cyd3F6MmxrMmd2aHYifQ.CuLMjRl3fvGDPxX_jGUGjw'
-            }
+            accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string}
             options={{
               navigation_profile: 'walking',
               origin: { lon: -79.3832, lat: 43.6532 }, //Location of Sandford Fleming Building
