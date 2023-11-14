@@ -20,14 +20,17 @@ const RSVP = ({
   session
 }: Props) => {
   const RSVPed = RSVPEvents.includes(eventId);
-  const disabled = session ? ownerUuid === session.user.id : false;
+  const disabled = session ? ownerUuid === session.user.id : true;
+  const tooltipEnabled = session ? ownerUuid === session.user.id : true;
 
   return (
     <div className="z-50 flex flex-row items-center justify-between p-2">
       <div className="flex flex-row gap-1">
         <Tooltip
-          isDisabled={!disabled}
-          content="You cant RSVP to your own event"
+          isDisabled={!tooltipEnabled}
+          content={
+            session ? 'You cant RSVP to your own event' : 'Log in to RSVP'
+          }
         >
           <span>
             <button
