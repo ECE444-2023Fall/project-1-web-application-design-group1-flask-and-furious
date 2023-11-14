@@ -130,7 +130,7 @@ export default function MapBox() {
     const map = new mapboxgl.Map({
       accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
       container: 'map',
-      style: 'mapbox://styles/mapbox/standard-beta?optimize=true',
+      style: 'mapbox://styles/mapbox/standard-beta',
       center: [-79.39486600749379, 43.66027265761257],
       optimizeForTerrain: true,
       minZoom: 13,
@@ -160,8 +160,8 @@ export default function MapBox() {
       //Create markers for each popup and add them to the map
       events.forEach((event) => {
         if (
-          event.Latitude !== undefined &&
-          event.Longitude !== undefined &&
+          event.Latitude &&
+          event.Longitude &&
           event.Latitude + event.Longitude !== -2
         ) {
           // const ref = createRef<HTMLDivElement | null>();
@@ -186,7 +186,7 @@ export default function MapBox() {
           new mapboxgl.Marker({
             color: '#7C3AED'
           })
-            .setLngLat([event.Longitude, event.Latitude])
+            .setLngLat([event.Latitude, event.Longitude])
             .setPopup(popup)
             .addTo(map);
         }
