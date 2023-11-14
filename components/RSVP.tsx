@@ -1,6 +1,5 @@
 import { Tooltip } from '@nextui-org/react';
 import { Session } from '@supabase/gotrue-js';
-import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 import { apiUpdateRSVPEvents } from '../app/events/api';
 import { toast } from './ui/use-toast';
@@ -20,8 +19,6 @@ const RSVP = ({
   RSVPEvents,
   session
 }: Props) => {
-  const router = useRouter();
-
   const RSVPed = RSVPEvents.includes(eventId);
   const disabled = ownerUuid === session.user.id;
 
@@ -66,8 +63,6 @@ const RSVP = ({
                       });
                     }
                   });
-                } else {
-                  router.push('/login');
                 }
               }}
             >

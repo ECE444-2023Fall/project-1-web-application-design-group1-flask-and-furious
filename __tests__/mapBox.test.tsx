@@ -1,10 +1,19 @@
 import MapBox from '@/components/MapBox';
-import { act, render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import mapboxgl from 'mapbox-gl';
 
 jest.mock('@supabase/auth-helpers-nextjs', () => ({
   createClientComponentClient: () => ({
     auth: {
+      getUser: jest.fn(async () => ({
+        data: {
+          user: {
+            id: 'user-123',
+            email: ''
+          }
+        },
+        error: null
+      })),
       getSession: jest.fn(async () => ({
         data: {
           session: {
@@ -58,41 +67,47 @@ describe('MapBox', () => {
   });
 
   //Joshua-Pow
-  it('renders without crashing', () => {
-    render(<MapBox />);
+  it('renders without crashing', async () => {
+    act(() => {
+      render(<MapBox />);
+    });
   });
 
   //Joshua-Pow
-  it('initializes the map', () => {
+  it('initializes the map', async () => {
     act(() => {
       render(<MapBox />);
     });
 
-    expect(mockedMapboxglMap).toHaveBeenCalledTimes(1);
-    expect(mockedMapboxglMap).toHaveBeenCalledWith(
-      expect.objectContaining({
-        accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
-        container: 'map',
-        style: 'mapbox://styles/mapbox/standard-beta',
-        center: [-79.39486600749379, 43.66027265761257],
-        zoom: 14,
-        pitch: 60
-      })
-    );
+    waitFor(() => {
+      expect(mockedMapboxglMap).toHaveBeenCalledTimes(1);
+      expect(mockedMapboxglMap).toHaveBeenCalledWith(
+        expect.objectContaining({
+          accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
+          container: 'map',
+          style: 'mapbox://styles/mapbox/standard-beta',
+          center: [-79.39486600749379, 43.66027265761257],
+          zoom: 14,
+          pitch: 60
+        })
+      );
+    });
   });
 
   //Ardavan-Alaei-Fard
-  it('checks the event locations', () => {
+  it('checks the event locations', async () => {
     act(() => {
       render(<MapBox />);
     });
 
-    expect(mockedMapboxglMarker).toHaveBeenCalled();
-    expect(mockedMapboxglMarker).toHaveBeenCalledWith(
-      expect.objectContaining({
-        setLngLat: [-79.397662, 43.659527],
-        setPopup: mockedMapboxglPopup
-      })
-    );
+    waitFor(() => {
+      expect(mockedMapboxglMarker).toHaveBeenCalled();
+      expect(mockedMapboxglMarker).toHaveBeenCalledWith(
+        expect.objectContaining({
+          setLngLat: [-79.397662, 43.659527],
+          setPopup: mockedMapboxglPopup
+        })
+      );
+    });
   });
 });

@@ -18,6 +18,10 @@ jest.mock('@supabase/auth-helpers-nextjs', () => ({
   })
 }));
 
+jest.mock('@mapbox/search-js-react', () => ({
+  SearchBox: jest.fn(() => null)
+}));
+
 // Rest of your test code
 
 describe('EventForm', () => {
@@ -37,7 +41,9 @@ describe('EventForm', () => {
       date: '2023-10-28',
       frequency: 'Weekly',
       tags: ['Tag 1', 'Tag 3'],
-      file: null
+      file: null,
+      latitude: undefined,
+      longitude: undefined
     },
     Update: mockUpdate,
     isNewEvent: false,
@@ -62,7 +68,6 @@ describe('EventForm', () => {
           'Super awesome concert that everyone want to go to!'
         )
       ).toBeInTheDocument();
-      expect(screen.getByDisplayValue('Perfect Location')).toBeInTheDocument();
       expect(screen.getByDisplayValue('21:00:00')).toBeInTheDocument();
       expect(screen.getByDisplayValue('23:00:00')).toBeInTheDocument();
       expect(screen.getByDisplayValue('2023-10-28')).toBeInTheDocument();

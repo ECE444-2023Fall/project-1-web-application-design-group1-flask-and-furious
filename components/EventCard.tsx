@@ -111,7 +111,7 @@ export default function EventCard(props: EventCardProps) {
             </div>
           )}
         </div>
-        {props.viewer && (
+        {props.viewer && props.session && (
           <RSVP
             ownerUuid={props.eventData.Owner}
             eventId={props.eventData.id}

@@ -46,6 +46,7 @@ export default function EventModal(props: EventModalProps) {
               <Image
                 width={450}
                 height={200}
+                alt="event image"
                 src={imgError ? defaultImage : event.image_url}
                 className="z-0"
                 onError={() => {
@@ -113,26 +114,23 @@ export default function EventModal(props: EventModalProps) {
                 ))}
               </div>
             </ModalBody>
-            <ModalFooter>
-              <Button
-                className="btn mt-2"
-                color="danger"
-                variant="light"
-                onPress={onClose}
-              >
+            <ModalFooter className="items-center justify-between">
+              <Button size="lg" color="danger" onPress={onClose}>
                 Close
               </Button>
-              <RSVP
-                ownerUuid={event.Owner}
-                eventId={event.id}
-                setRSVPEvents={
-                  props.setRSVPEvents as React.Dispatch<
-                    SetStateAction<number[]>
-                  >
-                }
-                RSVPEvents={props.RSVPEvents as number[]}
-                session={props.session as Session}
-              />
+              {props.session && (
+                <RSVP
+                  ownerUuid={event.Owner}
+                  eventId={event.id}
+                  setRSVPEvents={
+                    props.setRSVPEvents as React.Dispatch<
+                      SetStateAction<number[]>
+                    >
+                  }
+                  RSVPEvents={props.RSVPEvents as number[]}
+                  session={props.session as Session}
+                />
+              )}
             </ModalFooter>
           </>
         )}
