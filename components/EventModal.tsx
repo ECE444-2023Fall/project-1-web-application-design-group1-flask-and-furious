@@ -15,7 +15,7 @@ import {
   ModalFooter
 } from '@nextui-org/react';
 import { Session } from '@supabase/gotrue-js';
-import { SetStateAction } from 'react';
+import { SetStateAction, useState } from 'react';
 import RSVP from './RSVP';
 
 export interface EventModalProps {
@@ -33,6 +33,10 @@ export default function EventModal(props: EventModalProps) {
   const onOpenChange = props.onOpenChange;
   const event = props.event;
 
+  const defaultImage =
+    'https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image';
+  const [imgError, setImgError] = useState<boolean>(false);
+
   return (
     <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
@@ -42,9 +46,11 @@ export default function EventModal(props: EventModalProps) {
               <Image
                 width={450}
                 height={200}
-                src={event.image_url}
-                fallbackSrc="https://yqrgbzoauzaaznsztnwb.supabase.co/storage/v1/object/public/Images/no-image"
+                src={imgError ? defaultImage : event.image_url}
                 className="z-0"
+                onError={() => {
+                  setImgError(true);
+                }}
               />
               <Chip
                 className="absolute right-2 top-2"
