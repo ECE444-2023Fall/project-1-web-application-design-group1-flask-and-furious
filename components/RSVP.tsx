@@ -23,13 +23,13 @@ const RSVP = ({
   const router = useRouter();
 
   const RSVPed = RSVPEvents.includes(eventId);
-  const disabled = ownerUuid === session.user.id;
+  const disabled = session ? ownerUuid === session.user.id : false;
 
   return (
     <div className="z-50 flex flex-row items-center justify-between p-2">
       <div className="flex flex-row gap-1">
         <Tooltip
-          isDisabled={ownerUuid !== session.user.id}
+          isDisabled={!disabled}
           content="You cant RSVP to your own event"
         >
           <span>
