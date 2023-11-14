@@ -6,6 +6,7 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import EventCard from './EventCard';
+import { toast } from './ui/use-toast';
 
 // this is where all of our map logic is going to live
 // adding the empty dependency array ensures that the map
@@ -32,7 +33,21 @@ export default function MapBox() {
 
   const getEvents = async () => {
     setLoading(true);
-    await apiGetEvents((await session).data.session, setEvents, {});
+    await apiGetEvents((await session).data.session, {})
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to get events');
+        }
+        const data = await res.json();
+        setEvents(JSON.parse(data)['data']);
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Failed to get events',
+          description: 'Something went wrong. Please try again later'
+        });
+      });
     setLoading(false);
   };
 

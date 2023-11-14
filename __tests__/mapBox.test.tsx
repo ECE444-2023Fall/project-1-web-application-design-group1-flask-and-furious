@@ -90,7 +90,7 @@ describe('MapBox', () => {
     expect(mockedMapboxglMarker).toHaveBeenCalled();
     expect(mockedMapboxglMarker).toHaveBeenCalledWith(
       expect.objectContaining({
-        setLngLat: [-79.394718, 43.659885],
+        setLngLat: [-79.397662, 43.659527],
         setPopup: mockedMapboxglPopup
       })
     );
