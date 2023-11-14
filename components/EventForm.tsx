@@ -198,7 +198,7 @@ export default function EventForm(props: formProps) {
           />
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col p-6">
+      <form onSubmit={handleSubmit} className="flex w-full flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="title"
