@@ -36,7 +36,7 @@ export default function EventCard(props: EventCardProps) {
       >
         <div className="relative">
           <Image
-            className="aspect-video h-48 w-full rounded-t-lg object-cover"
+            className="z-0 aspect-video h-48 w-full rounded-t-lg object-cover"
             height={192}
             width={384}
             src={imgError ? defaultImage : props.eventData?.image_url}
