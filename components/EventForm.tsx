@@ -76,7 +76,22 @@ export default function EventForm(props: formProps) {
 
   useEffect(() => {
     setFormData(props.initialFormData);
-  }, [props.initialFormData]);
+    // set the tags event has to true in the tag options
+    // BUT if the event is new, set all tags to false(gets rid of previous state)
+    setTagOptions((prevState) => {
+      if (props.isNewEvent) {
+        return Object.fromEntries(
+          Object.keys(prevState).map((tag) => [tag, false])
+        );
+      } else {
+        const newTagOptions = { ...prevState };
+        props.initialFormData.tags.forEach((tag) => {
+          newTagOptions[tag] = true;
+        });
+        return newTagOptions;
+      }
+    });
+  }, [props.initialFormData, props.isNewEvent]);
 
   useEffect(() => {
     if (props.backgroundImage) {
@@ -187,7 +202,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="title"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Title:
           </label>
@@ -203,7 +218,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="description"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Description:
           </label>
@@ -218,7 +233,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="location"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Location:
           </label>
@@ -234,7 +249,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="startTime"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Start Time:
           </label>
@@ -250,7 +265,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="endTime"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             End Time:
           </label>
@@ -264,10 +279,7 @@ export default function EventForm(props: formProps) {
           />
         </div>
         <div className="mb-4 flex items-start justify-between">
-          <label
-            htmlFor="date"
-            className="mr-2 text-lg font-bold text-violet-700"
-          >
+          <label htmlFor="date" className="mr-2 text-lg font-bold text-primary">
             Date:
           </label>
           <input
@@ -282,7 +294,7 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <label
             htmlFor="frequency"
-            className="mr-2 text-lg font-bold text-violet-700"
+            className="mr-2 text-lg font-bold text-primary"
           >
             Frequency:
           </label>
@@ -305,12 +317,18 @@ export default function EventForm(props: formProps) {
         <div className="mb-4 flex items-start justify-between">
           <Tags selectedTags={tagOptions} setSelectedTags={setTagOptions} />
         </div>
-        <div className="mt-auto flex justify-between">
+        <div
+          className={`mt-auto flex ${
+            props.initialFormData.eventId >= 0
+              ? 'justify-between'
+              : 'justify-end'
+          }`}
+        >
           {props.initialFormData.eventId >= 0 && (
             <button
               onClick={() => setIsDelete(true)}
               type="submit"
-              className="rounded-md bg-red-500 px-3 py-1 text-white"
+              className="rounded-md bg-red-500 px-3 py-1 text-white hover:bg-red-500/80"
             >
               Delete
             </button>
@@ -319,7 +337,7 @@ export default function EventForm(props: formProps) {
           <button
             onClick={() => setIsDelete(false)}
             type="submit"
-            className="rounded-md bg-primary px-3 py-1 text-white hover:bg-violet-500"
+            className="rounded-md bg-primary px-3 py-1 text-white hover:bg-primary/80"
           >
             Save
           </button>

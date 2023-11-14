@@ -15,7 +15,7 @@ const Dropdown = ({ tags, setSelectedTags }: Props) => {
     >
       <label
         tabIndex={0}
-        className="btn max-w-xs border-transparent bg-primary text-white hover:border-transparent hover:bg-violet-500 "
+        className="btn max-w-xs border-transparent bg-primary text-white hover:border-transparent hover:bg-primary/80 "
       >
         <span className="text-xs">Add Tags</span>
         <svg

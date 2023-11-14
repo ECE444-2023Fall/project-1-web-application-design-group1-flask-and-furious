@@ -301,9 +301,9 @@ export default function Home() {
   };
 
   return (
-    <main className="max-h-[calc(100vh-8rem)]">
+    <main className="max-h-[calc(100vh-4rem-1px)]">
       <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-        <div className="h-[calc(100vh-4rem)]">
+        <div className="h-[calc(100vh-4rem-1px)]">
           <EventForm
             onClose={onCloseDrawer}
             Post={createEvent}
@@ -317,7 +317,7 @@ export default function Home() {
         </div>
       </Drawer>
       <div
-        className={`absolute h-[calc(100vh-4rem)] duration-500 ${
+        className={`absolute h-[calc(100vh-4rem-1px)] duration-500 ${
           isDrawerOpen ? 'left-1/3 w-2/3' : 'left-[2rem] w-[calc(100%-2rem)]'
         }`}
       >
@@ -325,24 +325,20 @@ export default function Home() {
           <div
             className="flex cursor-pointer items-center"
             onClick={() => {
-              if (isDrawerOpen) {
-                onCloseDrawer();
-              } else {
-                onOpenDrawer();
-                setIsNewEvent(true);
-                setFormData({
-                  eventId: -1,
-                  title: '',
-                  description: '',
-                  location: '',
-                  startTime: '',
-                  endTime: '',
-                  date: '',
-                  frequency: '',
-                  file: null,
-                  tags: []
-                });
-              }
+              onOpenDrawer();
+              setIsNewEvent(true);
+              setFormData({
+                eventId: -1,
+                title: '',
+                description: '',
+                location: '',
+                startTime: '',
+                endTime: '',
+                date: '',
+                frequency: '',
+                file: null,
+                tags: []
+              });
             }}
           >
             <h5 className="text-lg font-bold">Create Event</h5>
@@ -356,7 +352,7 @@ export default function Home() {
         {!loading ? (
           events.length > 0 ? (
             <div
-              className={`absolute grid max-h-[calc(100vh-4rem-2.25rem)] overflow-y-auto duration-500 ${
+              className={`absolute grid max-h-[calc(100vh-4rem-2.25rem-1px)] overflow-y-auto duration-500 ${
                 isDrawerOpen ? 'grid-cols-4' : 'grid-cols-5'
               } gap-4 p-4`}
             >

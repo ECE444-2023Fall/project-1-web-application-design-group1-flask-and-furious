@@ -17,14 +17,14 @@ const RSVP = ({ eventId, setRSVPEvents, RSVPEvents, session }: Props) => {
   const RSVPed = RSVPEvents.includes(eventId);
 
   return (
-    <div className="flex flex-row items-center justify-between p-2">
+    <div className="z-50 flex flex-row items-center justify-between p-2">
       <div className="flex flex-row gap-1">
         <button
           id="RSVP-button"
           className={`btn btn-primary !border-transparent text-white ${
             RSVPed
-              ? 'bg-gray-600 hover:bg-gray-500'
-              : 'bg-violet-500 hover:bg-violet-400'
+              ? 'bg-gray-600 hover:bg-gray-600/80'
+              : 'bg-primary hover:bg-primary/80'
           }`}
           onClick={async () => {
             if (session) {
