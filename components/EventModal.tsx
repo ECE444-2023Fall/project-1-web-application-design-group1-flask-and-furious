@@ -118,19 +118,17 @@ export default function EventModal(props: EventModalProps) {
               <Button size="lg" color="danger" onPress={onClose}>
                 Close
               </Button>
-              {props.session && (
-                <RSVP
-                  ownerUuid={event.Owner}
-                  eventId={event.id}
-                  setRSVPEvents={
-                    props.setRSVPEvents as React.Dispatch<
-                      SetStateAction<number[]>
-                    >
-                  }
-                  RSVPEvents={props.RSVPEvents as number[]}
-                  session={props.session as Session}
-                />
-              )}
+              <RSVP
+                ownerUuid={event.Owner}
+                eventId={event.id}
+                setRSVPEvents={
+                  props.setRSVPEvents as React.Dispatch<
+                    SetStateAction<number[]>
+                  >
+                }
+                RSVPEvents={props.RSVPEvents as number[]}
+                session={props.session as Session}
+              />
             </ModalFooter>
           </>
         )}
