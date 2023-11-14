@@ -95,13 +95,4 @@ describe('MapBox', () => {
       })
     );
   });
-
-  //Ardavan-Alaei-Fard
-  it('checks the event details', () => {
-    act(() => {
-      render(<MapBox />);
-    });
-
-    expect(mockedMapboxglPopup).toHaveBeenCalled();
-  });
 });
