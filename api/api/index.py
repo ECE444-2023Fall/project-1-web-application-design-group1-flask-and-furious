@@ -157,6 +157,8 @@ class Event(Resource):
                 "EndTime": request.form.get("endTime"),
                 "Frequency": request.form.get("frequency"),
                 "Location": request.form.get("location"),
+                "Latitude": request.form.get("latitude"),
+                "Longitude": request.form.get("longitude"),
                 "StartTime": request.form.get("startTime"),
                 "Tags": tags,
                 "Title": request.form.get("title"),

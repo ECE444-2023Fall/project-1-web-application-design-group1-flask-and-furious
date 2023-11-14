@@ -93,6 +93,8 @@ export default function Home() {
     data.append('description', formData.description);
     data.append('location', formData.location || '');
     data.append('startTime', formData.startTime);
+    data.append('longitude', String(formData.longitude));
+    data.append('latitude', String(formData.latitude));
     data.append('endTime', formData.endTime);
     data.append('date', formData.date);
     data.append('frequency', formData.frequency);
@@ -152,6 +154,8 @@ export default function Home() {
     data.append('title', formData.title);
     data.append('description', formData.description);
     data.append('location', formData.location || '');
+    data.append('longitude', String(formData.longitude));
+    data.append('latitude', String(formData.latitude));
     data.append('startTime', formData.startTime);
     data.append('endTime', formData.endTime);
     data.append('date', formData.date);
