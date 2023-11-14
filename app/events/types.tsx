@@ -20,8 +20,8 @@ export interface formData {
   title: string;
   description: string;
   location: string | undefined;
-  latitude: number;
-  longitude: number;
+  latitude: number | undefined;
+  longitude: number | undefined;
   startTime: string;
   endTime: string;
   date: string;
