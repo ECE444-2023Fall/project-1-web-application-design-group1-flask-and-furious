@@ -113,7 +113,7 @@ export default function EventModal(props: EventModalProps) {
                 ))}
               </div>
             </ModalBody>
-            <ModalFooter className="-mr-2">
+            <ModalFooter>
               <Button
                 className="btn mt-2"
                 color="danger"
