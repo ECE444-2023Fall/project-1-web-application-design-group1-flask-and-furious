@@ -142,9 +142,9 @@ export default function Page() {
   };
 
   return (
-    <div className="flex max-h-[calc(100vh-7rem)] flex-row">
+    <div className="flex max-h-[calc(100vh-8rem-2px)] flex-row">
       <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-        <div className="h-[calc(100vh-4rem-3rem)]">
+        <div className="h-[calc(100vh-4rem-4rem-2px)]">
           <Filters
             setEvents={setFilteredEvents}
             rsvpEvents={RSVPevents}
