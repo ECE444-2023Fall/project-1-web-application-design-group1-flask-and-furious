@@ -11,24 +11,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - run: echo "api\nspecial_stuff" > .vercelignore
       - uses: pixta-dev/repository-mirroring-action@v1
         with:
           target_repo_url:
             git@github.com:chasemcdo/ECE444-app-deployment.git
           ssh_private_key:
             ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - uses: actions/checkout@v4
-        with:
-          repository: chasemcdo/ECE444-backend-deployment
-          ref: 'main'
-          token:  ${{ secrets.GH_API_KEY }}
-      - name: setup git config
-        run: |
-          git config user.name "chasemcdo"
-          git config user.email "chasemcdougall@hotmail.com"
-      - run: echo "api" > .vercelignore
-      - run: git push origin main
 
   mirror-backend:
     runs-on: ubuntu-latest
