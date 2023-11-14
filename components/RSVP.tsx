@@ -1,6 +1,5 @@
 import { Tooltip } from '@nextui-org/react';
 import { Session } from '@supabase/gotrue-js';
-import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 import { apiUpdateRSVPEvents } from '../app/events/api';
 import { toast } from './ui/use-toast';
@@ -20,17 +19,18 @@ const RSVP = ({
   RSVPEvents,
   session
 }: Props) => {
-  const router = useRouter();
-
   const RSVPed = RSVPEvents.includes(eventId);
-  const disabled = session ? ownerUuid === session.user.id : false;
+  const disabled = session ? ownerUuid === session.user.id : true;
+  const tooltipEnabled = session ? ownerUuid === session.user.id : true;
 
   return (
     <div className="z-50 flex flex-row items-center justify-between p-2">
       <div className="flex flex-row gap-1">
         <Tooltip
-          isDisabled={!disabled}
-          content="You cant RSVP to your own event"
+          isDisabled={!tooltipEnabled}
+          content={
+            session ? 'You cant RSVP to your own event' : 'Log in to RSVP'
+          }
         >
           <span>
             <button
@@ -66,8 +66,6 @@ const RSVP = ({
                       });
                     }
                   });
-                } else {
-                  router.push('/login');
                 }
               }}
             >

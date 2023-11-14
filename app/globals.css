@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.mapboxgl-popup-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 @media (prefers-color-scheme: light) {
   :root {
     --foreground-rgb: theme(colors.black);

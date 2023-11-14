@@ -1,4 +1,6 @@
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { SearchBoxRetrieveResponse } from '@mapbox/search-js-core';
+import { SearchBox } from '@mapbox/search-js-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Tags from './Tags';
@@ -9,7 +11,9 @@ export interface formData {
   eventId: number;
   title: string;
   description: string;
-  location: string;
+  location: string | undefined;
+  latitude: number | undefined;
+  longitude: number | undefined;
   startTime: string;
   endTime: string;
   date: string;
@@ -41,6 +45,8 @@ export default function EventForm(props: formProps) {
     title: '',
     description: '',
     location: '',
+    latitude: -1,
+    longitude: -1,
     startTime: '',
     endTime: '',
     date: '',
@@ -136,6 +142,21 @@ export default function EventForm(props: formProps) {
         });
       }
     }
+  };
+
+  const handleLocation = (e: SearchBoxRetrieveResponse) => {
+    // Find the latitude, longitude and name of the selected location
+    const lat = e.features.at(0)?.geometry.coordinates[0];
+    const lon = e.features.at(0)?.geometry.coordinates[1];
+    const name = e.features.at(0)?.properties.name.toString();
+
+    // Update the form
+    setFormData({
+      ...formData,
+      ['location']: name,
+      ['latitude']: lat,
+      ['longitude']: lon
+    });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -237,13 +258,18 @@ export default function EventForm(props: formProps) {
           >
             Location:
           </label>
-          <input
-            type="text"
-            id="location"
-            name="location"
+
+          <SearchBox
+            accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string}
+            options={{
+              navigation_profile: 'walking',
+              origin: { lon: -79.3832, lat: 43.6532 }, //Location of Sandford Fleming Building
+              proximity: { lon: -79.3832, lat: 43.6532 },
+              language: 'en',
+              country: 'CA'
+            }}
             value={formData.location}
-            onChange={handleChange}
-            className="w-2/3 rounded border border-gray-300 p-2"
+            onRetrieve={handleLocation}
           />
         </div>
         <div className="mb-4 flex items-start justify-between">

@@ -11,13 +11,17 @@ export interface EventData {
   Tags: string[];
   Date: string;
   image_url: string;
+  Latitude: number;
+  Longitude: number;
 }
 
 export interface formData {
   eventId: number;
   title: string;
   description: string;
-  location: string;
+  location: string | undefined;
+  latitude: number | undefined;
+  longitude: number | undefined;
   startTime: string;
   endTime: string;
   date: string;

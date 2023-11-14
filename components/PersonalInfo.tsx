@@ -166,13 +166,13 @@ const PersonalInfo = ({
         {edit ? (
           <>
             <button
-              className="mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-purple-900"
+              className="mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-primary/80"
               onClick={onSaveClick}
             >
               Save
             </button>
             <button
-              className="mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-purple-900"
+              className="mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-primary/80"
               onClick={() => setProfileEdit(false)}
             >
               Cancel
@@ -180,7 +180,7 @@ const PersonalInfo = ({
           </>
         ) : (
           <button
-            className=" mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-purple-900"
+            className=" mr-2 rounded bg-primary px-4 py-2 text-white hover:bg-primary/80"
             onClick={onEditClick}
           >
             Edit
