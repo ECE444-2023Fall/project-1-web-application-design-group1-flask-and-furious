@@ -31,7 +31,7 @@ export default function MapBox() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [events, setEvents] = useState<EventData[] | null>(null);
-  const [RSVPevents, setRSVPEvents] = useState<number[] | null>(null);
+  const [RSVPevents, setRSVPEvents] = useState<number[]>([]);
   const [rsvpCounts, setRsvpCounts] = useState<Record<number, number> | null>(
     null
   );
