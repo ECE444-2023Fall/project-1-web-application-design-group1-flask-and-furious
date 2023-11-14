@@ -105,7 +105,7 @@ export default function EventCard(props: EventCardProps) {
           {props.eventData.Tags.length > 3 && (
             <div className="rounded-full bg-gray-200 px-2">
               <p className="text-sm font-normal text-gray-700">
-                {props.eventData.Tags.length} More...
+                {props.eventData.Tags.length - 3} More...
               </p>
             </div>
           )}
