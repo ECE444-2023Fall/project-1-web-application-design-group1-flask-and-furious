@@ -291,14 +291,24 @@ const Filters = ({ setEvents, rsvpEvents, tags, setTags }: Props) => {
           { value: 15, label: '3pm' },
           { value: 18, label: '6pm' },
           { value: 21, label: '9pm' },
-          { value: 24, label: '12pm' }
+          { value: 24, label: '12am' }
         ]}
         getValue={(value) => {
           //Convert 24hr time to 12hr time
           const times = (value as number[]).map((time) => time % 12 || 12);
           const timeRangeString = `${times[0]}${
-            (value as number[])[0] >= 12 ? 'pm' : 'am'
-          } - ${times[1]}${(value as number[])[1] >= 12 ? 'pm' : 'am'}`;
+            (value as number[])[0] >= 12
+              ? (value as number[])[0] == 24
+                ? 'am'
+                : 'pm'
+              : 'am'
+          } - ${times[1]}${
+            (value as number[])[1] >= 12
+              ? (value as number[])[1] == 24
+                ? 'am'
+                : 'pm'
+              : 'am'
+          }`;
           return timeRangeString;
         }}
         onChange={(value) => {
